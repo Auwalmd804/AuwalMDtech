@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Auwal MD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body{
+      margin:0;
+      font-family: Arial, sans-serif;
+      background:#0a0f1c;
+      color:white;
+      text-align:center;
+    }
+    header{
+      padding:20px;
+      background:#111a2e;
+    }
+    nav a{
+      color:#00aaff;
+      margin:0 15px;
+      text-decoration:none;
+    }
+    section{
+      padding:60px 20px;
+    }
+    h1{
+      color:#00aaff;
+      font-size:40px;
+    }
+    .btn{
+      display:inline-block;
+      padding:10px 20px;
+      background:#00aaff;
+      color:white;
+      border-radius:5px;
+      text-decoration:none;
+      margin-top:20px;
+    }
+    footer{
+      background:#111a2e;
+      padding:20px;
+      margin-top:40px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h2>Auwal MD</h2>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<section id="home">
+  <h1>From Ideas to Impact</h1>
+  <p>Official Technology Company Website</p>
+  <a href="#services" class="btn">Explore Services</a>
+</section>
+
+<section id="about">
+  <h1>About Us</h1>
+  <p>Auwal MD is a technology company focused on app development and digital innovation.</p>
+</section>
+
+<section id="services">
+  <h1>Our Services</h1>
+  <p>✔ App Development</p>
+  <p>✔ App Distribution Platform</p>
+  <p>✔ Digital Solutions</p>
+</section>
+
+<section id="contact">
+  <h1>Contact</h1>
+  <p>Email: your@email.com</p>
+</section>
+
+<footer>
+  <p>© 2026 Auwal MD. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>
