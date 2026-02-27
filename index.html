@@ -3,57 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auwal MD Technology Company</title>
+<title>Auwal MD Dashboard</title>
 
 <style>
 body{
 margin:0;
 font-family:'Segoe UI', sans-serif;
-background:linear-gradient(135deg,#141e30,#243b55);
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
 color:white;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-height:100vh;
 text-align:center;
-overflow:hidden;
 }
 
-/* Title */
+/* Header */
 h1{
-font-size:38px;
-margin-bottom:5px;
+margin-top:30px;
 }
 
-.subtitle{
-letter-spacing:3px;
-color:#ccc;
-margin-bottom:20px;
-}
-
-/* Box */
-.box{
+/* Card */
+.card{
 background:rgba(255,255,255,0.08);
-padding:25px;
+padding:20px;
+margin:20px auto;
+width:90%;
+max-width:400px;
 border-radius:15px;
 backdrop-filter:blur(10px);
-width:90%;
-max-width:350px;
 }
 
-input{
-width:100%;
-padding:12px;
-margin:8px 0;
-border:none;
-border-radius:8px;
-}
-
+/* Button */
 button{
-width:100%;
-padding:12px;
-margin:6px 0;
+padding:10px 20px;
 border:none;
 border-radius:8px;
 background:#00c6ff;
@@ -62,31 +41,11 @@ font-weight:bold;
 cursor:pointer;
 }
 
-/* Success */
-.success{
-margin-top:10px;
-color:#00ff9d;
-font-weight:bold;
-display:none;
-animation:fade 0.4s ease-in-out;
-}
-
-@keyframes fade{
-from{opacity:0;transform:scale(0.8);}
-to{opacity:1;transform:scale(1);}
-}
-
-/* WhatsApp */
-.whatsapp{
-position:fixed;
-bottom:20px;
-right:20px;
-}
-
 /* Footer */
 footer{
 position:fixed;
 bottom:5px;
+width:100%;
 font-size:12px;
 color:#ccc;
 }
@@ -95,68 +54,16 @@ color:#ccc;
 
 <body>
 
-<h1>👋👋 AUWAL MD</h1>
-<div class="subtitle">Technology Company</div>
+<h1>Welcome to Auwal MD Dashboard ✅</h1>
 
-<div class="box">
-<input type="email" id="email" placeholder="Email">
-<input type="password" id="password" placeholder="Password">
-
-<button onclick="register()">Register</button>
-<button onclick="login()">Login</button>
-
-<div class="success" id="msg"></div>
+<div class="card">
+<p>This is your control panel.</p>
+<button onclick="alert('Next step ready 🚀')">Continue</button>
 </div>
-
-<a href="https://wa.me/2349137904300" target="_blank" class="whatsapp">
-<img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="50">
-</a>
 
 <footer>
 © 2026 Auwal MD Technology Company | yau789452@gmail.com
 </footer>
-
-<script>
-function showMessage(text){
-let msg=document.getElementById("msg");
-msg.innerHTML=text;
-msg.style.display="block";
-
-setTimeout(()=>{
-msg.style.display="none";
-},3000);
-}
-
-function register(){
-showMessage("Register Success ✅");
-}
-
-function login(){
-showMessage("Login Success ✅");
-}
-
-/* Simple Falling Dots */
-for(let i=0;i<40;i++){
-let dot=document.createElement("div");
-dot.style.position="absolute";
-dot.style.width="5px";
-dot.style.height="5px";
-dot.style.background="rgba(255,255,255,0.2)";
-dot.style.borderRadius="50%";
-dot.style.left=Math.random()*100+"%";
-dot.style.top=Math.random()*100+"%";
-dot.style.animation="fall "+(5+Math.random()*10)+"s linear infinite";
-document.body.appendChild(dot);
-}
-
-let style=document.createElement("style");
-style.innerHTML=`
-@keyframes fall{
-from{transform:translateY(-100px);}
-to{transform:translateY(100vh);}
-}`;
-document.head.appendChild(style);
-</script>
 
 </body>
 </html>
