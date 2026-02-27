@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auwal MD Technology</title>
+<title>Auwal MD Technology Company</title>
 
 <style>
 *{
@@ -18,26 +18,54 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  background:linear-gradient(135deg,#0f172a,#1e293b);
+  background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);
+  overflow:hidden;
   color:white;
 }
 
+/* Floating Background Animation */
+.background{
+  position:absolute;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  z-index:0;
+}
+
+.background span{
+  position:absolute;
+  display:block;
+  width:20px;
+  height:20px;
+  background:rgba(0,198,255,0.2);
+  animation:move 20s linear infinite;
+  border-radius:50%;
+}
+
+@keyframes move{
+  0%{transform:translateY(0) rotate(0deg);}
+  100%{transform:translateY(-1000px) rotate(720deg);}
+}
+
+/* Login Card */
 .card{
+  position:relative;
+  z-index:1;
   width:90%;
-  max-width:360px; /* SMALL SIZE */
-  background:rgba(255,255,255,0.07);
-  backdrop-filter:blur(18px);
+  max-width:360px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(20px);
   padding:25px;
-  border-radius:14px;
+  border-radius:15px;
   text-align:center;
-  box-shadow:0 15px 35px rgba(0,0,0,0.5);
+  box-shadow:0 20px 40px rgba(0,0,0,0.6);
 }
 
 .logo{
   font-size:18px;
   font-weight:bold;
   color:#00c6ff;
-  margin-bottom:10px;
+  margin-bottom:5px;
 }
 
 input{
@@ -54,7 +82,7 @@ button{
   margin-top:8px;
   border:none;
   border-radius:6px;
-  background:#00c6ff;
+  background:linear-gradient(90deg,#00c6ff,#0072ff);
   font-weight:bold;
   cursor:pointer;
 }
@@ -67,7 +95,7 @@ button{
 }
 
 .support{
-  margin-top:15px;
+  margin-top:12px;
   font-size:13px;
 }
 
@@ -76,15 +104,37 @@ button{
   text-decoration:none;
   font-weight:bold;
 }
+
+footer{
+  position:absolute;
+  bottom:8px;
+  width:100%;
+  text-align:center;
+  font-size:12px;
+  color:#94a3b8;
+  z-index:1;
+}
 </style>
 </head>
 
 <body>
 
+<div class="background">
+<script>
+for(let i=0;i<25;i++){
+  let span=document.createElement("span");
+  span.style.left=Math.random()*100+"%";
+  span.style.top=Math.random()*100+"%";
+  span.style.animationDuration=(10+Math.random()*20)+"s";
+  document.body.querySelector(".background")?.appendChild(span);
+}
+</script>
+</div>
+
 <div class="card">
 
 <div class="logo">
-Auwal MD Technology Company
+👋 Auwal MD Technology Company
 </div>
 
 <input type="email" id="email" placeholder="Gmail">
@@ -98,14 +148,17 @@ Switch to Register
 </div>
 
 <div class="support">
-Customer Support:  
-<br>
-<a href="https://wa.me/2349137904300" target="_blank">
-📱 WhatsApp Us
+📧 <a href="mailto:yau789452@gmail.com">yau789452@gmail.com</a><br>
+📱 <a href="https://wa.me/2349137904300" target="_blank">
+Customer Support WhatsApp
 </a>
 </div>
 
 </div>
+
+<footer>
+© 2026 Auwal MD Technology Company | All Rights Reserved
+</footer>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
@@ -121,46 +174,32 @@ var firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-var auth = firebase.auth();
+var auth=firebase.auth();
 
-let isLogin = true;
+let isLogin=true;
 
 function toggleForm(){
-  isLogin = !isLogin;
-
-  if(isLogin){
-    document.getElementById("confirmPassword").style.display="none";
-    document.getElementById("actionBtn").innerText="Login";
-  }else{
-    document.getElementById("confirmPassword").style.display="block";
-    document.getElementById("actionBtn").innerText="Register";
-  }
+  isLogin=!isLogin;
+  document.getElementById("confirmPassword").style.display=isLogin?"none":"block";
+  document.getElementById("actionBtn").innerText=isLogin?"Login":"Register";
 }
 
 document.getElementById("actionBtn").onclick=function(){
-
   var email=document.getElementById("email").value;
   var password=document.getElementById("password").value;
   var confirmPassword=document.getElementById("confirmPassword").value;
 
   if(isLogin){
-
     auth.signInWithEmailAndPassword(email,password)
-    .then(()=>{ window.location.href="dashboard.html"; })
+    .then(()=>window.location.href="dashboard.html")
     .catch(err=>alert(err.message));
-
   }else{
-
     if(password!==confirmPassword){
       alert("Passwords do not match!");
       return;
     }
-
     auth.createUserWithEmailAndPassword(email,password)
-    .then(()=>{
-      alert("Registration Successful!");
-      toggleForm();
-    })
+    .then(()=>{ alert("Registration Successful!"); toggleForm(); })
     .catch(err=>alert(err.message));
   }
 }
