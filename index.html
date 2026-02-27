@@ -1,226 +1,69 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auwal MD Technology Company</title>
-
-<style>
-body{
-margin:0;
-font-family:'Segoe UI', sans-serif;
-background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-color:white;
-text-align:center;
-overflow:hidden;
-}
-
-/* Animation Background */
-.background{
-position:fixed;
-width:100%;
-height:100%;
-z-index:0;
-}
-
-.background span{
-position:absolute;
-width:6px;
-height:6px;
-background:rgba(0,255,200,0.3);
-border-radius:50%;
-animation:fall linear infinite;
-}
-
-@keyframes fall{
-0%{transform:translateY(-10vh);opacity:0;}
-10%{opacity:1;}
-100%{transform:translateY(110vh);opacity:0;}
-}
-
-/* Company Name */
-.company{
-margin-top:35px;
-position:relative;
-z-index:2;
-}
-
-.company h1{
-font-size:40px;
-background:linear-gradient(90deg,#00f5ff,#00ff9d);
--webkit-background-clip:text;
-color:transparent;
-}
-
-.company p{
-letter-spacing:3px;
-color:#ccc;
-}
-
-/* Card */
-.card{
-margin-top:25px;
-position:relative;
-z-index:2;
-}
-
-input{
-padding:12px;
-width:220px;
-border-radius:25px;
-border:none;
-margin:6px;
-}
-
-button{
-padding:12px 22px;
-border:none;
-border-radius:25px;
-background:linear-gradient(90deg,#00ff9d,#00c3ff);
-color:black;
-font-weight:bold;
-cursor:pointer;
-margin:6px;
-}
-
-/* Success */
-.success-box{
-margin-top:15px;
-font-size:20px;
-font-weight:bold;
-color:#00ff9d;
-display:none;
-animation:pop 0.4s ease-in-out;
-}
-
-@keyframes pop{
-0%{transform:scale(0.5);opacity:0;}
-100%{transform:scale(1);opacity:1;}
-}
-
-/* Loader */
-.loader{
-display:none;
-margin:10px auto;
-border:4px solid rgba(255,255,255,0.3);
-border-top:4px solid #00ff9d;
-border-radius:50%;
-width:28px;
-height:28px;
-animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-0%{transform:rotate(0deg);}
-100%{transform:rotate(360deg);}
-}
-
-/* Footer */
-footer{
-position:absolute;
-bottom:10px;
-width:100%;
-font-size:13px;
-color:#ccc;
-z-index:2;
-}
-
-/* WhatsApp */
-.whatsapp{
-position:fixed;
-bottom:20px;
-right:20px;
-z-index:10;
-}
-</style>
-</head>
-
-<body>
-
-<div class="background"></div>
-
-<div class="company">
-<h1>👋👋 AUWAL MD</h1>
-<p>Technology Company</p>
-</div>
-
-<div class="card">
-
-<div id="loginForm">
-<input type="email" placeholder="Email"><br>
-<input type="password" placeholder="Password"><br>
-<button onclick="startProcess('Login Success ✅')">Login</button>
-<br>
-<span onclick="switchForm()" style="cursor:pointer;color:#00ff9d;">Switch to Register</span>
-</div>
-
-<div id="registerForm" style="display:none;">
-<input type="email" placeholder="Email"><br>
-<input type="password" placeholder="Password"><br>
-<input type="password" placeholder="Confirm Password"><br>
-<button onclick="startProcess('Register Done ✅')">Register</button>
-<br>
-<span onclick="switchForm()" style="cursor:pointer;color:#00ff9d;">Switch to Login</span>
-</div>
-
-<div class="loader" id="loader"></div>
-<div id="successBox" class="success-box"></div>
-
-</div>
-
-<!-- WhatsApp -->
-<a href="https://wa.me/2349137904300" target="_blank" class="whatsapp">
-<img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="55">
-</a>
-
-<footer>
-© 2026 Auwal MD Technology Company | yau789452@gmail.com
-</footer>
-
 <script>
-function switchForm(){
-let login=document.getElementById("loginForm");
-let register=document.getElementById("registerForm");
+var firebaseConfig = {
+apiKey: "AIzaSyCKg3APPgfsx94I3HDMNFgr-ySpKnbVmIg",
+authDomain: "auwalmdtech.firebaseapp.com",
+projectId: "auwalmdtech",
+storageBucket: "auwalmdtech.firebasestorage.app",
+messagingSenderId: "202329584080",
+appId: "1:202329584080:android:33b8aa59e2267dd04609d5"
+};
 
-if(login.style.display==="none"){
-login.style.display="block";
-register.style.display="none";
-}else{
-login.style.display="none";
-register.style.display="block";
+firebase.initializeApp(firebaseConfig);
+var auth = firebase.auth();
+
+/* CHECK IF USER IS LOGGED IN */
+auth.onAuthStateChanged(function(user){
+    if(user){
+        window.location.href="dashboard.html";
+    }
+});
+
+/* REGISTER */
+function register(){
+    let email=document.getElementById("email").value;
+    let password=document.getElementById("password").value;
+
+    document.getElementById("loader").style.display="block";
+
+    auth.createUserWithEmailAndPassword(email,password)
+    .then(()=>{
+        showMessage("Register Success ✅");
+    })
+    .catch(error=>{
+        alert(error.message);
+    })
+    .finally(()=>{
+        document.getElementById("loader").style.display="none";
+    });
 }
+
+/* LOGIN */
+function login(){
+    let email=document.getElementById("email").value;
+    let password=document.getElementById("password").value;
+
+    document.getElementById("loader").style.display="block";
+
+    auth.signInWithEmailAndPassword(email,password)
+    .then(()=>{
+        showMessage("Login Success ✅");
+    })
+    .catch(error=>{
+        alert("You must register first!");
+    })
+    .finally(()=>{
+        document.getElementById("loader").style.display="none";
+    });
 }
 
-function startProcess(message){
-let loader=document.getElementById("loader");
-let box=document.getElementById("successBox");
+/* SUCCESS MESSAGE */
+function showMessage(msg){
+    let box=document.getElementById("successBox");
+    box.innerHTML=msg;
+    box.style.display="block";
 
-box.style.display="none";
-loader.style.display="block";
-
-setTimeout(function(){
-loader.style.display="none";
-box.innerHTML=message;
-box.style.display="block";
-
-setTimeout(function(){
-box.style.display="none";
-window.location.href="dashboard.html";
-},2000);
-
-},2000);
-}
-
-/* Falling Animation */
-const bg=document.querySelector(".background");
-for(let i=0;i<60;i++){
-let span=document.createElement("span");
-span.style.left=Math.random()*100+"%";
-span.style.animationDuration=(5+Math.random()*6)+"s";
-span.style.animationDelay=Math.random()*5+"s";
-bg.appendChild(span);
+    setTimeout(()=>{
+        box.style.display="none";
+    },3000);
 }
 </script>
-
-</body>
-</html>
