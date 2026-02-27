@@ -127,3 +127,110 @@
 
 </body>
   </html>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Auwal MD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body{
+      margin:0;
+      font-family:Arial;
+      background:linear-gradient(135deg,#0a0f1c,#111a2e);
+      color:white;
+      text-align:center;
+    }
+
+    h1{
+      margin-top:40px;
+      background:linear-gradient(90deg,#00aaff,#8a2be2);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+
+    input{
+      padding:10px;
+      margin:10px;
+      width:80%;
+      border-radius:5px;
+      border:none;
+    }
+
+    button{
+      padding:10px 20px;
+      border:none;
+      border-radius:20px;
+      background:linear-gradient(90deg,#00aaff,#8a2be2);
+      color:white;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    button:hover{
+      transform:scale(1.05);
+    }
+  </style>
+</head>
+
+<h1>Auwal MD Login</h1>
+
+<div>
+  <input type="text" id="phone" placeholder="Enter Phone Number (+234...)">
+  <br>
+  <button onclick="sendOTP()">Send OTP</button>
+</div>
+
+<div>
+  <input type="text" id="otp" placeholder="Enter OTP Code">
+  <br>
+  <button onclick="verifyOTP()">Verify</button>
+</div>
+
+<div id="recaptcha-container"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, signInWithPhoneNumber, RecaptchaVerifier } 
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "auwalmdtech.firebaseapp.com",
+    projectId: "auwalmdtech",
+    storageBucket: "auwalmdtech.firebasestorage.app",
+    messagingSenderId: "202329584080",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+    'size': 'normal'
+  }, auth);
+
+  window.sendOTP = function(){
+    const phoneNumber = document.getElementById("phone").value;
+    signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
+    .then((confirmationResult)=>{
+      window.confirmationResult = confirmationResult;
+      alert("OTP Sent!");
+    }).catch((error)=>{
+      alert(error.message);
+    });
+  }
+
+  window.verifyOTP = function(){
+    const code = document.getElementById("otp").value;
+    window.confirmationResult.confirm(code)
+    .then((result)=>{
+      alert("Login Successful!");
+    }).catch((error)=>{
+      alert("Wrong Code!");
+    });
+  }
+</script>
+
+</body>
+</html>
