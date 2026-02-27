@@ -3,52 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auwal MD Technology</title>
+<title>Auwal MD</title>
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Segoe UI', sans-serif;
-}
-
 body{
-  height:100vh;
+  margin:0;
+  font-family:'Segoe UI', sans-serif;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
   display:flex;
   justify-content:center;
   align-items:center;
-  background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);
+  height:100vh;
   color:white;
 }
 
 .card{
   width:90%;
-  max-width:420px;
-  padding:35px;
-  border-radius:18px;
+  max-width:400px;
   background:rgba(255,255,255,0.08);
   backdrop-filter:blur(20px);
-  box-shadow:0 20px 50px rgba(0,0,0,0.6);
+  padding:30px;
+  border-radius:15px;
   text-align:center;
-  animation:fadeIn 1s ease-in-out;
 }
 
-@keyframes fadeIn{
-  from{opacity:0; transform:translateY(20px);}
-  to{opacity:1; transform:translateY(0);}
-}
-
-h1{
-  font-size:22px;
-  margin-bottom:10px;
-  color:#00c6ff;
-}
-
-p{
-  font-size:13px;
+h2{
   margin-bottom:20px;
-  color:#cbd5e1;
 }
 
 input{
@@ -57,13 +37,6 @@ input{
   margin:8px 0;
   border:none;
   border-radius:8px;
-  background:rgba(255,255,255,0.15);
-  color:white;
-  outline:none;
-}
-
-input::placeholder{
-  color:#ddd;
 }
 
 button{
@@ -72,46 +45,34 @@ button{
   margin-top:10px;
   border:none;
   border-radius:8px;
-  background:linear-gradient(90deg,#00c6ff,#0072ff);
-  color:white;
+  background:#00c6ff;
   font-weight:bold;
   cursor:pointer;
-  transition:0.3s;
 }
 
-button:hover{
-  transform:scale(1.05);
-}
-
-.contact{
-  margin-top:20px;
-  font-size:13px;
-}
-
-.contact a{
+.switch{
+  margin-top:15px;
   color:#00c6ff;
-  text-decoration:none;
+  cursor:pointer;
+  font-size:14px;
 }
-
 </style>
 </head>
 
 <body>
 
 <div class="card">
-<h1>Auwal MD Technology</h1>
-<p>Original Hausa Apps & Digital Innovation</p>
+
+<h2 id="formTitle">Login</h2>
 
 <input type="email" id="email" placeholder="Enter Gmail">
 <input type="password" id="password" placeholder="Enter Password">
-<input type="password" id="confirmPassword" placeholder="Confirm Password">
+<input type="password" id="confirmPassword" placeholder="Confirm Password" style="display:none;">
 
-<button id="registerBtn">Register</button>
-<button id="loginBtn">Login</button>
+<button id="actionBtn">Login</button>
 
-<div class="contact">
-<p>📧 <a href="mailto:yau789452@gmail.com">yau789452@gmail.com</a></p>
-<p>📱 <a href="https://wa.me/2349137904300" target="_blank">09137904300</a></p>
+<div class="switch" onclick="toggleForm()">
+Switch to Register
 </div>
 
 </div>
@@ -132,39 +93,54 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var auth = firebase.auth();
 
-document.getElementById("registerBtn").onclick = function(){
+let isLogin = true;
+
+function toggleForm(){
+  isLogin = !isLogin;
+
+  if(isLogin){
+    document.getElementById("formTitle").innerText = "Login";
+    document.getElementById("confirmPassword").style.display = "none";
+    document.getElementById("actionBtn").innerText = "Login";
+  }else{
+    document.getElementById("formTitle").innerText = "Register";
+    document.getElementById("confirmPassword").style.display = "block";
+    document.getElementById("actionBtn").innerText = "Register";
+  }
+}
+
+document.getElementById("actionBtn").onclick = function(){
+
   var email = document.getElementById("email").value;
   var password = document.getElementById("password").value;
   var confirmPassword = document.getElementById("confirmPassword").value;
 
-  if(password !== confirmPassword){
-    alert("Passwords do not match!");
-    return;
+  if(isLogin){
+
+    auth.signInWithEmailAndPassword(email, password)
+    .then(function(){
+      window.location.href = "dashboard.html";
+    })
+    .catch(function(error){
+      alert(error.message);
+    });
+
+  }else{
+
+    if(password !== confirmPassword){
+      alert("Passwords do not match!");
+      return;
+    }
+
+    auth.createUserWithEmailAndPassword(email, password)
+    .then(function(){
+      alert("Registration Successful!");
+      toggleForm();
+    })
+    .catch(function(error){
+      alert(error.message);
+    });
   }
-
-  auth.createUserWithEmailAndPassword(email, password)
-  .then(function(){
-    alert("Registration Successful!");
-  })
-  .catch(function(error){
-    alert(error.message);
-  });
-}
-
-document.getElementById("loginBtn").onclick = function(){
-  var email = document.getElementById("email").value;
-  var password = document.getElementById("password").value;
-
-  auth.signInWithEmailAndPassword(email, password)
-.then(function(){
-  window.location.href = "dashboard.html";
-})
-.catch(function(error){
-  alert(error.message);
-});
-  .catch(function(error){
-    alert(error.message);
-  });
 }
 </script>
 
