@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auwal MD</title>
+<title>Auwal MD Technology Company</title>
 
 <style>
 body{
@@ -19,16 +19,19 @@ body{
 
 .card{
   width:90%;
-  max-width:400px;
+  max-width:420px;
   background:rgba(255,255,255,0.08);
   backdrop-filter:blur(20px);
   padding:30px;
-  border-radius:15px;
+  border-radius:18px;
   text-align:center;
+  position:relative;
 }
 
-h2{
-  margin-bottom:20px;
+h1{
+  font-size:20px;
+  margin-bottom:15px;
+  color:#00c6ff;
 }
 
 input{
@@ -45,16 +48,44 @@ button{
   margin-top:10px;
   border:none;
   border-radius:8px;
-  background:#00c6ff;
+  background:linear-gradient(90deg,#00c6ff,#0072ff);
+  color:white;
   font-weight:bold;
   cursor:pointer;
 }
 
 .switch{
-  margin-top:15px;
+  margin-top:12px;
   color:#00c6ff;
   cursor:pointer;
   font-size:14px;
+}
+
+.support{
+  margin-top:20px;
+  font-size:14px;
+}
+
+.support a{
+  color:#25D366;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+.loader{
+  display:none;
+  margin:15px auto;
+  border:4px solid #f3f3f3;
+  border-top:4px solid #00c6ff;
+  border-radius:50%;
+  width:30px;
+  height:30px;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  0%{transform:rotate(0deg);}
+  100%{transform:rotate(360deg);}
 }
 </style>
 </head>
@@ -63,7 +94,7 @@ button{
 
 <div class="card">
 
-<h2 id="formTitle">Login</h2>
+<h1>Auwal MD Technology Company 👋</h1>
 
 <input type="email" id="email" placeholder="Enter Gmail">
 <input type="password" id="password" placeholder="Enter Password">
@@ -71,8 +102,17 @@ button{
 
 <button id="actionBtn">Login</button>
 
+<div class="loader" id="loader"></div>
+
 <div class="switch" onclick="toggleForm()">
 Switch to Register
+</div>
+
+<div class="support">
+📱 Customer Support: <br>
+<a href="https://wa.me/2349137904300" target="_blank">
+💬 Contact Us on WhatsApp
+</a>
 </div>
 
 </div>
@@ -99,17 +139,17 @@ function toggleForm(){
   isLogin = !isLogin;
 
   if(isLogin){
-    document.getElementById("formTitle").innerText = "Login";
     document.getElementById("confirmPassword").style.display = "none";
     document.getElementById("actionBtn").innerText = "Login";
   }else{
-    document.getElementById("formTitle").innerText = "Register";
     document.getElementById("confirmPassword").style.display = "block";
     document.getElementById("actionBtn").innerText = "Register";
   }
 }
 
 document.getElementById("actionBtn").onclick = function(){
+
+  document.getElementById("loader").style.display = "block";
 
   var email = document.getElementById("email").value;
   var password = document.getElementById("password").value;
@@ -123,12 +163,14 @@ document.getElementById("actionBtn").onclick = function(){
     })
     .catch(function(error){
       alert(error.message);
+      document.getElementById("loader").style.display = "none";
     });
 
   }else{
 
     if(password !== confirmPassword){
       alert("Passwords do not match!");
+      document.getElementById("loader").style.display = "none";
       return;
     }
 
@@ -136,9 +178,11 @@ document.getElementById("actionBtn").onclick = function(){
     .then(function(){
       alert("Registration Successful!");
       toggleForm();
+      document.getElementById("loader").style.display = "none";
     })
     .catch(function(error){
       alert(error.message);
+      document.getElementById("loader").style.display = "none";
     });
   }
 }
