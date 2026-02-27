@@ -2,230 +2,115 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auwal MD Technology Company</title>
+<title>Auwal MD</title>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
-}
-
 body{
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:linear-gradient(135deg,#6a11cb,#2575fc);
-overflow:hidden;
-color:white;
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color:white;
+    text-align:center;
 }
 
-/* Falling Animation */
-.background{
-position:fixed;
-width:100%;
-height:100%;
-overflow:hidden;
-z-index:0;
+/* Company Name */
+.company{
+    margin-top:40px;
 }
 
-.background span{
-position:absolute;
-width:7px;
-height:7px;
-background:rgba(255,255,255,0.25);
-border-radius:50%;
-animation:fall linear infinite;
+.company h1{
+    font-size:42px;
+    font-weight:bold;
+    background: linear-gradient(90deg,#00f5ff,#00ff9d);
+    -webkit-background-clip:text;
+    color:transparent;
+    letter-spacing:2px;
 }
 
-@keyframes fall{
-0%{transform:translateY(-10vh);opacity:0;}
-10%{opacity:1;}
-100%{transform:translateY(110vh);opacity:0;}
+.company p{
+    margin-top:-10px;
+    font-size:18px;
+    color:#ddd;
+    letter-spacing:3px;
 }
 
-/* Login Card */
-.card{
-position:relative;
-z-index:1;
-width:90%;
-max-width:360px;
-background:white;
-color:#333;
-padding:25px;
-border-radius:18px;
-text-align:center;
-box-shadow:0 20px 40px rgba(0,0,0,0.4);
-}
-
-.logo img{
-width:170px;
-margin-bottom:10px;
-}
-
-input{
-width:100%;
-padding:12px;
-margin:8px 0;
-border:1px solid #ddd;
-border-radius:8px;
-}
-
+/* Button Style */
 button{
-width:100%;
-padding:12px;
-margin-top:10px;
-border:none;
-border-radius:10px;
-background:linear-gradient(90deg,#8e2de2,#4a00e0);
-color:white;
-font-weight:bold;
-cursor:pointer;
+    padding:12px 25px;
+    border:none;
+    border-radius:25px;
+    background: linear-gradient(90deg,#00ff9d,#00c3ff);
+    color:black;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:15px;
+    transition:0.3s;
 }
 
 button:hover{
-opacity:0.9;
+    transform:scale(1.05);
 }
 
-.switch{
-margin-top:10px;
-font-size:13px;
-color:#6a11cb;
-cursor:pointer;
+/* Success Message */
+.success-box{
+    margin-top:20px;
+    font-size:20px;
+    font-weight:bold;
+    color:#00ff9d;
+    display:none;
+    animation: pop 0.5s ease-in-out;
 }
 
-.spinner{
-width:25px;
-height:25px;
-border:3px solid rgba(0,0,0,0.2);
-border-top:3px solid #6a11cb;
-border-radius:50%;
-animation:spin 1s linear infinite;
-margin:10px auto;
-display:none;
+@keyframes pop{
+    0%{transform:scale(0.5);opacity:0;}
+    100%{transform:scale(1);opacity:1;}
 }
 
-@keyframes spin{
-0%{transform:rotate(0deg);}
-100%{transform:rotate(360deg);}
-}
-
-/* WhatsApp Floating */
-.whatsapp{
-position:fixed;
-bottom:20px;
-right:20px;
-z-index:1000;
-}
-
-footer{
-position:absolute;
-bottom:8px;
-width:100%;
-text-align:center;
-font-size:12px;
-color:white;
-z-index:1;
+input{
+    padding:10px;
+    border-radius:20px;
+    border:none;
+    margin:5px;
+    width:200px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="background"></div>
-
-<div class="card">
-
-<div class="logo">
-<img src="logo.png" alt="Auwal MD Logo">
+<div class="company">
+    <h1>👋👋 AUWAL MD</h1>
+    <p>Technology Company</p>
 </div>
 
-<input type="email" id="email" placeholder="Enter your email">
-<input type="password" id="password" placeholder="Enter your password">
-<input type="password" id="confirmPassword" placeholder="Confirm Password" style="display:none;">
+<br><br>
 
-<button id="actionBtn">Sign In</button>
-
-<div class="spinner" id="loader"></div>
-
-<div class="switch" onclick="toggleForm()">
-Create Account
-</div>
-
+<input type="text" placeholder="Enter Email">
 <br>
-📧 <a href="mailto:yau789452@gmail.com">yau789452@gmail.com</a>
+<input type="password" placeholder="Enter Password">
+<br>
+<button onclick="showSuccess('Login Success ✅')">Login</button>
+<button onclick="showSuccess('Register Done ✅')">Register</button>
 
-</div>
+<br><br>
 
-<a href="https://wa.me/2349137904300" target="_blank" class="whatsapp">
-<img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="50">
-</a>
+<input type="text" id="searchInput" placeholder="Search here...">
+<br>
+<button onclick="searchDone()">Search</button>
 
-<footer>
-© 2026 Auwal MD Technology Company
-</footer>
-
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<div class="success-box" id="successMessage"></div>
 
 <script>
-var firebaseConfig = {
-apiKey: "AIzaSyCKg3APPgfsx94I3HDMNFgr-ySpKnbVmIg",
-authDomain: "auwalmdtech.firebaseapp.com",
-projectId: "auwalmdtech",
-storageBucket: "auwalmdtech.firebasestorage.app",
-messagingSenderId: "202329584080",
-appId: "1:202329584080:android:33b8aa59e2267dd04609d5"
-};
-
-firebase.initializeApp(firebaseConfig);
-var auth=firebase.auth();
-
-let isLogin=true;
-
-function toggleForm(){
-isLogin=!isLogin;
-document.getElementById("confirmPassword").style.display=isLogin?"none":"block";
-document.getElementById("actionBtn").innerText=isLogin?"Sign In":"Register";
-document.querySelector(".switch").innerText=isLogin?"Create Account":"Back to Login";
+function showSuccess(message){
+    let box = document.getElementById("successMessage");
+    box.innerHTML = message;
+    box.style.display = "block";
 }
 
-document.getElementById("actionBtn").onclick=function(){
-var email=document.getElementById("email").value;
-var password=document.getElementById("password").value;
-var confirmPassword=document.getElementById("confirmPassword").value;
-
-document.getElementById("loader").style.display="block";
-
-if(isLogin){
-auth.signInWithEmailAndPassword(email,password)
-.then(()=>window.location.href="dashboard.html")
-.catch(err=>alert(err.message))
-.finally(()=>document.getElementById("loader").style.display="none");
-}else{
-if(password!==confirmPassword){
-alert("Passwords do not match!");
-document.getElementById("loader").style.display="none";
-return;
-}
-auth.createUserWithEmailAndPassword(email,password)
-.then(()=>{alert("Registration Successful!");toggleForm();})
-.catch(err=>alert(err.message))
-.finally(()=>document.getElementById("loader").style.display="none");
-}
-}
-
-/* Generate Falling Dots */
-const bg=document.querySelector(".background");
-for(let i=0;i<60;i++){
-let span=document.createElement("span");
-span.style.left=Math.random()*100+"%";
-span.style.animationDuration=(5+Math.random()*6)+"s";
-span.style.animationDelay=Math.random()*5+"s";
-bg.appendChild(span);
+function searchDone(){
+    let box = document.getElementById("successMessage");
+    box.innerHTML = "Search Done ✅";
+    box.style.display = "block";
 }
 </script>
 
