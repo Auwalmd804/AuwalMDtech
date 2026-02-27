@@ -7,157 +7,165 @@
 
 <style>
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Segoe UI', sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
 }
 
 body{
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);
-  overflow:hidden;
-  color:white;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#6a11cb,#2575fc);
+overflow:hidden;
+color:white;
 }
 
-/* Floating Background Animation */
+/* Falling Animation */
 .background{
-  position:absolute;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  z-index:0;
+position:fixed;
+width:100%;
+height:100%;
+overflow:hidden;
+z-index:0;
 }
 
 .background span{
-  position:absolute;
-  display:block;
-  width:20px;
-  height:20px;
-  background:rgba(0,198,255,0.2);
-  animation:move 20s linear infinite;
-  border-radius:50%;
+position:absolute;
+width:6px;
+height:6px;
+background:rgba(255,255,255,0.25);
+border-radius:50%;
+animation:fall linear infinite;
 }
 
-@keyframes move{
-  0%{transform:translateY(0) rotate(0deg);}
-  100%{transform:translateY(-1000px) rotate(720deg);}
+@keyframes fall{
+0%{transform:translateY(-10vh);opacity:0;}
+10%{opacity:1;}
+100%{transform:translateY(110vh);opacity:0;}
 }
 
 /* Login Card */
 .card{
-  position:relative;
-  z-index:1;
-  width:90%;
-  max-width:360px;
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(20px);
-  padding:25px;
-  border-radius:15px;
-  text-align:center;
-  box-shadow:0 20px 40px rgba(0,0,0,0.6);
+position:relative;
+z-index:1;
+width:90%;
+max-width:360px;
+background:white;
+color:#333;
+padding:25px;
+border-radius:18px;
+text-align:center;
+box-shadow:0 20px 40px rgba(0,0,0,0.4);
 }
 
-.logo{
-  font-size:18px;
-  font-weight:bold;
-  color:#00c6ff;
-  margin-bottom:5px;
+.logo img{
+width:170px;
+margin-bottom:10px;
 }
 
 input{
-  width:100%;
-  padding:10px;
-  margin:6px 0;
-  border:none;
-  border-radius:6px;
+width:100%;
+padding:12px;
+margin:8px 0;
+border:1px solid #ddd;
+border-radius:8px;
 }
 
 button{
-  width:100%;
-  padding:10px;
-  margin-top:8px;
-  border:none;
-  border-radius:6px;
-  background:linear-gradient(90deg,#00c6ff,#0072ff);
-  font-weight:bold;
-  cursor:pointer;
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+background:linear-gradient(90deg,#8e2de2,#4a00e0);
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{
+opacity:0.9;
 }
 
 .switch{
-  margin-top:10px;
-  font-size:13px;
-  color:#00c6ff;
-  cursor:pointer;
+margin-top:10px;
+font-size:13px;
+color:#6a11cb;
+cursor:pointer;
 }
 
-.support{
-  margin-top:12px;
-  font-size:13px;
+.spinner{
+width:25px;
+height:25px;
+border:3px solid rgba(0,0,0,0.2);
+border-top:3px solid #6a11cb;
+border-radius:50%;
+animation:spin 1s linear infinite;
+margin:10px auto;
+display:none;
 }
 
-.support a{
-  color:#25D366;
-  text-decoration:none;
-  font-weight:bold;
+@keyframes spin{
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
+}
+
+/* WhatsApp Floating */
+.whatsapp{
+position:fixed;
+bottom:20px;
+right:20px;
+z-index:1000;
 }
 
 footer{
-  position:absolute;
-  bottom:8px;
-  width:100%;
-  text-align:center;
-  font-size:12px;
-  color:#94a3b8;
-  z-index:1;
+position:absolute;
+bottom:8px;
+width:100%;
+text-align:center;
+font-size:12px;
+color:white;
+z-index:1;
 }
 </style>
 </head>
 
 <body>
 
-<div class="background">
-<script>
-for(let i=0;i<25;i++){
-  let span=document.createElement("span");
-  span.style.left=Math.random()*100+"%";
-  span.style.top=Math.random()*100+"%";
-  span.style.animationDuration=(10+Math.random()*20)+"s";
-  document.body.querySelector(".background")?.appendChild(span);
-}
-</script>
-</div>
+<div class="background"></div>
 
 <div class="card">
 
 <div class="logo">
-👋 Auwal MD Technology Company
+<img src="logo.png" alt="Auwal MD Logo">
 </div>
 
-<input type="email" id="email" placeholder="Gmail">
-<input type="password" id="password" placeholder="Password">
+<input type="email" id="email" placeholder="Enter your email">
+<input type="password" id="password" placeholder="Enter your password">
 <input type="password" id="confirmPassword" placeholder="Confirm Password" style="display:none;">
 
-<button id="actionBtn">Login</button>
+<button id="actionBtn">Sign In</button>
+
+<div class="spinner" id="loader"></div>
 
 <div class="switch" onclick="toggleForm()">
-Switch to Register
+Create Account
 </div>
 
-<div class="support">
-📧 <a href="mailto:yau789452@gmail.com">yau789452@gmail.com</a><br>
-📱 <a href="https://wa.me/2349137904300" target="_blank">
-Customer Support WhatsApp
+<br>
+📧 <a href="mailto:yau789452@gmail.com">yau789452@gmail.com</a>
+
+</div>
+
+<a href="https://wa.me/2349137904300" target="_blank" class="whatsapp">
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="50">
 </a>
-</div>
-
-</div>
 
 <footer>
-© 2026 Auwal MD Technology Company | All Rights Reserved
+© 2026 Auwal MD Technology Company
 </footer>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -165,12 +173,12 @@ Customer Support WhatsApp
 
 <script>
 var firebaseConfig = {
-  apiKey: "AIzaSyCKg3APPgfsx94I3HDMNFgr-ySpKnbVmIg",
-  authDomain: "auwalmdtech.firebaseapp.com",
-  projectId: "auwalmdtech",
-  storageBucket: "auwalmdtech.firebasestorage.app",
-  messagingSenderId: "202329584080",
-  appId: "1:202329584080:android:33b8aa59e2267dd04609d5"
+apiKey: "AIzaSyCKg3APPgfsx94I3HDMNFgr-ySpKnbVmIg",
+authDomain: "auwalmdtech.firebaseapp.com",
+projectId: "auwalmdtech",
+storageBucket: "auwalmdtech.firebasestorage.app",
+messagingSenderId: "202329584080",
+appId: "1:202329584080:android:33b8aa59e2267dd04609d5"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -179,29 +187,45 @@ var auth=firebase.auth();
 let isLogin=true;
 
 function toggleForm(){
-  isLogin=!isLogin;
-  document.getElementById("confirmPassword").style.display=isLogin?"none":"block";
-  document.getElementById("actionBtn").innerText=isLogin?"Login":"Register";
+isLogin=!isLogin;
+document.getElementById("confirmPassword").style.display=isLogin?"none":"block";
+document.getElementById("actionBtn").innerText=isLogin?"Sign In":"Register";
+document.querySelector(".switch").innerText=isLogin?"Create Account":"Back to Login";
 }
 
 document.getElementById("actionBtn").onclick=function(){
-  var email=document.getElementById("email").value;
-  var password=document.getElementById("password").value;
-  var confirmPassword=document.getElementById("confirmPassword").value;
+var email=document.getElementById("email").value;
+var password=document.getElementById("password").value;
+var confirmPassword=document.getElementById("confirmPassword").value;
 
-  if(isLogin){
-    auth.signInWithEmailAndPassword(email,password)
-    .then(()=>window.location.href="dashboard.html")
-    .catch(err=>alert(err.message));
-  }else{
-    if(password!==confirmPassword){
-      alert("Passwords do not match!");
-      return;
-    }
-    auth.createUserWithEmailAndPassword(email,password)
-    .then(()=>{ alert("Registration Successful!"); toggleForm(); })
-    .catch(err=>alert(err.message));
-  }
+document.getElementById("loader").style.display="block";
+
+if(isLogin){
+auth.signInWithEmailAndPassword(email,password)
+.then(()=>window.location.href="dashboard.html")
+.catch(err=>{alert(err.message);})
+.finally(()=>document.getElementById("loader").style.display="none");
+}else{
+if(password!==confirmPassword){
+alert("Passwords do not match!");
+document.getElementById("loader").style.display="none";
+return;
+}
+auth.createUserWithEmailAndPassword(email,password)
+.then(()=>{alert("Registration Successful!");toggleForm();})
+.catch(err=>alert(err.message))
+.finally(()=>document.getElementById("loader").style.display="none");
+}
+}
+
+/* Generate Falling Dots */
+const bg=document.querySelector(".background");
+for(let i=0;i<50;i++){
+let span=document.createElement("span");
+span.style.left=Math.random()*100+"%";
+span.style.animationDuration=(6+Math.random()*6)+"s";
+span.style.animationDelay=Math.random()*5+"s";
+bg.appendChild(span);
 }
 </script>
 
