@@ -156,9 +156,12 @@ document.getElementById("loginBtn").onclick = function(){
   var password = document.getElementById("password").value;
 
   auth.signInWithEmailAndPassword(email, password)
-  .then(function(){
-    alert("Login Successful!");
-  })
+.then(function(){
+  window.location.href = "dashboard.html";
+})
+.catch(function(error){
+  alert(error.message);
+});
   .catch(function(error){
     alert(error.message);
   });
