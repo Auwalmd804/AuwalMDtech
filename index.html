@@ -3,89 +3,78 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auwal MD Technology Company</title>
+<title>Auwal MD Technology</title>
 
 <style>
-body{
+*{
   margin:0;
+  padding:0;
+  box-sizing:border-box;
   font-family:'Segoe UI', sans-serif;
-  background:linear-gradient(135deg,#0f172a,#1e293b);
+}
+
+body{
+  height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
-  height:100vh;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
   color:white;
 }
 
 .card{
   width:90%;
-  max-width:420px;
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(20px);
-  padding:30px;
-  border-radius:18px;
+  max-width:360px; /* SMALL SIZE */
+  background:rgba(255,255,255,0.07);
+  backdrop-filter:blur(18px);
+  padding:25px;
+  border-radius:14px;
   text-align:center;
-  position:relative;
+  box-shadow:0 15px 35px rgba(0,0,0,0.5);
 }
 
-h1{
-  font-size:20px;
-  margin-bottom:15px;
+.logo{
+  font-size:18px;
+  font-weight:bold;
   color:#00c6ff;
+  margin-bottom:10px;
 }
 
 input{
   width:100%;
-  padding:12px;
-  margin:8px 0;
+  padding:10px;
+  margin:6px 0;
   border:none;
-  border-radius:8px;
+  border-radius:6px;
 }
 
 button{
   width:100%;
-  padding:12px;
-  margin-top:10px;
+  padding:10px;
+  margin-top:8px;
   border:none;
-  border-radius:8px;
-  background:linear-gradient(90deg,#00c6ff,#0072ff);
-  color:white;
+  border-radius:6px;
+  background:#00c6ff;
   font-weight:bold;
   cursor:pointer;
 }
 
 .switch{
-  margin-top:12px;
+  margin-top:10px;
+  font-size:13px;
   color:#00c6ff;
   cursor:pointer;
-  font-size:14px;
 }
 
 .support{
-  margin-top:20px;
-  font-size:14px;
+  margin-top:15px;
+  font-size:13px;
 }
 
 .support a{
   color:#25D366;
   text-decoration:none;
   font-weight:bold;
-}
-
-.loader{
-  display:none;
-  margin:15px auto;
-  border:4px solid #f3f3f3;
-  border-top:4px solid #00c6ff;
-  border-radius:50%;
-  width:30px;
-  height:30px;
-  animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-  0%{transform:rotate(0deg);}
-  100%{transform:rotate(360deg);}
 }
 </style>
 </head>
@@ -94,24 +83,25 @@ button{
 
 <div class="card">
 
-<h1>Auwal MD Technology Company 👋</h1>
+<div class="logo">
+Auwal MD Technology Company
+</div>
 
-<input type="email" id="email" placeholder="Enter Gmail">
-<input type="password" id="password" placeholder="Enter Password">
+<input type="email" id="email" placeholder="Gmail">
+<input type="password" id="password" placeholder="Password">
 <input type="password" id="confirmPassword" placeholder="Confirm Password" style="display:none;">
 
 <button id="actionBtn">Login</button>
-
-<div class="loader" id="loader"></div>
 
 <div class="switch" onclick="toggleForm()">
 Switch to Register
 </div>
 
 <div class="support">
-📱 Customer Support: <br>
+Customer Support:  
+<br>
 <a href="https://wa.me/2349137904300" target="_blank">
-💬 Contact Us on WhatsApp
+📱 WhatsApp Us
 </a>
 </div>
 
@@ -139,51 +129,39 @@ function toggleForm(){
   isLogin = !isLogin;
 
   if(isLogin){
-    document.getElementById("confirmPassword").style.display = "none";
-    document.getElementById("actionBtn").innerText = "Login";
+    document.getElementById("confirmPassword").style.display="none";
+    document.getElementById("actionBtn").innerText="Login";
   }else{
-    document.getElementById("confirmPassword").style.display = "block";
-    document.getElementById("actionBtn").innerText = "Register";
+    document.getElementById("confirmPassword").style.display="block";
+    document.getElementById("actionBtn").innerText="Register";
   }
 }
 
-document.getElementById("actionBtn").onclick = function(){
+document.getElementById("actionBtn").onclick=function(){
 
-  document.getElementById("loader").style.display = "block";
-
-  var email = document.getElementById("email").value;
-  var password = document.getElementById("password").value;
-  var confirmPassword = document.getElementById("confirmPassword").value;
+  var email=document.getElementById("email").value;
+  var password=document.getElementById("password").value;
+  var confirmPassword=document.getElementById("confirmPassword").value;
 
   if(isLogin){
 
-    auth.signInWithEmailAndPassword(email, password)
-    .then(function(){
-      window.location.href = "dashboard.html";
-    })
-    .catch(function(error){
-      alert(error.message);
-      document.getElementById("loader").style.display = "none";
-    });
+    auth.signInWithEmailAndPassword(email,password)
+    .then(()=>{ window.location.href="dashboard.html"; })
+    .catch(err=>alert(err.message));
 
   }else{
 
-    if(password !== confirmPassword){
+    if(password!==confirmPassword){
       alert("Passwords do not match!");
-      document.getElementById("loader").style.display = "none";
       return;
     }
 
-    auth.createUserWithEmailAndPassword(email, password)
-    .then(function(){
+    auth.createUserWithEmailAndPassword(email,password)
+    .then(()=>{
       alert("Registration Successful!");
       toggleForm();
-      document.getElementById("loader").style.display = "none";
     })
-    .catch(function(error){
-      alert(error.message);
-      document.getElementById("loader").style.display = "none";
-    });
+    .catch(err=>alert(err.message));
   }
 }
 </script>
