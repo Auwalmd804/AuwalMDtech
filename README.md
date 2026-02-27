@@ -1,116 +1,86 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auwal MD</title>
-
-<style>
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  color:white;
-}
-
-.container{
-  background:#111;
-  padding:30px;
-  border-radius:10px;
-  width:90%;
-  max-width:350px;
-  text-align:center;
-}
-
-h2{
-  margin-bottom:20px;
-}
-
-input{
-  width:100%;
-  padding:12px;
-  margin:8px 0;
-  border:none;
-  border-radius:5px;
-}
-
-button{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border:none;
-  border-radius:5px;
-  background:linear-gradient(90deg,#00c6ff,#0072ff);
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-button:hover{
-  opacity:0.9;
-}
-</style>
+  <title>Auwal MD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body{
+      margin:0;
+      font-family: Arial, sans-serif;
+      background:#0a0f1c;
+      color:white;
+      text-align:center;
+    }
+    header{
+      padding:20px;
+      background:#111a2e;
+    }
+    nav a{
+      color:#00aaff;
+      margin:0 15px;
+      text-decoration:none;
+    }
+    section{
+      padding:60px 20px;
+    }
+    h1{
+      color:#00aaff;
+      font-size:40px;
+    }
+    .btn{
+      display:inline-block;
+      padding:10px 20px;
+      background:#00aaff;
+      color:white;
+      border-radius:5px;
+      text-decoration:none;
+      margin-top:20px;
+    }
+    footer{
+      background:#111a2e;
+      padding:20px;
+      margin-top:40px;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="container">
-  <h2>Auwal MD Login</h2>
+<header>
+  <h2>Auwal MD</h2>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
 
-  <input type="email" id="email" placeholder="Enter Gmail">
-  <input type="password" id="password" placeholder="Enter Password">
+<section id="home">
+  <h1>From Ideas to Impact</h1>
+  <p>Official Technology Company Website</p>
+  <a href="#services" class="btn">Explore Services</a>
+</section>
 
-  <button id="registerBtn">Register</button>
-  <button id="loginBtn">Login</button>
-</div>
+<section id="about">
+  <h1>About Us</h1>
+  <p>Auwal MD is a technology company focused on app development and digital innovation.</p>
+</section>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<section id="services">
+  <h1>Our Services</h1>
+  <p>✔ App Development</p>
+  <p>✔ App Distribution Platform</p>
+  <p>✔ Digital Solutions</p>
+</section>
 
-<script>
-  var firebaseConfig = {
-    apiKey: "AIzaSyCKg3APPgfsx94I3HDMNFgr-ySpKnbVmIg",
-    authDomain: "auwalmdtech.firebaseapp.com",
-    projectId: "auwalmdtech",
-    storageBucket: "auwalmdtech.firebasestorage.app",
-    messagingSenderId: "202329584080",
-    appId: "1:202329584080:android:33b8aa59e2267dd04609d5"
-  };
+<section id="contact">
+  <h1>Contact</h1>
+  <p>Email: your@email.com</p>
+</section>
 
-  firebase.initializeApp(firebaseConfig);
-  var auth = firebase.auth();
-
-  document.getElementById("registerBtn").onclick = function(){
-    var email = document.getElementById("email").value;
-    var password = document.getElementById("password").value;
-
-    auth.createUserWithEmailAndPassword(email, password)
-    .then(function(){
-      alert("Registration Successful!");
-    })
-    .catch(function(error){
-      alert(error.message);
-    });
-  }
-
-  document.getElementById("loginBtn").onclick = function(){
-    var email = document.getElementById("email").value;
-    var password = document.getElementById("password").value;
-
-    auth.signInWithEmailAndPassword(email, password)
-    .then(function(){
-      alert("Login Successful!");
-    })
-    .catch(function(error){
-      alert(error.message);
-    });
-  }
-</script>
+<footer>
+  <p>© 2026 Auwal MD. All Rights Reserved.</p>
+</footer>
 
 </body>
 </html>
