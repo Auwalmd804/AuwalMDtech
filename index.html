@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auwal MD Dashboard</title>
+<title>Auwal MD Technology Company</title>
 
 <style>
 body{
@@ -12,40 +12,89 @@ font-family:'Segoe UI', sans-serif;
 background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
 color:white;
 text-align:center;
+overflow:hidden;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+height:100vh;
 }
 
-/* Header */
+/* Title */
 h1{
-margin-top:30px;
+margin:0;
+font-size:40px;
 }
 
-/* Card */
-.card{
+.subtitle{
+margin-top:5px;
+letter-spacing:3px;
+color:#ccc;
+margin-bottom:25px;
+}
+
+/* Login Box */
+.box{
 background:rgba(255,255,255,0.08);
 padding:20px;
-margin:20px auto;
-width:90%;
-max-width:400px;
 border-radius:15px;
+width:90%;
+max-width:320px;
 backdrop-filter:blur(10px);
 }
 
-/* Button */
-button{
-padding:10px 20px;
+input{
+width:100%;
+padding:10px;
+margin:6px 0;
 border:none;
-border-radius:8px;
+border-radius:6px;
+}
+
+button{
+width:100%;
+padding:10px;
+margin-top:6px;
+border:none;
+border-radius:6px;
 background:#00c6ff;
 color:black;
 font-weight:bold;
 cursor:pointer;
 }
 
+.switch{
+margin-top:10px;
+font-size:13px;
+color:#00ff9d;
+cursor:pointer;
+}
+
+/* Success */
+.success{
+margin-top:10px;
+color:#00ff9d;
+font-weight:bold;
+display:none;
+animation:pop 0.4s ease;
+}
+
+@keyframes pop{
+from{transform:scale(0.8);opacity:0;}
+to{transform:scale(1);opacity:1;}
+}
+
+/* WhatsApp */
+.whatsapp{
+position:fixed;
+bottom:20px;
+right:20px;
+}
+
 /* Footer */
 footer{
 position:fixed;
 bottom:5px;
-width:100%;
 font-size:12px;
 color:#ccc;
 }
@@ -54,16 +103,62 @@ color:#ccc;
 
 <body>
 
-<h1>Welcome to Auwal MD Dashboard ✅</h1>
+<h1>👋👋 AUWAL MD</h1>
+<div class="subtitle">Technology Company</div>
 
-<div class="card">
-<p>This is your control panel.</p>
-<button onclick="alert('Next step ready 🚀')">Continue</button>
+<div class="box">
+
+<div id="loginForm">
+<input type="email" placeholder="Email">
+<input type="password" placeholder="Password">
+<button onclick="showSuccess('Login Success ✅')">Login</button>
+<div class="switch" onclick="toggleForm()">Switch to Register</div>
 </div>
+
+<div id="registerForm" style="display:none;">
+<input type="email" placeholder="Email">
+<input type="password" placeholder="Password">
+<input type="password" placeholder="Confirm Password">
+<button onclick="showSuccess('Register Success ✅')">Register</button>
+<div class="switch" onclick="toggleForm()">Switch to Login</div>
+</div>
+
+<div class="success" id="msg"></div>
+
+</div>
+
+<a href="https://wa.me/2349137904300" target="_blank" class="whatsapp">
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="50">
+</a>
 
 <footer>
 © 2026 Auwal MD Technology Company | yau789452@gmail.com
 </footer>
+
+<script>
+function toggleForm(){
+let login=document.getElementById("loginForm");
+let register=document.getElementById("registerForm");
+
+if(login.style.display==="none"){
+login.style.display="block";
+register.style.display="none";
+}else{
+login.style.display="none";
+register.style.display="block";
+}
+}
+
+function showSuccess(text){
+let msg=document.getElementById("msg");
+msg.innerHTML=text;
+msg.style.display="block";
+
+setTimeout(()=>{
+msg.style.display="none";
+},3000);
+}
+</script>
 
 </body>
 </html>
