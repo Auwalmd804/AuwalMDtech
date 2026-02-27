@@ -1,82 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - Auwal MD</title>
+<title>Auwal MD Technology Company - Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "auwalmdtech.firebaseapp.com",
+    projectId: "auwalmdtech",
+    storageBucket: "auwalmdtech.appspot.com",
+    messagingSenderId: "202329584080",
+    appId: "1:202329584080:web:8f4a816bfca6c7834609d5"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // Protect dashboard
+  onAuthStateChanged(auth, (user) => {
+    if(user){
+      document.getElementById('userEmail').innerText = user.email;
+    } else {
+      // redirect to login if not logged in
+      window.location.href = "index.html";
+    }
+  });
+
+  // Logout function
+  window.logout = async function() {
+    try {
+      await signOut(auth);
+      window.location.href = "index.html";
+    } catch(error) {
+      alert(error.message);
+    }
+  }
+</script>
 
 <style>
-body{
-  margin:0;
-  font-family:'Segoe UI', sans-serif;
-  background:linear-gradient(135deg,#0f172a,#1e293b);
-  color:white;
-  text-align:center;
-  padding:40px;
-}
-
-h1{
-  color:#00c6ff;
-}
-
-.card{
-  background:rgba(255,255,255,0.08);
-  padding:30px;
-  border-radius:15px;
-  max-width:400px;
-  margin:auto;
-  backdrop-filter:blur(15px);
-}
-
-button{
-  margin-top:20px;
-  padding:10px 20px;
-  border:none;
-  border-radius:8px;
-  background:#ff4d4d;
-  color:white;
-  cursor:pointer;
-}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif;}
+  body{background:#f0f2f5;height:100vh;display:flex;flex-direction:column;}
+  header{background:#4F46E5;color:white;padding:20px;display:flex;justify-content:space-between;align-items:center;}
+  header h1{font-size:20px;}
+  header button{padding:8px 15px;background:#06B6D4;color:white;border:none;border-radius:6px;cursor:pointer;transition:0.3s;}
+  header button:hover{opacity:0.9;}
+  main{flex:1;padding:40px;}
+  main h2{font-size:24px;margin-bottom:20px;}
+  .card-container{display:flex;flex-wrap:wrap;gap:20px;}
+  .card{flex:1 1 200px;background:white;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
 </style>
 </head>
 
 <body>
+  <header>
+    <h1>Welcome, <span id="userEmail"></span></h1>
+    <button onclick="logout()">Logout</button>
+  </header>
 
-<h1>Welcome to Auwal MD Dashboard</h1>
-
-<div class="card">
-<p>You are successfully logged in.</p>
-<button onclick="logout()">Logout</button>
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-
-<script>
-var firebaseConfig = {
-  apiKey: "AIzaSyCKg3APPgfsx94I3HDMNFgr-ySpKnbVmIg",
-  authDomain: "auwalmdtech.firebaseapp.com",
-  projectId: "auwalmdtech",
-  storageBucket: "auwalmdtech.firebasestorage.app",
-  messagingSenderId: "202329584080",
-  appId: "1:202329584080:android:33b8aa59e2267dd04609d5"
-};
-
-firebase.initializeApp(firebaseConfig);
-var auth = firebase.auth();
-
-auth.onAuthStateChanged(function(user){
-  if(!user){
-    window.location.href = "index.html";
-  }
-});
-
-function logout(){
-  auth.signOut().then(function(){
-    window.location.href = "index.html";
-  });
-}
-</script>
-
+  <main>
+    <h2>Dashboard Overview</h2>
+    <div class="card-container">
+      <div class="card">
+        <h3>Total Projects</h3>
+        <p>12</p>
+      </div>
+      <div class="card">
+        <h3>Messages</h3>
+        <p>5</p>
+      </div>
+      <div class="card">
+        <h3>Notifications</h3>
+        <p>3</p>
+      </div>
+      <div class="card">
+        <h3>Account Status</h3>
+        <p>Active</p>
+      </div>
+    </div>
+  </main>
 </body>
 </html>
