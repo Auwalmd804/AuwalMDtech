@@ -1,73 +1,79 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Auwal MD</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body{
-      margin:0;
-      font-family:Arial;
-      background:linear-gradient(135deg,#0a0f1c,#111a2e);
-      color:white;
-      text-align:center;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auwal MD</title>
 
-    h1{
-      margin-top:40px;
-      background:linear-gradient(90deg,#00aaff,#8a2be2);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-    }
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  color:white;
+}
 
-    .box{
-      margin-top:50px;
-    }
+.container{
+  background:#111;
+  padding:30px;
+  border-radius:10px;
+  width:90%;
+  max-width:350px;
+  text-align:center;
+}
 
-    input{
-      padding:12px;
-      margin:10px;
-      width:80%;
-      max-width:300px;
-      border-radius:5px;
-      border:none;
-    }
+h2{
+  margin-bottom:20px;
+}
 
-    button{
-      padding:10px 20px;
-      border:none;
-      border-radius:20px;
-      background:linear-gradient(90deg,#00aaff,#8a2be2);
-      color:white;
-      font-weight:bold;
-      cursor:pointer;
-      margin:5px;
-    }
+input{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border:none;
+  border-radius:5px;
+}
 
-    button:hover{
-      transform:scale(1.05);
-    }
-  </style>
+button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:5px;
+  background:linear-gradient(90deg,#00c6ff,#0072ff);
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:hover{
+  opacity:0.9;
+}
+</style>
 </head>
 
 <body>
 
-<h1>Auwal MD Login</h1>
+<div class="container">
+  <h2>Auwal MD Login</h2>
 
-<div class="box">
   <input type="email" id="email" placeholder="Enter Gmail">
-  <br>
   <input type="password" id="password" placeholder="Enter Password">
-  <br>
-  <button onclick="register()">Register</button>
-  <button onclick="login()">Login</button>
+
+  <button id="registerBtn">Register</button>
+  <button id="loginBtn">Login</button>
 </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } 
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
-  const firebaseConfig = {
+<script>
+  var firebaseConfig = {
     apiKey: "AIzaSyCKg3APPgfsx94I3HDMNFgr-ySpKnbVmIg",
     authDomain: "auwalmdtech.firebaseapp.com",
     projectId: "auwalmdtech",
@@ -76,31 +82,31 @@
     appId: "1:202329584080:android:33b8aa59e2267dd04609d5"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+  firebase.initializeApp(firebaseConfig);
+  var auth = firebase.auth();
 
-  window.register = function(){
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+  document.getElementById("registerBtn").onclick = function(){
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;
 
-    createUserWithEmailAndPassword(auth, email, password)
-    .then(()=>{
+    auth.createUserWithEmailAndPassword(email, password)
+    .then(function(){
       alert("Registration Successful!");
     })
-    .catch((error)=>{
+    .catch(function(error){
       alert(error.message);
     });
   }
 
-  window.login = function(){
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+  document.getElementById("loginBtn").onclick = function(){
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;
 
-    signInWithEmailAndPassword(auth, email, password)
-    .then(()=>{
+    auth.signInWithEmailAndPassword(email, password)
+    .then(function(){
       alert("Login Successful!");
     })
-    .catch((error)=>{
+    .catch(function(error){
       alert(error.message);
     });
   }
