@@ -8,21 +8,8 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
-body{
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:linear-gradient(135deg,#4F46E5,#06B6D4);
-}
-.container{
-background:#fff;
-padding:40px;
-border-radius:15px;
-width:360px;
-box-shadow:0 15px 30px rgba(0,0,0,0.2);
-text-align:center;
-}
+body{height:100vh;display:flex;justify-content:center;align-items:center;background:linear-gradient(135deg,#4F46E5,#06B6D4);}
+.container{background:#fff;padding:40px;border-radius:15px;width:360px;box-shadow:0 15px 30px rgba(0,0,0,0.2);text-align:center;}
 h2{margin-bottom:15px;color:#4F46E5;}
 input{width:100%;padding:12px;margin:10px 0;border-radius:8px;border:1px solid #ccc;}
 button{width:100%;padding:12px;border:none;border-radius:8px;background:#4F46E5;color:#fff;cursor:pointer;font-weight:bold;transition:0.3s;}
@@ -36,6 +23,13 @@ button:hover{background:#3b36c4;}
 .contact img{width:38px;}
 .contact a:hover{transform:scale(1.2);}
 footer{position:fixed;bottom:10px;width:100%;text-align:center;color:#fff;font-size:14px;}
+
+/* Floating WhatsApp Button */
+.floating-whatsapp{
+position:fixed;bottom:80px;right:20px;width:60px;height:60px;background:#25D366;border-radius:50%;display:flex;justify-content:center;align-items:center;box-shadow:0 5px 15px rgba(0,0,0,0.3);cursor:pointer;animation:float 2s ease-in-out infinite alternate;}
+.floating-whatsapp img{width:30px;}
+@keyframes float{0%{transform:translateY(0px);}100%{transform:translateY(-10px);}}
+.floating-whatsapp:hover{box-shadow:0 8px 20px rgba(0,0,0,0.4);}
 </style>
 </head>
 <body>
@@ -63,17 +57,18 @@ footer{position:fixed;bottom:10px;width:100%;text-align:center;color:#fff;font-s
 
 <!-- CONTACT ICONS -->
 <div class="contact">
-<a href="https://wa.me/2349137904300" target="_blank">
-<img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
-</a>
-<a href="mailto:yau789452@gmail.com">
-<img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Gmail">
-</a>
+<a href="https://wa.me/2349137904300" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp"></a>
+<a href="mailto:yau789452@gmail.com"><img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Gmail"></a>
 </div>
 
 </div>
 
 <footer>© 2026 Auwal MD Technology Company</footer>
+
+<!-- Floating WhatsApp -->
+<div class="floating-whatsapp" onclick="window.open('https://wa.me/2349137904300','_blank')">
+<img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+</div>
 
 <!-- FIREBASE -->
 <script type="module">
@@ -118,7 +113,7 @@ onAuthStateChanged(auth, user=>{
 window.showSignup = ()=>{document.getElementById("loginForm").style.display="none";document.getElementById("signupForm").style.display="block";}
 window.showLogin = ()=>{document.getElementById("signupForm").style.display="none";document.getElementById("loginForm").style.display="block";}
 
-// Login with success animation and validation
+// Login with success animation + Firebase error handling
 window.login = async ()=>{
   const email=document.getElementById("email").value;
   const password=document.getElementById("password").value;
@@ -134,14 +129,17 @@ window.login = async ()=>{
     setTimeout(()=>{btn.textContent = originalText; window.location.href="dashboard.html";},1500);
   }catch(err){
     spinner.style.display="none";
-    if(err.code==="auth/wrong-password") alert("❌ Incorrect password");
-    else if(err.code==="auth/user-not-found") alert("❌ No user found with this email");
-    else if(err.code==="auth/invalid-email") alert("❌ Invalid email format");
-    else alert("❌ "+err.message);
+    switch(err.code){
+      case "auth/wrong-password": alert("❌ Incorrect password"); break;
+      case "auth/user-not-found": alert("❌ No account found with this email"); break;
+      case "auth/invalid-email": alert("❌ Invalid email format"); break;
+      case "auth/too-many-requests": alert("❌ Too many attempts, try later"); break;
+      default: alert("❌ "+err.message);
+    }
   }
 }
 
-// Register with success animation and validation
+// Register with success animation + Firebase error handling
 window.register = async ()=>{
   const email=document.getElementById("regEmail").value;
   const pass=document.getElementById("regPassword").value;
@@ -159,10 +157,12 @@ window.register = async ()=>{
     setTimeout(()=>{btn.textContent = originalText; showLogin();},1500);
   }catch(err){
     spinner.style.display="none";
-    if(err.code==="auth/email-already-in-use") alert("❌ Email already registered");
-    else if(err.code==="auth/invalid-email") alert("❌ Invalid email format");
-    else if(err.code==="auth/weak-password") alert("❌ Weak password, try at least 6 characters");
-    else alert("❌ "+err.message);
+    switch(err.code){
+      case "auth/email-already-in-use": alert("❌ Email already registered"); break;
+      case "auth/invalid-email": alert("❌ Invalid email format"); break;
+      case "auth/weak-password": alert("❌ Weak password, use at least 6 characters"); break;
+      default: alert("❌ "+err.message);
+    }
   }
 }
 </script>
