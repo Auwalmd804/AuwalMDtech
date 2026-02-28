@@ -8,29 +8,29 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
+  apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
   authDomain: "auwalmdtech.firebaseapp.com",
   projectId: "auwalmdtech",
-  storageBucket: "auwalmdtech.appspot.com",
+  storageBucket: "auwalmdtech.firebasestorage.app",
   messagingSenderId: "202329584080",
-  appId: "1:202329584080:web:8f4a816bfca6c7834609d5"
+  appId: "1:202329584080:web:8f4a816bfca6c7834609d5",
+  measurementId: "G-7R1TKWBEHD"
 };
 
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 const auth = getAuth(app);
 
-onAuthStateChanged(auth, (user)=>{
-  if(user){
-    document.getElementById('userEmail').innerText = user.email;
-  } else {
-    window.location.href="index.html";
-  }
+onAuthStateChanged(auth,(user)=>{
+  if(user){ document.getElementById('userEmail').innerText = user.email; }
+  else{ window.location.href="index.html"; }
 });
 
 window.logout = async function(){
-  try { await signOut(auth); window.location.href="index.html"; }
+  try{ await signOut(auth); window.location.href="index.html"; }
   catch(e){ alert(e.message); }
 }
 </script>
@@ -48,6 +48,7 @@ main h2{font-size:24px;margin-bottom:20px;}
 .card{flex:1 1 200px;background:white;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
 </style>
 </head>
+
 <body>
 <header>
   <h1>Welcome, <span id="userEmail"></span></h1>
