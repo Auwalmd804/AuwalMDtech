@@ -7,45 +7,49 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  // Firebase config ka
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
 
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "auwalmdtech.firebaseapp.com",
-  projectId: "auwalmdtech",
-  storageBucket: "auwalmdtech.appspot.com",
-  messagingSenderId: "202329584080",
-  appId: "1:202329584080:web:8f4a816bfca6c7834609d5"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
+    authDomain: "auwalmdtech.firebaseapp.com",
+    projectId: "auwalmdtech",
+    storageBucket: "auwalmdtech.firebasestorage.app",
+    messagingSenderId: "202329584080",
+    appId: "1:202329584080:web:8f4a816bfca6c7834609d5",
+    measurementId: "G-7R1TKWBEHD"
+  };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const analytics = getAnalytics(app);
 
-// Login
-window.login = async function() {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  if(!email || !password){ alert("Enter both email and password"); return; }
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    window.location.href = "dashboard.html";
-  } catch(error){ alert(error.message); }
-}
+  // Login
+  window.login = async function() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    if(!email || !password){ alert("Enter both email and password"); return; }
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      window.location.href = "dashboard.html";
+    } catch(error){ alert(error.message); }
+  }
 
-// Register
-window.register = async function() {
-  const email = document.getElementById('regEmail').value;
-  const pass = document.getElementById('regPassword').value;
-  const confirm = document.getElementById('regConfirmPassword').value;
-  if(!email||!pass||!confirm){ alert("Fill all fields"); return; }
-  if(pass!==confirm){ alert("Passwords do not match"); return; }
-  try {
-    await createUserWithEmailAndPassword(auth, email, pass);
-    alert("Registration successful! You can now login");
-    document.getElementById('registerModal').style.display='none';
-  } catch(error){ alert(error.message); }
-}
+  // Register
+  window.register = async function() {
+    const email = document.getElementById('regEmail').value;
+    const pass = document.getElementById('regPassword').value;
+    const confirm = document.getElementById('regConfirmPassword').value;
+    if(!email||!pass||!confirm){ alert("Fill all fields"); return; }
+    if(pass!==confirm){ alert("Passwords do not match"); return; }
+    try {
+      await createUserWithEmailAndPassword(auth, email, pass);
+      alert("Registration successful! You can now login");
+      document.getElementById('registerModal').style.display='none';
+    } catch(error){ alert(error.message); }
+  }
 </script>
 
 <style>
@@ -93,7 +97,6 @@ body{display:flex;justify-content:center;align-items:center;height:100vh;backgro
   </div>
 </div>
 
-<!-- Registration Modal -->
 <div class="modal" id="registerModal">
   <div class="modal-content">
     <span class="close" onclick="document.getElementById('registerModal').style.display='none'">&times;</span>
