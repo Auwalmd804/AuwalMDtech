@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Auwal MD Technology Company</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
@@ -84,23 +83,10 @@ margin-left:8px;
 100%{transform:rotate(360deg);}
 }
 
-/* Contact Icons */
 .contact{
-margin-top:25px;
-}
-
-.contact a{
-display:inline-block;
-margin:10px;
-transition:0.3s;
-}
-
-.contact img{
-width:38px;
-}
-
-.contact a:hover{
-transform:scale(1.2);
+margin-top:20px;
+font-size:13px;
+color:#555;
 }
 
 footer{
@@ -123,7 +109,6 @@ font-size:14px;
 <div id="loginForm">
 <input type="email" id="email" placeholder="Gmail">
 <input type="password" id="password" placeholder="Password">
-
 <button onclick="login()">
 Sign In <span class="spinner" id="spinner1"></span>
 </button>
@@ -138,7 +123,6 @@ Don't have account? <span onclick="showSignup()">Sign Up</span>
 <input type="email" id="regEmail" placeholder="Gmail">
 <input type="password" id="regPassword" placeholder="Password">
 <input type="password" id="regConfirm" placeholder="Confirm Password">
-
 <button onclick="register()">
 Register <span class="spinner" id="spinner2"></span>
 </button>
@@ -148,17 +132,9 @@ Already have account? <span onclick="showLogin()">Sign In</span>
 </div>
 </div>
 
-<!-- CONTACT ICONS -->
 <div class="contact">
-
-<a href="https://wa.me/2349137904300" target="_blank">
-<img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
-</a>
-
-<a href="mailto:yau789452@gmail.com">
-<img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Gmail">
-</a>
-
+WhatsApp: <b>09137904300</b><br>
+Gmail: <b>yau789452@gmail.com</b>
 </div>
 
 </div>
@@ -167,7 +143,7 @@ Already have account? <span onclick="showLogin()">Sign In</span>
 © 2026 Auwal MD Technology Company
 </footer>
 
-<!-- FIREBASE -->
+<!-- FIREBASE SCRIPT -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } 
