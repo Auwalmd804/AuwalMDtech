@@ -8,7 +8,6 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
-
 body{
 height:100vh;
 display:flex;
@@ -16,7 +15,6 @@ justify-content:center;
 align-items:center;
 background:linear-gradient(135deg,#4F46E5,#06B6D4);
 }
-
 .container{
 background:#fff;
 padding:40px;
@@ -25,78 +23,19 @@ width:360px;
 box-shadow:0 15px 30px rgba(0,0,0,0.2);
 text-align:center;
 }
-
-h2{
-margin-bottom:15px;
-color:#4F46E5;
-}
-
-input{
-width:100%;
-padding:12px;
-margin:10px 0;
-border-radius:8px;
-border:1px solid #ccc;
-}
-
-button{
-width:100%;
-padding:12px;
-border:none;
-border-radius:8px;
-background:#4F46E5;
-color:#fff;
-cursor:pointer;
-font-weight:bold;
-transition:0.3s;
-}
-
-button:hover{
-background:#3b36c4;
-}
-
-.switch{
-margin-top:15px;
-font-size:14px;
-}
-
-.switch span{
-color:#4F46E5;
-cursor:pointer;
-font-weight:bold;
-}
-
-/* Spinner */
-.spinner{
-display:none;
-width:18px;
-height:18px;
-border:3px solid #ddd;
-border-top:3px solid #fff;
-border-radius:50%;
-animation:spin 0.8s linear infinite;
-margin-left:8px;
-}
-
-@keyframes spin{
-0%{transform:rotate(0deg);}
-100%{transform:rotate(360deg);}
-}
-
-.contact{
-margin-top:20px;
-font-size:13px;
-color:#555;
-}
-
-footer{
-position:fixed;
-bottom:10px;
-width:100%;
-text-align:center;
-color:#fff;
-font-size:14px;
-}
+h2{margin-bottom:15px;color:#4F46E5;}
+input{width:100%;padding:12px;margin:10px 0;border-radius:8px;border:1px solid #ccc;}
+button{width:100%;padding:12px;border:none;border-radius:8px;background:#4F46E5;color:#fff;cursor:pointer;font-weight:bold;transition:0.3s;}
+button:hover{background:#3b36c4;}
+.switch{margin-top:15px;font-size:14px;}
+.switch span{color:#4F46E5;cursor:pointer;font-weight:bold;}
+.spinner{display:none;width:18px;height:18px;border:3px solid #ddd;border-top:3px solid #fff;border-radius:50%;animation:spin 0.8s linear infinite;margin-left:8px;}
+@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+.contact{margin-top:25px;}
+.contact a{display:inline-block;margin:10px;transition:0.3s;}
+.contact img{width:38px;}
+.contact a:hover{transform:scale(1.2);}
+footer{position:fixed;bottom:10px;width:100%;text-align:center;color:#fff;font-size:14px;}
 </style>
 </head>
 <body>
@@ -109,13 +48,8 @@ font-size:14px;
 <div id="loginForm">
 <input type="email" id="email" placeholder="Gmail">
 <input type="password" id="password" placeholder="Password">
-<button onclick="login()">
-Sign In <span class="spinner" id="spinner1"></span>
-</button>
-
-<div class="switch">
-Don't have account? <span onclick="showSignup()">Sign Up</span>
-</div>
+<button onclick="login()">Sign In <span class="spinner" id="spinner1"></span></button>
+<div class="switch">Don't have account? <span onclick="showSignup()">Sign Up</span></div>
 </div>
 
 <!-- SIGNUP -->
@@ -123,31 +57,24 @@ Don't have account? <span onclick="showSignup()">Sign Up</span>
 <input type="email" id="regEmail" placeholder="Gmail">
 <input type="password" id="regPassword" placeholder="Password">
 <input type="password" id="regConfirm" placeholder="Confirm Password">
-<button onclick="register()">
-Register <span class="spinner" id="spinner2"></span>
-</button>
-
-<div class="switch">
-Already have account? <span onclick="showLogin()">Sign In</span>
-</div>
+<button onclick="register()">Register <span class="spinner" id="spinner2"></span></button>
+<div class="switch">Already have account? <span onclick="showLogin()">Sign In</span></div>
 </div>
 
+<!-- CONTACT ICONS -->
 <div class="contact">
-WhatsApp: <b>09137904300</b><br>
-Gmail: <b>yau789452@gmail.com</b>
+<a href="https://wa.me/2349137904300" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp"></a>
+<a href="mailto:yau789452@gmail.com"><img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Gmail"></a>
 </div>
 
 </div>
 
-<footer>
-© 2026 Auwal MD Technology Company
-</footer>
+<footer>© 2026 Auwal MD Technology Company</footer>
 
-<!-- FIREBASE SCRIPT -->
+<!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } 
-from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
@@ -162,54 +89,61 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-window.showSignup = function(){
-document.getElementById("loginForm").style.display="none";
-document.getElementById("signupForm").style.display="block";
-}
+// DOM elements
+const contactDiv = document.querySelector(".contact");
+const container = document.querySelector(".container");
 
-window.showLogin = function(){
-document.getElementById("signupForm").style.display="none";
-document.getElementById("loginForm").style.display="block";
-}
+// Logout button
+const logoutBtn = document.createElement("button");
+logoutBtn.textContent = "Log Out";
+logoutBtn.style.marginTop="15px";
+logoutBtn.onclick = ()=>signOut(auth);
 
-window.login = async function(){
+// Auth state listener
+onAuthStateChanged(auth, user=>{
+  if(user){
+    // user logged in
+    contactDiv.style.display="none";
+    if(!logoutBtn.parentNode) container.appendChild(logoutBtn);
+  } else {
+    // user logged out
+    contactDiv.style.display="block";
+    if(logoutBtn.parentNode) logoutBtn.remove();
+  }
+});
+
+// UI switching
+window.showSignup = ()=>{document.getElementById("loginForm").style.display="none";document.getElementById("signupForm").style.display="block";}
+window.showLogin = ()=>{document.getElementById("signupForm").style.display="none";document.getElementById("loginForm").style.display="block";}
+
+// Login
+window.login = async ()=>{
 const email=document.getElementById("email").value;
 const password=document.getElementById("password").value;
 const spinner=document.getElementById("spinner1");
-
 if(!email||!password) return alert("Fill all fields");
-
 spinner.style.display="inline-block";
-
 try{
 await signInWithEmailAndPassword(auth,email,password);
 window.location.href="dashboard.html";
-}catch(error){
-alert(error.message);
-}
-
+}catch(err){alert(err.message);}
 spinner.style.display="none";
 }
 
-window.register = async function(){
+// Register
+window.register = async ()=>{
 const email=document.getElementById("regEmail").value;
 const pass=document.getElementById("regPassword").value;
 const confirm=document.getElementById("regConfirm").value;
 const spinner=document.getElementById("spinner2");
-
 if(!email||!pass||!confirm) return alert("Fill all fields");
 if(pass!==confirm) return alert("Passwords do not match");
-
 spinner.style.display="inline-block";
-
 try{
 await createUserWithEmailAndPassword(auth,email,pass);
 alert("Account created successfully. Please Sign In.");
 showLogin();
-}catch(error){
-alert(error.message);
-}
-
+}catch(err){alert(err.message);}
 spinner.style.display="none";
 }
 </script>
