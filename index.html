@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <script type="module">
-  // Firebase config ka
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
@@ -26,18 +25,34 @@
   const auth = getAuth(app);
   const analytics = getAnalytics(app);
 
-  // Login
+  // Login with animation + success ✅
   window.login = async function() {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    const btn = document.getElementById('loginBtn');
+    const status = document.getElementById('loginStatus');
+
     if(!email || !password){ alert("Enter both email and password"); return; }
+
+    btn.disabled = true;
+    status.innerText = "Searching... 🔎";
+    status.style.color = "#555";
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      await new Promise(res=>setTimeout(res,1500)); // UX delay
+      status.innerText = "Success ✅";
+      status.style.color = "green";
+      await new Promise(res=>setTimeout(res,1000));
       window.location.href = "dashboard.html";
-    } catch(error){ alert(error.message); }
+    } catch(error){
+      status.innerText = "Error: " + error.message;
+      status.style.color = "red";
+      btn.disabled = false;
+    }
   }
 
-  // Register
+  // Registration
   window.register = async function() {
     const email = document.getElementById('regEmail').value;
     const pass = document.getElementById('regPassword').value;
@@ -68,6 +83,8 @@ body{display:flex;justify-content:center;align-items:center;height:100vh;backgro
 .right h1{text-align:center;font-size:28px;margin-bottom:15px;}
 .right p{text-align:center;font-size:16px;margin-bottom:10px;}
 .contact{margin-top:20px;text-align:center;font-size:14px;}
+.contact a{color:white;text-decoration:none;font-weight:600;}
+#loginStatus{margin-top:10px;font-weight:600;}
 .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);justify-content:center;align-items:center;}
 .modal-content{background:#fff;padding:30px;border-radius:12px;width:350px;display:flex;flex-direction:column;}
 .modal-content input{margin-bottom:12px;}
@@ -82,7 +99,8 @@ body{display:flex;justify-content:center;align-items:center;height:100vh;backgro
     <p>Sign in to your account</p>
     <input type="email" id="email" placeholder="Email">
     <input type="password" id="password" placeholder="Password">
-    <button onclick="login()">Sign In</button>
+    <button id="loginBtn" onclick="login()">Sign In</button>
+    <p id="loginStatus"></p>
     <div class="signup">
       Don’t have an account? <a onclick="document.getElementById('registerModal').style.display='flex'">Sign Up</a>
     </div>
@@ -91,8 +109,8 @@ body{display:flex;justify-content:center;align-items:center;height:100vh;backgro
     <h1>Auwal MD Technology Company</h1>
     <p>Innovating Smart Digital Solutions</p>
     <div class="contact">
-      WhatsApp: <a href="https://wa.me/2349137904300" style="color:white;">+234 913 790 4300</a><br>
-      Gmail: <a href="mailto:yau789452@gmail.com" style="color:white;">yau789452@gmail.com</a>
+      WhatsApp: <a href="https://wa.me/2349137904300" target="_blank">+234 913 790 4300</a><br>
+      Gmail: <a href="mailto:yau789452@gmail.com">yau789452@gmail.com</a>
     </div>
   </div>
 </div>
