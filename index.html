@@ -11,6 +11,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
 
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
   authDomain: "auwalmdtech.firebaseapp.com",
@@ -66,9 +67,9 @@ window.register = async function() {
   try {
     await createUserWithEmailAndPassword(auth, email, pass);
     await new Promise(res=>setTimeout(res,1000));
-    status.innerText = "Success ✅ Account Created!";
+    status.innerText = "Success ✅ Account Created! Please Sign In.";
     status.style.color = "green";
-    await new Promise(res=>setTimeout(res,1000));
+    await new Promise(res=>setTimeout(res,1500));
     document.getElementById('registerModal').style.display='none';
     status.innerText = "";
   } catch(error){
@@ -118,7 +119,7 @@ footer{position:absolute;bottom:10px;width:100%;text-align:center;font-size:14px
 <div class="container">
   <div class="left">
     <h1>Welcome Back 👋</h1>
-    <p>Sign in to your account</p>
+    <p>Sign in to your account - Auwal MD Technology Company</p>
     <input type="email" id="email" placeholder="Email">
     <input type="password" id="password" placeholder="Password">
     <button id="loginBtn" onclick="login()">Sign In</button>
@@ -140,7 +141,7 @@ footer{position:absolute;bottom:10px;width:100%;text-align:center;font-size:14px
 <div class="modal" id="registerModal">
   <div class="modal-content">
     <span class="close" onclick="document.getElementById('registerModal').style.display='none'">&times;</span>
-    <h2>Create Account</h2>
+    <h2>Create Account - Auwal MD Technology Company</h2>
     <input type="email" id="regEmail" placeholder="Email">
     <input type="password" id="regPassword" placeholder="Password">
     <input type="password" id="regConfirmPassword" placeholder="Confirm Password">
