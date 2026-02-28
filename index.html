@@ -63,8 +63,12 @@ footer{position:fixed;bottom:10px;width:100%;text-align:center;color:#fff;font-s
 
 <!-- CONTACT ICONS -->
 <div class="contact">
-<a href="https://wa.me/2349137904300" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp"></a>
-<a href="mailto:yau789452@gmail.com"><img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Gmail"></a>
+<a href="https://wa.me/2349137904300" target="_blank">
+<img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+</a>
+<a href="mailto:yau789452@gmail.com">
+<img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Gmail">
+</a>
 </div>
 
 </div>
@@ -116,35 +120,46 @@ onAuthStateChanged(auth, user=>{
 window.showSignup = ()=>{document.getElementById("loginForm").style.display="none";document.getElementById("signupForm").style.display="block";}
 window.showLogin = ()=>{document.getElementById("signupForm").style.display="none";document.getElementById("loginForm").style.display="block";}
 
-// Login
+// Login with success animation
 window.login = async ()=>{
-const email=document.getElementById("email").value;
-const password=document.getElementById("password").value;
-const spinner=document.getElementById("spinner1");
-if(!email||!password) return alert("Fill all fields");
-spinner.style.display="inline-block";
-try{
-await signInWithEmailAndPassword(auth,email,password);
-window.location.href="dashboard.html";
-}catch(err){alert(err.message);}
-spinner.style.display="none";
+  const email=document.getElementById("email").value;
+  const password=document.getElementById("password").value;
+  const spinner=document.getElementById("spinner1");
+  if(!email||!password) return alert("Fill all fields");
+  spinner.style.display="inline-block";
+  try{
+    await signInWithEmailAndPassword(auth,email,password);
+    spinner.style.display="none";
+    const btn = document.querySelector("#loginForm button");
+    const originalText = btn.textContent;
+    btn.textContent = "Login Done ✅";
+    setTimeout(()=>{btn.textContent = originalText; window.location.href="dashboard.html";},1500);
+  }catch(err){
+    spinner.style.display="none";
+    alert(err.message);
+  }
 }
 
-// Register
+// Register with success animation
 window.register = async ()=>{
-const email=document.getElementById("regEmail").value;
-const pass=document.getElementById("regPassword").value;
-const confirm=document.getElementById("regConfirm").value;
-const spinner=document.getElementById("spinner2");
-if(!email||!pass||!confirm) return alert("Fill all fields");
-if(pass!==confirm) return alert("Passwords do not match");
-spinner.style.display="inline-block";
-try{
-await createUserWithEmailAndPassword(auth,email,pass);
-alert("Account created successfully. Please Sign In.");
-showLogin();
-}catch(err){alert(err.message);}
-spinner.style.display="none";
+  const email=document.getElementById("regEmail").value;
+  const pass=document.getElementById("regPassword").value;
+  const confirm=document.getElementById("regConfirm").value;
+  const spinner=document.getElementById("spinner2");
+  if(!email||!pass||!confirm) return alert("Fill all fields");
+  if(pass!==confirm) return alert("Passwords do not match");
+  spinner.style.display="inline-block";
+  try{
+    await createUserWithEmailAndPassword(auth,email,pass);
+    spinner.style.display="none";
+    const btn = document.querySelector("#signupForm button");
+    const originalText = btn.textContent;
+    btn.textContent = "Registered Successfully ✅";
+    setTimeout(()=>{btn.textContent = originalText; showLogin();},1500);
+  }catch(err){
+    spinner.style.display="none";
+    alert(err.message);
+  }
 }
 </script>
 
