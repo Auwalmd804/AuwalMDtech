@@ -5,76 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Auwal MD Tech</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00AEEF; --dark: #0f172a; --bg: #f8fafc; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg); padding-bottom: 50px; }
+        :root { --primary: #00AEEF; --dark: #0f172a; --bg: #f1f5f9; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); padding: 15px; }
+        .card { background: var(--dark); color: white; padding: 20px; border-radius: 20px; text-align: center; margin-bottom: 20px; }
+        .balance-label { font-size: 14px; opacity: 0.8; }
+        .balance-amount { font-size: 32px; font-weight: bold; margin: 5px 0; }
         
-        nav { 
-            background: #fff; 
-            padding: 15px 5%; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
-        }
+        .bank-card { background: white; padding: 15px; border-radius: 15px; border: 1px dashed var(--primary); margin-bottom: 20px; }
+        .bank-label { font-size: 11px; color: #64748b; text-transform: uppercase; }
         
-        .logo { font-weight: 600; color: var(--dark); font-size: 18px; }
-        .logout-btn { 
-            color: #ff4757; 
-            text-decoration: none; 
-            font-size: 13px; 
-            font-weight: 600; 
-            cursor: pointer; 
-            background: #fff1f2; 
-            padding: 8px 15px; 
-            border-radius: 8px; 
-            border: none; 
-        }
-
-        .container { padding: 20px 5%; max-width: 800px; margin: auto; }
+        .buy-section { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        h3 { margin-bottom: 15px; color: var(--dark); font-size: 16px; }
+        select, input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #e2e8f0; border-radius: 10px; outline: none; }
         
-        .wallet-card { 
-            background: var(--dark); 
-            color: #fff; 
-            padding: 30px; 
-            border-radius: 20px; 
-            margin-bottom: 25px; 
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .wallet-card p { font-size: 12px; opacity: 0.8; margin-bottom: 5px; }
-        .wallet-card h1 { font-size: 35px; margin-bottom: 10px; }
-        #dbStatus { font-size: 11px; color: #fbbf24; display: block; }
-        
-        .welcome-msg { margin-top: 20px; color: #475569; font-size: 15px; }
+        .btn-buy { background: var(--primary); color: white; width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .btn-logout { background: transparent; color: #ef4444; border: none; margin-top: 20px; width: 100%; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<nav>
-    <div class="logo">Auwal MD Tech</div>
-    <button class="logout-btn" id="logoutBtn">Logout</button>
-</nav>
+    <div class="card">
+        <p class="balance-label">Available Balance</p>
+        <h1 id="userBalance" class="balance-amount">₦0.00</h1>
+        <p id="userEmailDisplay" style="font-size: 12px; color: #10b981;"></p>
+    </div>
 
-<div class="container">
-    <div class="wallet-card">
-        <p>Wallet Balance</p>
-        <h1 id="userBalance">₦0.00</h1>
-        <span id="dbStatus">Connecting to server...</span>
+    <div class="bank-card">
+        <p class="bank-label"><i class="fas fa-university"></i> Funding Account (Auto-Wallet)</p>
+        <h4 id="bankName" style="margin-top: 5px; color: #334155;">Setting up Bank...</h4>
+        <h2 id="accNo" style="color: var(--primary); letter-spacing: 1px; margin: 5px 0;">Generating...</h2>
+        <p id="accName" style="font-size: 12px; font-weight: bold; color: #475569;"></p>
     </div>
-    
-    <div class="welcome-msg">
-        <p>Barka da zuwa dashboard dinka, <span id="userNameDisplay">User</span>.</p>
+
+    <div class="buy-section">
+        <h3><i class="fas fa-bolt" style="color: #fbbf24;"></i> Quick Buy Data</h3>
+        
+        <label style="font-size: 12px;">Select Network</label>
+        <select id="network">
+            <option value="MTN">MTN (SME)</option>
+            <option value="GLO">GLO</option>
+            <option value="AIRTEL">AIRTEL</option>
+            <option value="9MOBILE">9MOBILE</option>
+        </select>
+
+        <label style="font-size: 12px;">Select Data Plan</label>
+        <select id="plan">
+            <option value="260">1GB (SME) - ₦260</option>
+            <option value="520">2GB (SME) - ₦520</option>
+            <option value="1300">5GB (SME) - ₦1,300</option>
+            <option value="2600">10GB (SME) - ₦2,600</option>
+        </select>
+
+        <label style="font-size: 12px;">Recipient Phone Number</label>
+        <input type="number" id="phone" placeholder="08123456789">
+
+        <button class="btn-buy" id="buyBtn">Purchase Now</button>
+        <p id="txStatus" style="text-align: center; font-size: 12px; margin-top: 10px;"></p>
     </div>
-</div>
+
+    <button class="btn-logout" id="logoutBtn">Logout</button>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, doc, onSnapshot, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
@@ -89,43 +84,63 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Logout Function
-    document.getElementById("logoutBtn").onclick = () => {
-        signOut(auth).then(() => window.location.href = "index.html");
-    };
-
     onAuthStateChanged(auth, (user) => {
         if (user) {
             const userEmail = user.email.toLowerCase();
-            const userDoc = doc(db, "auwalmdtech", userEmail);
-
-            // Saurara ga Database (Real-time listener)
-            onSnapshot(userDoc, (docSnap) => {
+            document.getElementById("userEmailDisplay").innerText = userEmail;
+            
+            // Listen for data changes (Balance and Account)
+            onSnapshot(doc(db, "auwalmdtech", userEmail), (docSnap) => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    const bal = data.balance || 0;
-                    const name = data.fullName || "User";
+                    document.getElementById("userBalance").innerText = "₦" + (data.balance || 0).toLocaleString();
                     
-                    document.getElementById("userBalance").innerText = "₦" + bal.toLocaleString();
-                    document.getElementById("userNameDisplay").innerText = name;
-                    document.getElementById("dbStatus").innerText = "Status: Connected to " + userEmail;
-                    document.getElementById("dbStatus").style.color = "#4ade80"; // Kore (Connected)
-                } else {
-                    // Wannan shine gyaran idan folder ba ta bude ba tukuna
-                    document.getElementById("userBalance").innerText = "₦0.00";
-                    document.getElementById("dbStatus").innerText = "Status: Setting up your account... Please wait.";
-                    document.getElementById("dbStatus").style.color = "#fbbf24"; // Rawaya (Waiting)
+                    if (data.accountNumber) {
+                        document.getElementById("bankName").innerText = data.bankName || "Wema Bank";
+                        document.getElementById("accNo").innerText = data.accountNumber;
+                        document.getElementById("accName").innerText = "NAME: AMD-" + (data.fullName || "USER");
+                    }
                 }
-            }, (error) => {
-                document.getElementById("dbStatus").innerText = "Error: " + error.message;
-                document.getElementById("dbStatus").style.color = "#ff4757"; // Ja (Error)
             });
         } else {
-            // Idan ba a yi login ba, koma home
             window.location.href = "index.html";
         }
     });
-</script>
 
+    // Buying Data Logic
+    document.getElementById("buyBtn").onclick = async () => {
+        const phone = document.getElementById("phone").value;
+        const price = Number(document.getElementById("plan").value);
+        const status = document.getElementById("txStatus");
+        const user = auth.currentUser;
+
+        if (phone.length < 10) return alert("Enter a valid phone number!");
+
+        status.innerText = "Processing...";
+        status.style.color = "blue";
+
+        const userRef = doc(db, "auwalmdtech", user.email.toLowerCase());
+        const userSnap = await getDoc(userRef);
+        const currentBal = userSnap.data().balance || 0;
+
+        if (currentBal < price) {
+            status.innerText = "Insufficient Balance!";
+            status.style.color = "red";
+            return;
+        }
+
+        try {
+            await updateDoc(userRef, { balance: currentBal - price });
+            status.innerText = "Transaction Successful! Data sent to " + phone;
+            status.style.color = "green";
+            alert("Data Purchase Success!");
+        } catch (e) {
+            status.innerText = "Error: " + e.message;
+            status.style.color = "red";
+        }
+    };
+
+    document.getElementById("logoutBtn").onclick = () => signOut(auth);
+</script>
 </body>
 </html>
