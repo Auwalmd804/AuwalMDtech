@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auwal MD Tech | User Dashboard</title>
+    <title>Auwal MD Tech | Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
@@ -11,48 +11,38 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg); color: var(--dark); padding-bottom: 50px; }
 
-        /* Navigation */
         nav { background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
         .logo { display: flex; align-items: center; gap: 10px; font-weight: 600; }
         .logo img { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--primary); }
         .logout { color: #ff4757; text-decoration: none; font-size: 13px; font-weight: 600; background: #fff1f2; padding: 5px 12px; border-radius: 6px; }
 
         .container { padding: 20px 5%; max-width: 800px; margin: auto; }
-
-        /* Wallet */
         .wallet-card { background: var(--dark); color: #fff; padding: 25px; border-radius: 20px; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .wallet-card p { font-size: 12px; opacity: 0.8; text-transform: uppercase; }
-        .wallet-card h1 { font-size: 32px; margin: 5px 0 10px; }
+        .wallet-card h1 { font-size: 32px; margin-top: 5px; }
 
-        /* Admin Tag */
-        #adminSection { display: none; background: #fffbeb; border: 1px solid #fde68a; padding: 12px; border-radius: 12px; margin-bottom: 20px; text-align: center; }
-
-        /* Grid Services */
         h3 { margin-bottom: 15px; font-size: 16px; border-left: 4px solid var(--primary); padding-left: 10px; }
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; }
-        .card { background: #fff; padding: 20px; border-radius: 18px; text-align: center; cursor: pointer; border: 1px solid #f1f5f9; box-shadow: 0 4px 10px rgba(0,0,0,0.02); transition: 0.2s; }
-        .card:active { transform: scale(0.95); background: #f0f9ff; }
+        .card { background: #fff; padding: 20px; border-radius: 18px; text-align: center; cursor: pointer; border: 1px solid #f1f5f9; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
         .card i { font-size: 30px; margin-bottom: 10px; display: block; color: var(--primary); }
 
-        /* Modal Styles */
+        /* Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: #fff; width: 100%; max-width: 400px; padding: 25px; border-radius: 25px; position: relative; animation: slideUp 0.3s ease-out; }
-        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-content { background: #fff; width: 100%; max-width: 400px; padding: 25px; border-radius: 25px; position: relative; text-align: center; }
         .close-modal { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #94a3b8; }
 
-        /* Network Icons */
+        /* Network Icons Fixed */
         .network-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
-        .network-item { border: 1.5px solid #f1f5f9; padding: 10px; border-radius: 15px; text-align: center; cursor: pointer; }
+        .network-item { border: 1.5px solid #f1f5f9; padding: 10px; border-radius: 15px; text-align: center; cursor: pointer; background: #fff; }
         .network-item:hover { border-color: var(--primary); background: #f0f9ff; }
-        .network-item img { width: 45px; height: 45px; border-radius: 10px; margin-bottom: 8px; object-fit: cover; }
-        .network-item p { font-size: 12px; font-weight: 600; }
+        
+        /* Idan hoton ya ki fitowa, wannan zai nuna sunan a karkashi */
+        .net-img { width: 55px; height: 55px; border-radius: 50%; margin-bottom: 8px; object-fit: cover; display: block; margin-left: auto; margin-right: auto; background: #eee; border: 1px solid #ddd; }
+        .network-item p { font-size: 13px; font-weight: 600; }
 
-        /* Form */
         .form-group { margin-top: 15px; text-align: left; }
         label { font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 5px; display: block; }
-        input, select { width: 100%; padding: 12px; border-radius: 12px; border: 1.5px solid #e2e8f0; background: #f8fafc; outline: none; font-size: 14px; }
-        .btn-submit { width: 100%; background: var(--primary); color: #fff; padding: 14px; border: none; border-radius: 12px; font-weight: 600; margin-top: 20px; cursor: pointer; font-size: 15px; }
-        
+        input, select { width: 100%; padding: 12px; border-radius: 12px; border: 1.5px solid #e2e8f0; background: #f8fafc; outline: none; }
+        .btn-submit { width: 100%; background: var(--primary); color: #fff; padding: 14px; border: none; border-radius: 12px; font-weight: 600; margin-top: 20px; cursor: pointer; }
         .hidden { display: none; }
     </style>
 </head>
@@ -64,12 +54,8 @@
 </nav>
 
 <div class="container">
-    <div id="adminSection">
-        <p style="color: #92400e; font-size: 13px; font-weight: 600;"><i class="fa-solid fa-crown"></i> Admin Mode Active (Auwal MD)</p>
-    </div>
-
     <div class="wallet-card">
-        <p>Wallet Balance</p>
+        <p style="font-size:12px; opacity:0.8;">Wallet Balance</p>
         <h1 id="userBalance">₦0.00</h1>
     </div>
 
@@ -84,18 +70,6 @@
             <p>Buy Data</p>
         </div>
     </div>
-
-    <h3>Identity Verification</h3>
-    <div class="grid">
-        <div class="card" onclick="alert('NIN Service Coming Soon')">
-            <i class="fa-solid fa-id-card" style="color:#059669;"></i>
-            <p>NIN Verify</p>
-        </div>
-        <div class="card" onclick="alert('BVN Service Coming Soon')">
-            <i class="fa-solid fa-fingerprint" style="color:#dc2626;"></i>
-            <p>BVN Verify</p>
-        </div>
-    </div>
 </div>
 
 <div class="modal" id="serviceModal">
@@ -103,99 +77,68 @@
         <span class="close-modal" onclick="closeModal()">&times;</span>
         
         <div id="step1">
-            <h3 style="text-align:center; border:none;" id="modalTitle">Select Network</h3>
+            <h3 style="border:none;">Select Network</h3>
             <div class="network-grid">
-                <div class="network-item" onclick="openStep2('MTN', 'https://upload.wikimedia.org/wikipedia/commons/9/93/New-mtn-logo.jpg')">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/New-mtn-logo.jpg" alt="MTN">
+                <div class="network-item" onclick="openStep2('MTN')">
+                    <img src="https://img.freepik.com/free-icon/mtn_318-566000.jpg" class="net-img" alt="MTN">
                     <p>MTN</p>
                 </div>
-                <div class="network-item" onclick="openStep2('Airtel', 'https://seeklogo.com/images/A/airtel-logo-4394019A1E-seeklogo.com.png')">
-                    <img src="https://seeklogo.com/images/A/airtel-logo-4394019A1E-seeklogo.com.png" alt="Airtel">
+                <div class="network-item" onclick="openStep2('Airtel')">
+                    <img src="https://logowik.com/content/uploads/images/airtel-new-20238475.logowik.com.webp" class="net-img" alt="Airtel">
                     <p>Airtel</p>
                 </div>
-                <div class="network-item" onclick="openStep2('Glo', 'https://upload.wikimedia.org/wikipedia/en/thumb/7/76/Globacom_Limited_Logo.svg/1200px-Globacom_Limited_Logo.svg.png')">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/7/76/Globacom_Limited_Logo.svg/1200px-Globacom_Limited_Logo.svg.png" alt="Glo">
+                <div class="network-item" onclick="openStep2('Glo')">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/7/76/Globacom_Limited_Logo.svg/1200px-Globacom_Limited_Logo.svg.png" class="net-img" alt="Glo">
                     <p>Glo</p>
                 </div>
-                <div class="network-item" onclick="openStep2('9mobile', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6A6R9Xn9n7L_m8kP_y4j-VfG2kY9oN_K7WA&s')">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6A6R9Xn9n7L_m8kP_y4j-VfG2kY9oN_K7WA&s" alt="9mobile">
+                <div class="network-item" onclick="openStep2('9mobile')">
+                    <img src="https://i0.wp.com/9mobile.com.ng/wp-content/uploads/2017/07/9mobile-logo.png" class="net-img" alt="9mobile">
                     <p>9mobile</p>
                 </div>
             </div>
         </div>
 
         <div id="step2" class="hidden">
-            <h3 id="formTitle" style="border:none;">Buy Airtime</h3>
+            <h3 id="formTitle" style="border:none;">Form</h3>
             <p id="selectedDetails" style="font-size:12px; color:var(--primary); margin-bottom:15px; font-weight:600;"></p>
             
             <div class="form-group">
                 <label>Phone Number</label>
-                <input type="number" id="phone" placeholder="Ex: 08137904300">
+                <input type="number" id="phone" placeholder="08123456789">
             </div>
 
             <div class="form-group" id="amountGroup">
                 <label>Amount (₦)</label>
-                <input type="number" id="amount" placeholder="Min ₦50">
+                <input type="number" id="amount" placeholder="Min 50">
             </div>
 
             <div class="form-group hidden" id="dataGroup">
                 <label>Select Data Plan</label>
                 <select id="dataPlan">
-                    <option value="500MB (₦150)">500MB - ₦150 (30 Days)</option>
-                    <option value="1GB (₦250)">1GB - ₦250 (30 Days)</option>
-                    <option value="2GB (₦500)">2GB - ₦500 (30 Days)</option>
-                    <option value="5GB (₦1,200)">5GB - ₦1,200 (30 Days)</option>
+                    <option value="500MB (₦150)">500MB - ₦150</option>
+                    <option value="1GB (₦250)">1GB - ₦250</option>
+                    <option value="2GB (₦500)">2GB - ₦500</option>
                 </select>
             </div>
 
             <button class="btn-submit" onclick="processToWhatsApp()">Purchase Now</button>
-            <p onclick="backToStep1()" style="font-size:12px; text-align:center; margin-top:15px; cursor:pointer; color:#94a3b8;">← Back to Networks</p>
+            <p onclick="backToStep1()" style="font-size:12px; margin-top:15px; cursor:pointer; color:#94a3b8;">← Back</p>
         </div>
     </div>
 </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
-        authDomain: "auwalmdtech.firebaseapp.com",
-        projectId: "auwalmdtech",
-        storageBucket: "auwalmdtech.firebasestorage.app",
-        messagingSenderId: "202329584080",
-        appId: "1:202329584080:web:e989d7df53d3c3024609d5"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            if (user.email === "yau789452@gmail.com") {
-                document.getElementById("adminSection").style.display = "block";
-            }
-        } else {
-            window.location.href = "index.html";
-        }
-    });
-
-    document.getElementById("logoutBtn").onclick = () => signOut(auth).then(() => window.location.href = "index.html");
-
-    // Modal & Logic
+<script>
     const modal = document.getElementById('serviceModal');
-    let serviceType = ""; 
-    let selectedNet = "";
+    let serviceType = ""; let selectedNet = "";
 
-    window.openStep1 = (type) => {
+    function openStep1(type) {
         serviceType = type;
-        document.getElementById('modalTitle').innerText = "Select " + type + " Network";
         document.getElementById('step1').classList.remove('hidden');
         document.getElementById('step2').classList.add('hidden');
         modal.style.display = "flex";
     }
 
-    window.openStep2 = (network) => {
+    function openStep2(network) {
         selectedNet = network;
         document.getElementById('step1').classList.add('hidden');
         document.getElementById('step2').classList.remove('hidden');
@@ -211,39 +154,22 @@
         }
     }
 
-    window.backToStep1 = () => {
-        document.getElementById('step2').classList.add('hidden');
-        document.getElementById('step1').classList.remove('hidden');
-    }
+    function closeModal() { modal.style.display = "none"; }
+    function backToStep1() { document.getElementById('step2').classList.add('hidden'); document.getElementById('step1').classList.remove('hidden'); }
 
-    window.closeModal = () => { modal.style.display = "none"; }
-
-    // WhatsApp Notification Logic
-    window.processToWhatsApp = () => {
+    function processToWhatsApp() {
         const phone = document.getElementById('phone').value;
         const amount = document.getElementById('amount').value;
         const dataPlan = document.getElementById('dataPlan').value;
-        
-        if(phone.length < 11) return alert("Please enter a valid phone number");
+        if(phone.length < 11) return alert("Phone number error");
 
-        let message = `*NEW ORDER - AUWAL MD TECH*%0A%0A`;
-        message += `*Service:* ${serviceType}%0A`;
-        message += `*Network:* ${selectedNet}%0A`;
-        message += `*Phone:* ${phone}%0A`;
-        
-        if(serviceType === 'Airtime') {
-            if(!amount) return alert("Enter amount");
-            message += `*Amount:* ₦${amount}`;
-        } else {
-            message += `*Plan:* ${dataPlan}`;
-        }
+        let msg = `*NEW ORDER*%0A*Service:* ${serviceType}%0A*Network:* ${selectedNet}%0A*Phone:* ${phone}`;
+        if(serviceType==='Airtime') msg += `%0A*Amount:* ₦${amount}`;
+        else msg += `%0A*Plan:* ${dataPlan}`;
 
-        const whatsappURL = `https://wa.me/2349137904300?text=${message}`;
-        window.open(whatsappURL, '_blank');
+        window.open(`https://wa.me/2349137904300?text=${msg}`);
         closeModal();
     }
-
-    window.onclick = (e) => { if(e.target == modal) closeModal(); }
 </script>
 
 </body>
