@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auwal MD Tech | Create Account</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Create Account | Auwal MD Tech</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #00AEEF; --dark: #0f172a; --bg: #f8fafc; }
@@ -14,8 +13,9 @@
         h2 { color: var(--dark); margin-bottom: 20px; text-align: center; }
         .form-group { margin-bottom: 15px; }
         label { font-size: 13px; font-weight: 600; color: #64748b; display: block; margin-bottom: 5px; }
-        input { width: 100%; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; outline: none; }
+        input { width: 100%; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; outline: none; width: 100%; }
         .btn-reg { width: 100%; padding: 14px; background: var(--primary); color: #fff; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        #status { text-align: center; font-size: 12px; margin-bottom: 10px; font-weight: bold; }
         p { text-align: center; font-size: 13px; margin-top: 20px; color: #64748b; }
         a { color: var(--primary); text-decoration: none; font-weight: 600; }
     </style>
@@ -23,23 +23,23 @@
 <body>
 
 <div class="card">
-    <h2>Create Account</h2>
-    <div id="status" style="color: red; font-size: 12px; text-align: center; margin-bottom: 10px;"></div>
+    <h2>Join Us</h2>
+    <div id="status"></div>
     
     <div class="form-group">
         <label>Full Name</label>
-        <input type="text" id="fullName" placeholder="Enter your name">
+        <input type="text" id="fullName" placeholder="Enter your full name">
     </div>
     <div class="form-group">
         <label>Email Address</label>
-        <input type="email" id="email" placeholder="example@mail.com">
+        <input type="email" id="email" placeholder="example@gmail.com">
     </div>
     <div class="form-group">
         <label>Password</label>
         <input type="password" id="password" placeholder="Min 6 characters">
     </div>
     
-    <button class="btn-reg" id="regBtn">Register Now</button>
+    <button class="btn-reg" id="regBtn">Create Account</button>
     <p>Already have an account? <a href="index.html">Login</a></p>
 </div>
 
@@ -68,32 +68,38 @@
         const status = document.getElementById("status");
 
         if(!name || !email || password.length < 6) {
+            status.style.color = "red";
             status.innerText = "Please fill all fields correctly!";
             return;
         }
 
         status.style.color = "blue";
-        status.innerText = "Creating account...";
+        status.innerText = "Processing... please wait.";
 
         try {
-            // 1. Create User in Firebase Auth
+            // 1. Create Login Details
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-
-            // 2. Create User Profile in "auwalmdtech" collection
-            await setDoc(doc(db, "auwalmdtech", email), {
+            
+            // 2. Create Database Record (Collection: auwalmdtech)
+            await setDoc(doc(db, "auwalmdtech", email.toLowerCase()), {
                 fullName: name,
                 balance: 0,
                 role: "user",
+                email: email.toLowerCase(),
                 createdAt: new Date().toISOString()
             });
 
-            alert("Registration Successful!");
-            window.location.href = "dashboard.html";
+            status.style.color = "green";
+            status.innerText = "Account Created Successfully!";
+            
+            setTimeout(() => {
+                window.location.href = "dashboard.html";
+            }, 1500);
 
         } catch (error) {
             status.style.color = "red";
-            status.innerText = error.message;
+            status.innerText = "Error: " + error.message;
+            console.error(error);
         }
     };
 </script>
