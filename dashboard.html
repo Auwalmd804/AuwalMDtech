@@ -3,19 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auwal MD Tech | Portal</title>
+    <title>Dashboard | Auwal MD Tech</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #00AEEF; --dark: #0f172a; --bg: #f8fafc; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg); padding-bottom: 50px; }
-        nav { background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .logout-btn { color: #ff4757; text-decoration: none; font-size: 13px; font-weight: 600; cursor: pointer; background: #fff1f2; padding: 5px 12px; border-radius: 6px; border: none; }
+        
+        nav { 
+            background: #fff; 
+            padding: 15px 5%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+        }
+        
+        .logo { font-weight: 600; color: var(--dark); font-size: 18px; }
+        .logout-btn { 
+            color: #ff4757; 
+            text-decoration: none; 
+            font-size: 13px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            background: #fff1f2; 
+            padding: 8px 15px; 
+            border-radius: 8px; 
+            border: none; 
+        }
+
         .container { padding: 20px 5%; max-width: 800px; margin: auto; }
-        .wallet-card { background: var(--dark); color: #fff; padding: 25px; border-radius: 20px; margin-bottom: 25px; }
-        .wallet-card h1 { font-size: 32px; margin-top: 5px; }
-        #dbStatus { font-size: 11px; color: #fbbf24; display: block; margin-top: 10px; }
+        
+        .wallet-card { 
+            background: var(--dark); 
+            color: #fff; 
+            padding: 30px; 
+            border-radius: 20px; 
+            margin-bottom: 25px; 
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .wallet-card p { font-size: 12px; opacity: 0.8; margin-bottom: 5px; }
+        .wallet-card h1 { font-size: 35px; margin-bottom: 10px; }
+        #dbStatus { font-size: 11px; color: #fbbf24; display: block; }
+        
+        .welcome-msg { margin-top: 20px; color: #475569; font-size: 15px; }
     </style>
 </head>
 <body>
@@ -27,11 +61,14 @@
 
 <div class="container">
     <div class="wallet-card">
-        <p style="font-size:12px; opacity:0.8;">Wallet Balance</p>
+        <p>Wallet Balance</p>
         <h1 id="userBalance">₦0.00</h1>
-        <span id="dbStatus">Loading database...</span>
+        <span id="dbStatus">Connecting to server...</span>
     </div>
-    <p>Barka da zuwa dashboard dinka, Auwal.</p>
+    
+    <div class="welcome-msg">
+        <p>Barka da zuwa dashboard dinka, <span id="userNameDisplay">User</span>.</p>
+    </div>
 </div>
 
 <script type="module">
@@ -59,22 +96,32 @@
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            // YANZU SUNAN YA DAICE DA "auwalmdtech" KAMAR YADDA KA SAKA
-            const userDoc = doc(db, "auwalmdtech", user.email);
+            const userEmail = user.email.toLowerCase();
+            const userDoc = doc(db, "auwalmdtech", userEmail);
 
+            // Saurara ga Database (Real-time listener)
             onSnapshot(userDoc, (docSnap) => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     const bal = data.balance || 0;
+                    const name = data.fullName || "User";
+                    
                     document.getElementById("userBalance").innerText = "₦" + bal.toLocaleString();
-                    document.getElementById("dbStatus").innerText = "Status: Connected to " + user.email;
+                    document.getElementById("userNameDisplay").innerText = name;
+                    document.getElementById("dbStatus").innerText = "Status: Connected to " + userEmail;
+                    document.getElementById("dbStatus").style.color = "#4ade80"; // Kore (Connected)
                 } else {
-                    document.getElementById("dbStatus").innerText = "Status: User document not found in 'auwalmdtech' collection.";
+                    // Wannan shine gyaran idan folder ba ta bude ba tukuna
+                    document.getElementById("userBalance").innerText = "₦0.00";
+                    document.getElementById("dbStatus").innerText = "Status: Setting up your account... Please wait.";
+                    document.getElementById("dbStatus").style.color = "#fbbf24"; // Rawaya (Waiting)
                 }
             }, (error) => {
                 document.getElementById("dbStatus").innerText = "Error: " + error.message;
+                document.getElementById("dbStatus").style.color = "#ff4757"; // Ja (Error)
             });
         } else {
+            // Idan ba a yi login ba, koma home
             window.location.href = "index.html";
         }
     });
