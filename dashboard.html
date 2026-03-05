@@ -1,139 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard | Auwal MD Tech</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #00AEEF;
-            --dark: #0f172a;
-            --light: #f1f5f9;
-            --success: #25D366;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--light); color: var(--dark); }
-
-        nav {
-            background: #fff; padding: 12px 5%;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky; top: 0; z-index: 1000;
-        }
-        .nav-logo { display: flex; align-items: center; gap: 10px; }
-        .nav-logo img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary); }
-
-        .logout-btn { background: #fee2e2; color: #ef4444; padding: 7px 15px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 600; }
-
-        .container { padding: 20px 5%; max-width: 1100px; margin: auto; }
-
-        /* Wallet Section a Sama */
-        .wallet-card {
-            background: linear-gradient(135deg, var(--dark), #1e293b);
-            color: #fff; padding: 30px; border-radius: 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-        .balance-info h4 { font-weight: 300; opacity: 0.8; font-size: 14px; }
-        .balance-info h1 { font-size: 32px; font-weight: 600; margin-top: 5px; }
-        
-        .deposit-btn {
-            background: var(--primary); color: #fff; padding: 12px 25px;
-            border-radius: 12px; text-decoration: none; font-weight: 600;
-            transition: 0.3s; font-size: 14px;
-        }
-        .deposit-btn:hover { background: #0096cc; transform: scale(1.05); }
-
-        /* Services Grid */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .card { background: #fff; padding: 25px; border-radius: 18px; box-shadow: 0 5px 15px rgba(0,0,0,0.04); }
-        .card h3 { color: var(--primary); margin-bottom: 12px; font-size: 18px; }
-        .card p { font-size: 13.5px; color: #64748b; line-height: 1.6; margin-bottom: 15px; }
-
-        .action-link { color: var(--primary); text-decoration: none; font-weight: 600; font-size: 14px; }
-
-        /* WhatsApp Support */
-        .chat-btn { position: fixed; bottom: 25px; right: 25px; background: var(--success); width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3); cursor: pointer; }
-
-        @media (max-width: 600px) {
-            .wallet-card { flex-direction: column; text-align: center; gap: 20px; }
-        }
-    </style>
-</head>
-<body>
-
-    <nav>
-        <div class="nav-logo">
-            <img src="Image_1.png" alt="Logo">
-            <span style="font-weight: 600;">Auwal MD Tech</span>
+<div class="container">
+    <div class="wallet-card">
+        <div class="balance-info">
+            <h4>Wallet Balance</h4>
+            <h1 id="userBalance">₦0.00</h1>
         </div>
-        <a href="#" class="logout-btn" id="logoutBtn">Logout</a>
-    </nav>
+        <a href="#" class="deposit-btn" onclick="openPaystack()">+ Add Funds</a>
+    </div>
 
-    <div class="container">
-        <div class="wallet-card">
-            <div class="balance-info">
-                <h4>Available Balance</h4>
-                <h1 id="userBalance">₦0.00</h1>
-            </div>
-            <a href="#" class="deposit-btn" onclick="openPaystack()">+ Deposit Funds</a>
+    <h2 style="margin-bottom: 15px; font-size: 18px;">Verification Services</h2>
+    <div class="grid">
+        <div class="card service-item" onclick="alert('NIN Service selected')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/NIMC_logo.png/640px-NIMC_logo.png" width="40" alt="NIMC">
+            <p>NIN Verification</p>
         </div>
-
-        <h2 style="margin-bottom: 20px; font-size: 20px;">Services & Projects</h2>
-        <div class="grid">
-            <div class="card">
-                <h3>Web Design</h3>
-                <p>Order a professional website for your business or personal brand.</p>
-                <a href="#" class="action-link">Start Order →</a>
-            </div>
-            <div class="card">
-                <h3>Software Update</h3>
-                <p>Get the latest premium software updates and technical support.</p>
-                <a href="#" class="action-link">Check Updates →</a>
-            </div>
-            <div class="card">
-                <h3>Ads & Branding</h3>
-                <p>Professional logo design and social media advertisement services.</p>
-                <a href="#" class="action-link">Get Quote →</a>
-            </div>
+        <div class="card service-item">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0R4U3-m6X-l_66hYhW_G_G-G_G-G_G-G_G&s" width="40" alt="BVN">
+            <p>BVN Verification</p>
         </div>
     </div>
 
-    <div class="chat-btn" onclick="window.open('https://wa.me/2349137904300')">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="28" style="filter: invert(1);">
+    <h2 style="margin-top: 30px; margin-bottom: 15px; font-size: 18px;">Bills & Data</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>Buy Data</h3>
+            <p>SME, CG & Gifting Data at cheap rates.</p>
+            <button class="btn-action">Purchase</button>
+        </div>
+        <div class="card">
+            <h3>Buy Airtime</h3>
+            <p>VTU Airtime for all networks with discount.</p>
+            <button class="btn-action">Buy Now</button>
+        </div>
     </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
-            authDomain: "auwalmdtech.firebaseapp.com",
-            projectId: "auwalmdtech",
-            storageBucket: "auwalmdtech.firebasestorage.app",
-            messagingSenderId: "202329584080",
-            appId: "1:202329584080:web:e989d7df53d3c3024609d5"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        onAuthStateChanged(auth, (user) => {
-            if (!user) { window.location.href = "index.html"; }
-        });
-
-        document.getElementById("logoutBtn").addEventListener("click", (e) => {
-            e.preventDefault();
-            signOut(auth).then(() => { window.location.href = "index.html"; });
-        });
-
-        // Paystack Payment Placeholder
-        window.openPaystack = () => {
-            alert("Payment gateway integration (Paystack) coming soon! Contact support for manual deposit.");
-        };
-    </script>
-</body>
-</html>
+</div>
