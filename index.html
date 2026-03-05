@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auwal MD Tech | Modern Login</title>
+    <title>Auwal MD Tech | Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #6366f1;
-            --secondary: #a855f7;
-            --bg-gradient: linear-gradient(135deg, #0f172a, #1e1b4b);
-            --glass: rgba(255, 255, 255, 0.95);
+            --primary: #00AEEF; /* Blue daga logo dinka */
+            --secondary: #adb5bd; /* Silver/Grey daga logo */
+            --bg-gradient: linear-gradient(135deg, #0f172a, #1e293b);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
@@ -21,165 +20,112 @@
             justify-content: center;
             align-items: center;
             background: var(--bg-gradient);
-            color: #333;
-            overflow: hidden;
+            padding: 20px;
         }
 
-        /* Modern Glass Card */
         .container {
-            background: var(--glass);
-            padding: 40px;
-            border-radius: 24px;
+            background: #fff;
+            padding: 30px; /* Na rage girman nan */
+            border-radius: 20px;
             width: 100%;
-            max-width: 400px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            max-width: 360px; /* Na rage fadin container din */
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
             text-align: center;
-            position: relative;
-            z-index: 1;
-            transition: 0.4s ease;
+        }
+
+        /* Logo Style */
+        .logo-img {
+            width: 120px; /* Girman logo */
+            margin-bottom: 15px;
         }
 
         h2 {
             font-weight: 600;
             color: #1e293b;
-            margin-bottom: 8px;
-            font-size: 24px;
+            font-size: 20px;
+            margin-bottom: 5px;
         }
 
         p.subtitle {
             color: #64748b;
-            font-size: 14px;
-            margin-bottom: 25px;
+            font-size: 13px;
+            margin-bottom: 20px;
         }
 
-        /* Modern Inputs */
-        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group { margin-bottom: 12px; text-align: left; }
 
         input {
             width: 100%;
-            padding: 14px 16px;
-            border-radius: 12px;
-            border: 2px solid #e2e8f0;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
             background: #f8fafc;
-            font-size: 15px;
-            transition: 0.3s;
+            font-size: 14px;
             outline: none;
+            transition: 0.3s;
         }
 
-        input:focus {
-            border-color: var(--primary);
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-        }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 174, 239, 0.1); }
 
-        /* Gradient Button */
         button {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             border: none;
-            border-radius: 12px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 10px;
+            background: var(--primary);
             color: #fff;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.3s;
             margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            transition: 0.3s;
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
-        }
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
 
-        .switch {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #64748b;
-        }
+        .switch { margin-top: 15px; font-size: 13px; color: #64748b; }
+        .switch span { color: var(--primary); cursor: pointer; font-weight: 600; }
 
-        .switch span {
-            color: var(--primary);
-            cursor: pointer;
-            font-weight: 600;
-            text-decoration: underline;
-        }
+        .contact { margin-top: 20px; display: flex; justify-content: center; gap: 15px; border-top: 1px solid #eee; padding-top: 15px; }
+        .contact a img { width: 25px; opacity: 0.7; }
 
-        /* Spinner */
-        .spinner {
-            display: none;
-            width: 18px;
-            height: 18px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-top: 3px solid #fff;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
+        footer { position: fixed; bottom: 15px; color: #94a3b8; font-size: 11px; }
 
+        .spinner { display: none; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid #fff; border-radius: 50%; animation: spin 0.8s linear infinite; margin-left: 8px; vertical-align: middle; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Social Icons */
-        .contact { margin-top: 30px; display: flex; justify-content: center; gap: 20px; }
-        .contact a img { width: 32px; transition: 0.3s; opacity: 0.8; }
-        .contact a:hover img { opacity: 1; transform: scale(1.1); }
-
-        footer {
-            position: absolute;
-            bottom: 20px;
-            color: rgba(255,255,255,0.6);
-            font-size: 12px;
-        }
-
-        /* Floating WhatsApp */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #25d366;
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            z-index: 100;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h2>Auwal MD Tech</h2>
-        <p class="subtitle">Barka da zuwa sashen fasaha</p>
+        <img src="logo.png" alt="Auwal MD Tech" class="logo-img">
+        
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Please enter your details</p>
 
         <div id="loginForm">
             <div class="input-group">
-                <input type="email" id="email" placeholder="Gmail Address">
+                <input type="email" id="email" placeholder="Email Address">
             </div>
             <div class="input-group">
                 <input type="password" id="password" placeholder="Password">
             </div>
             <button onclick="login()">Sign In <span class="spinner" id="spinner1"></span></button>
-            <div class="switch">Baka da account? <span onclick="showSignup()">Yi Register</span></div>
+            <div class="switch">Don't have an account? <span onclick="showSignup()">Sign Up</span></div>
         </div>
 
         <div id="signupForm" style="display:none;">
             <div class="input-group">
-                <input type="email" id="regEmail" placeholder="Gmail Address">
+                <input type="email" id="regEmail" placeholder="Email Address">
             </div>
             <div class="input-group">
-                <input type="password" id="regPassword" placeholder="New Password">
+                <input type="password" id="regPassword" placeholder="Password">
             </div>
             <div class="input-group">
                 <input type="password" id="regConfirm" placeholder="Confirm Password">
             </div>
             <button onclick="register()">Create Account <span class="spinner" id="spinner2"></span></button>
-            <div class="switch">Kana da account? <span onclick="showLogin()">Sign In</span></div>
+            <div class="switch">Already have an account? <span onclick="showLogin()">Sign In</span></div>
         </div>
 
         <div class="contact">
@@ -190,73 +136,8 @@
 
     <footer>© 2026 Auwal MD Technology Company</footer>
 
-    <div class="whatsapp-float" onclick="window.open('https://wa.me/2349137904300')">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="30" style="filter: invert(1);">
-    </div>
-
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
-            authDomain: "auwalmdtech.firebaseapp.com",
-            projectId: "auwalmdtech",
-            storageBucket: "auwalmdtech.firebasestorage.app",
-            messagingSenderId: "202329584080",
-            appId: "1:202329584080:web:e989d7df53d3c3024609d5",
-            measurementId: "G-8SZ1MQRMC9"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        // UI Logic
-        window.showSignup = () => {
-            document.getElementById("loginForm").style.display = "none";
-            document.getElementById("signupForm").style.display = "block";
-        };
-        window.showLogin = () => {
-            document.getElementById("signupForm").style.display = "none";
-            document.getElementById("loginForm").style.display = "block";
-        };
-
-        // Login Function
-        window.login = async () => {
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            const spinner = document.getElementById("spinner1");
-            if(!email || !password) return alert("Don Allah cika dukkan gurbi");
-            
-            spinner.style.display = "inline-block";
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                window.location.href = "dashboard.html";
-            } catch(err) {
-                spinner.style.display = "none";
-                alert("Kuskure: " + err.message);
-            }
-        };
-
-        // Register Function
-        window.register = async () => {
-            const email = document.getElementById("regEmail").value;
-            const pass = document.getElementById("regPassword").value;
-            const confirm = document.getElementById("regConfirm").value;
-            const spinner = document.getElementById("spinner2");
-
-            if(pass !== confirm) return alert("Password basu zo daya ba");
-            
-            spinner.style.display = "inline-block";
-            try {
-                await createUserWithEmailAndPassword(auth, email, pass);
-                alert("An yi register nasara! Yanzu zaka iya shiga.");
-                showLogin();
-            } catch(err) {
-                spinner.style.display = "none";
-                alert("Kuskure: " + err.message);
-            }
-        };
+        // ... (Nan zaka sa ragowar script din Firebase dinka yadda yake) ...
     </script>
 </body>
 </html>
