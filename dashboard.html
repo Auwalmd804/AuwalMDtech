@@ -3,183 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auwal MD Tech | Dashboard</title>
+    <title>Auwal MD Tech | Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #00AEEF; --dark: #0f172a; --bg: #f8fafc; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg); color: var(--dark); padding-bottom: 50px; }
-
-        nav { background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        body { background: var(--bg); padding-bottom: 50px; }
+        nav { background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .logo { display: flex; align-items: center; gap: 10px; font-weight: 600; }
-        .logo img { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--primary); }
-
+        .logo img { width: 35px; height: 35px; border-radius: 50%; }
+        .logout-btn { color: #ff4757; text-decoration: none; font-size: 13px; font-weight: 600; cursor: pointer; background: #fff1f2; padding: 5px 12px; border-radius: 6px; border: none; }
         .container { padding: 20px 5%; max-width: 800px; margin: auto; }
-        .wallet-card { background: var(--dark); color: #fff; padding: 25px; border-radius: 20px; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .wallet-card h1 { font-size: 32px; margin-top: 5px; }
-
-        h3 { margin-bottom: 15px; font-size: 16px; border-left: 4px solid var(--primary); padding-left: 10px; margin-top: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        
-        .card { background: #fff; padding: 20px; border-radius: 18px; text-align: center; cursor: pointer; border: 1px solid #f1f5f9; transition: 0.3s; }
-        .card:active { transform: scale(0.95); }
-        .card i { font-size: 35px; margin-bottom: 10px; display: block; color: var(--primary); }
-
-        /* Modal Settings */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: #fff; width: 100%; max-width: 400px; padding: 25px; border-radius: 25px; position: relative; text-align: center; }
-        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; }
-
-        /* Network Logos Styling */
-        .network-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
-        .network-item { border: 1.5px solid #f1f5f9; padding: 15px; border-radius: 15px; text-align: center; cursor: pointer; background: #fff; transition: 0.3s; }
-        .network-item img { width: 50px; height: 50px; border-radius: 10px; margin-bottom: 8px; object-fit: contain; }
-        .network-item p { font-size: 13px; font-weight: 600; }
-
-        .form-group { margin-top: 15px; text-align: left; }
-        label { font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 5px; display: block; }
-        input, select { width: 100%; padding: 12px; border-radius: 12px; border: 1.5px solid #e2e8f0; background: #f8fafc; outline: none; }
-        .btn-submit { width: 100%; background: var(--primary); color: #fff; padding: 14px; border: none; border-radius: 12px; font-weight: 600; margin-top: 20px; cursor: pointer; }
-        .hidden { display: none; }
+        .wallet-card { background: var(--dark); color: #fff; padding: 25px; border-radius: 20px; margin-bottom: 25px; }
+        .wallet-card h1 { font-size: 32px; margin-top: 5px; color: #fff; }
+        .status-msg { font-size: 11px; color: #fbbf24; margin-top: 10px; display: block; }
     </style>
 </head>
 <body>
 
 <nav>
-    <div class="logo"><img src="Image_1.png" alt="Logo"> Auwal MD Tech</div>
-    <a href="#" style="color:#ff4757; text-decoration:none; font-size:13px; font-weight:600;">Logout</a>
+    <div class="logo">Auwal MD Tech</div>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
 </nav>
 
 <div class="container">
     <div class="wallet-card">
         <p style="font-size:12px; opacity:0.8;">Wallet Balance</p>
-        <h1 id="userBalance">₦0.00</h1>
+        <h1 id="userBalance">Loading...</h1>
+        <span id="dbStatus" class="status-msg">Checking database...</span>
     </div>
 
-    <h3>Verification Services</h3>
-    <div class="grid">
-        <div class="card" onclick="alert('NIN Verification Under Maintenance')">
-            <i class="fa-solid fa-id-card" style="color: #059669;"></i>
-            <p>NIN Verify</p>
-        </div>
-        <div class="card" onclick="alert('BVN Verification Under Maintenance')">
-            <i class="fa-solid fa-fingerprint" style="color: #dc2626;"></i>
-            <p>BVN Verify</p>
-        </div>
+    <div id="adminSection" style="display:none; background:#ecfdf5; padding:10px; border-radius:10px; margin-bottom:20px; color:#065f46; font-size:13px;">
+        <i class="fa-solid fa-user-shield"></i> Admin: Auwal MD
     </div>
 
-    <h3>Telecom Services</h3>
-    <div class="grid">
-        <div class="card" onclick="openStep1('Airtime')">
-            <i class="fa-solid fa-phone-volume" style="color: #f59e0b;"></i>
-            <p>Buy Airtime</p>
-        </div>
-        <div class="card" onclick="openStep1('Data')">
-            <i class="fa-solid fa-wifi" style="color: #2563eb;"></i>
-            <p>Buy Data</p>
-        </div>
-    </div>
+    <h3 style="margin-bottom:15px; font-size:16px;">Services</h3>
+    <p>Danna daya daga cikin wadannan don gwada ayyukanmu.</p>
 </div>
 
-<div class="modal" id="serviceModal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeModal()">&times;</span>
-        
-        <div id="step1">
-            <h3 style="border:none; text-align:center;">Select Network</h3>
-            <div class="network-grid">
-                <div class="network-item" onclick="openStep2('MTN')">
-                    <img src="mtn.png" alt="MTN" onerror="this.src='https://placehold.co/50x50?text=MTN'">
-                    <p>MTN</p>
-                </div>
-                <div class="network-item" onclick="openStep2('Airtel')">
-                    <img src="airtel.png" alt="Airtel" onerror="this.src='https://placehold.co/50x50?text=Airtel'">
-                    <p>Airtel</p>
-                </div>
-                <div class="network-item" onclick="openStep2('Glo')">
-                    <img src="glo.png" alt="Glo" onerror="this.src='https://placehold.co/50x50?text=Glo'">
-                    <p>Glo</p>
-                </div>
-                <div class="network-item" onclick="openStep2('9mobile')">
-                    <img src="9mobile.png" alt="9mobile" onerror="this.src='https://placehold.co/50x50?text=9mobile'">
-                    <p>9mobile</p>
-                </div>
-            </div>
-        </div>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-        <div id="step2" class="hidden">
-            <h3 id="formTitle" style="border:none;">Order Details</h3>
-            <p id="selectedDetails" style="font-size:12px; color:var(--primary); margin-bottom:15px; font-weight:600;"></p>
-            
-            <div class="form-group">
-                <label>Phone Number</label>
-                <input type="number" id="phone" placeholder="08137904300">
-            </div>
+    const firebaseConfig = {
+        apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
+        authDomain: "auwalmdtech.firebaseapp.com",
+        projectId: "auwalmdtech",
+        storageBucket: "auwalmdtech.firebasestorage.app",
+        messagingSenderId: "202329584080",
+        appId: "1:202329584080:web:e989d7df53d3c3024609d5"
+    };
 
-            <div class="form-group" id="amountGroup">
-                <label>Amount (₦)</label>
-                <input type="number" id="amount" placeholder="Min 50">
-            </div>
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-            <div class="form-group hidden" id="dataGroup">
-                <label>Select Data Plan</label>
-                <select id="dataPlan">
-                    <option value="1GB (₦250)">1GB - ₦250 (30 Days)</option>
-                    <option value="2GB (₦500)">2GB - ₦500 (30 Days)</option>
-                    <option value="5GB (₦1,200)">5GB - ₦1,200 (30 Days)</option>
-                </select>
-            </div>
+    // FIX: Logout Button
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+        signOut(auth).then(() => {
+            window.location.href = "index.html";
+        }).catch(err => alert("Logout failed: " + err.message));
+    });
 
-            <button class="btn-submit" onclick="processToWhatsApp()">Purchase Now</button>
-            <p onclick="backToStep1()" style="font-size:12px; margin-top:15px; cursor:pointer; color:#94a3b8;">← Change Network</p>
-        </div>
-    </div>
-</div>
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            document.getElementById("dbStatus").innerText = "Connected as: " + user.email;
 
-<script>
-    const modal = document.getElementById('serviceModal');
-    let serviceType = ""; let selectedNet = "";
+            // Nuna Admin Section idan kai ne
+            if (user.email === "yau789452@gmail.com") {
+                document.getElementById("adminSection").style.display = "block";
+            }
 
-    function openStep1(type) {
-        serviceType = type;
-        document.getElementById('step1').classList.remove('hidden');
-        document.getElementById('step2').classList.add('hidden');
-        modal.style.display = "flex";
-    }
+            // KARANTO BALANCE
+            // MUHIMMI: Sunan Collection "AuwalMDtech" ne kamar yadda ka ce
+            const userDoc = doc(db, "AuwalMDtech", user.email);
 
-    function openStep2(network) {
-        selectedNet = network;
-        document.getElementById('step1').classList.add('hidden');
-        document.getElementById('step2').classList.remove('hidden');
-        document.getElementById('formTitle').innerText = "Buy " + serviceType;
-        document.getElementById('selectedDetails').innerText = network + " | " + serviceType;
+            onSnapshot(userDoc, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    // Tabbatar "balance" ne sunan field din a Firebase (kananan haruffa)
+                    const bal = data.balance !== undefined ? data.balance : "No 'balance' field";
+                    document.getElementById("userBalance").innerText = "₦" + bal.toLocaleString();
+                    document.getElementById("dbStatus").innerText = "Database sync active";
+                } else {
+                    document.getElementById("userBalance").innerText = "₦0.00";
+                    document.getElementById("dbStatus").innerText = "Error: Document not found in 'AuwalMDtech' collection.";
+                }
+            }, (error) => {
+                document.getElementById("dbStatus").innerText = "Database Error: " + error.message;
+            });
 
-        if(serviceType === 'Data') {
-            document.getElementById('amountGroup').classList.add('hidden');
-            document.getElementById('dataGroup').classList.remove('hidden');
         } else {
-            document.getElementById('amountGroup').classList.remove('hidden');
-            document.getElementById('dataGroup').classList.add('hidden');
+            window.location.href = "index.html";
         }
-    }
-
-    function closeModal() { modal.style.display = "none"; }
-    function backToStep1() { document.getElementById('step2').classList.add('hidden'); document.getElementById('step1').classList.remove('hidden'); }
-
-    function processToWhatsApp() {
-        const phone = document.getElementById('phone').value;
-        const amount = document.getElementById('amount').value;
-        const dataPlan = document.getElementById('dataPlan').value;
-        if(phone.length < 11) return alert("Please check phone number");
-
-        let msg = `*NEW ORDER - AUWAL MD TECH*%0A*Service:* ${serviceType}%0A*Network:* ${selectedNet}%0A*Phone:* ${phone}`;
-        if(serviceType==='Airtime') msg += `%0A*Amount:* ₦${amount}`;
-        else msg += `%0A*Plan:* ${dataPlan}`;
-
-        window.open(`https://wa.me/2349137904300?text=${msg}`);
-        closeModal();
-    }
+    });
 </script>
 
 </body>
