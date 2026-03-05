@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auwal MD Tech | Login</title>
+    <title>Auwal MD Tech | Secure Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #00AEEF; /* Blue daga logo dinka */
-            --secondary: #adb5bd; /* Silver/Grey daga logo */
+            --primary: #00AEEF; 
+            --secondary: #64748b;
             --bg-gradient: linear-gradient(135deg, #0f172a, #1e293b);
         }
 
@@ -24,54 +24,44 @@
         }
 
         .container {
-            background: #fff;
-            padding: 30px; /* Na rage girman nan */
+            background: #ffffff;
+            padding: 30px;
             border-radius: 20px;
             width: 100%;
-            max-width: 360px; /* Na rage fadin container din */
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            max-width: 360px; 
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
             text-align: center;
+            animation: fadeIn 0.8s ease-in-out;
         }
 
-        /* Logo Style */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
         .logo-img {
-            width: 120px; /* Girman logo */
-            margin-bottom: 15px;
+            width: 130px;
+            margin-bottom: 10px;
         }
 
-        h2 {
-            font-weight: 600;
-            color: #1e293b;
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
+        h2 { font-weight: 600; color: #1e293b; font-size: 22px; margin-bottom: 5px; }
+        p.subtitle { color: #64748b; font-size: 13px; margin-bottom: 25px; }
 
-        p.subtitle {
-            color: #64748b;
-            font-size: 13px;
-            margin-bottom: 20px;
-        }
-
-        .input-group { margin-bottom: 12px; text-align: left; }
-
+        .input-group { margin-bottom: 15px; text-align: left; }
         input {
             width: 100%;
-            padding: 12px 15px;
-            border-radius: 10px;
-            border: 1px solid #cbd5e1;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1.5px solid #e2e8f0;
             background: #f8fafc;
             font-size: 14px;
             outline: none;
             transition: 0.3s;
         }
-
-        input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 174, 239, 0.1); }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0, 174, 239, 0.1); }
 
         button {
             width: 100%;
-            padding: 12px;
+            padding: 13px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             background: var(--primary);
             color: #fff;
             font-size: 15px;
@@ -80,28 +70,29 @@
             margin-top: 10px;
             transition: 0.3s;
         }
+        button:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 5px 15px rgba(0, 174, 239, 0.3); }
 
-        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        .switch { margin-top: 20px; font-size: 13.5px; color: #64748b; }
+        .switch span { color: var(--primary); cursor: pointer; font-weight: 600; text-decoration: none; }
+        .switch span:hover { text-decoration: underline; }
 
-        .switch { margin-top: 15px; font-size: 13px; color: #64748b; }
-        .switch span { color: var(--primary); cursor: pointer; font-weight: 600; }
+        .contact { margin-top: 25px; display: flex; justify-content: center; gap: 20px; border-top: 1px solid #f1f5f9; padding-top: 20px; }
+        .contact a img { width: 28px; transition: 0.3s; opacity: 0.8; }
+        .contact a:hover img { opacity: 1; transform: scale(1.1); }
 
-        .contact { margin-top: 20px; display: flex; justify-content: center; gap: 15px; border-top: 1px solid #eee; padding-top: 15px; }
-        .contact a img { width: 25px; opacity: 0.7; }
+        footer { position: fixed; bottom: 15px; color: #64748b; font-size: 11px; font-weight: 300; }
 
-        footer { position: fixed; bottom: 15px; color: #94a3b8; font-size: 11px; }
-
-        .spinner { display: none; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid #fff; border-radius: 50%; animation: spin 0.8s linear infinite; margin-left: 8px; vertical-align: middle; }
+        .spinner { display: none; width: 18px; height: 18px; border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid #fff; border-radius: 50%; animation: spin 0.8s linear infinite; margin-left: 8px; vertical-align: middle; }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <img src="logo.png" alt="Auwal MD Tech" class="logo-img">
+        <img src="Image_1.png" alt="Auwal MD Tech Logo" class="logo-img">
         
         <h2>Welcome Back</h2>
-        <p class="subtitle">Please enter your details</p>
+        <p class="subtitle">Enter your credentials to continue</p>
 
         <div id="loginForm">
             <div class="input-group">
@@ -111,7 +102,7 @@
                 <input type="password" id="password" placeholder="Password">
             </div>
             <button onclick="login()">Sign In <span class="spinner" id="spinner1"></span></button>
-            <div class="switch">Don't have an account? <span onclick="showSignup()">Sign Up</span></div>
+            <div class="switch">New here? <span onclick="showSignup()">Create an Account</span></div>
         </div>
 
         <div id="signupForm" style="display:none;">
@@ -119,17 +110,17 @@
                 <input type="email" id="regEmail" placeholder="Email Address">
             </div>
             <div class="input-group">
-                <input type="password" id="regPassword" placeholder="Password">
+                <input type="password" id="regPassword" placeholder="New Password">
             </div>
             <div class="input-group">
                 <input type="password" id="regConfirm" placeholder="Confirm Password">
             </div>
-            <button onclick="register()">Create Account <span class="spinner" id="spinner2"></span></button>
-            <div class="switch">Already have an account? <span onclick="showLogin()">Sign In</span></div>
+            <button onclick="register()">Register <span class="spinner" id="spinner2"></span></button>
+            <div class="switch">Already a member? <span onclick="showLogin()">Sign In</span></div>
         </div>
 
         <div class="contact">
-            <a href="https://wa.me/2349137904300"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp"></a>
+            <a href="https://wa.me/2349137904300" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp"></a>
             <a href="mailto:yau789452@gmail.com"><img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Gmail"></a>
         </div>
     </div>
@@ -137,7 +128,65 @@
     <footer>© 2026 Auwal MD Technology Company</footer>
 
     <script type="module">
-        // ... (Nan zaka sa ragowar script din Firebase dinka yadda yake) ...
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
+            authDomain: "auwalmdtech.firebaseapp.com",
+            projectId: "auwalmdtech",
+            storageBucket: "auwalmdtech.firebasestorage.app",
+            messagingSenderId: "202329584080",
+            appId: "1:202329584080:web:e989d7df53d3c3024609d5",
+            measurementId: "G-8SZ1MQRMC9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        window.showSignup = () => {
+            document.getElementById("loginForm").style.display = "none";
+            document.getElementById("signupForm").style.display = "block";
+        };
+        window.showLogin = () => {
+            document.getElementById("signupForm").style.display = "none";
+            document.getElementById("loginForm").style.display = "block";
+        };
+
+        window.login = async () => {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const spinner = document.getElementById("spinner1");
+            if(!email || !password) return alert("Please fill all fields");
+            
+            spinner.style.display = "inline-block";
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                window.location.href = "dashboard.html";
+            } catch(err) {
+                spinner.style.display = "none";
+                alert("Login Error: " + err.message);
+            }
+        };
+
+        window.register = async () => {
+            const email = document.getElementById("regEmail").value;
+            const pass = document.getElementById("regPassword").value;
+            const confirm = document.getElementById("regConfirm").value;
+            const spinner = document.getElementById("spinner2");
+
+            if(pass !== confirm) return alert("Passwords do not match!");
+            
+            spinner.style.display = "inline-block";
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+                alert("Registration Successful! Please Sign In.");
+                showLogin();
+            } catch(err) {
+                spinner.style.display = "none";
+                alert("Registration Error: " + err.message);
+            }
+        };
     </script>
 </body>
 </html>
