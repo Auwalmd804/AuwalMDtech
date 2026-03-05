@@ -3,44 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account | Auwal MD Tech</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Signup | Auwal MD Tech</title>
     <style>
-        :root { --primary: #00AEEF; --dark: #0f172a; --bg: #f8fafc; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .card { background: #fff; width: 100%; max-width: 400px; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        h2 { color: var(--dark); margin-bottom: 20px; text-align: center; }
-        .form-group { margin-bottom: 15px; }
-        label { font-size: 13px; font-weight: 600; color: #64748b; display: block; margin-bottom: 5px; }
-        input { width: 100%; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; outline: none; width: 100%; }
-        .btn-reg { width: 100%; padding: 14px; background: var(--primary); color: #fff; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; }
-        #status { text-align: center; font-size: 12px; margin-bottom: 10px; font-weight: bold; }
-        p { text-align: center; font-size: 13px; margin-top: 20px; color: #64748b; }
-        a { color: var(--primary); text-decoration: none; font-weight: 600; }
+        body { font-family: 'Poppins', sans-serif; background: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 320px; }
+        input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #00AEEF; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        #msg { font-size: 11px; text-align: center; margin-top: 8px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>Join Us</h2>
-    <div id="status"></div>
-    
-    <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" id="fullName" placeholder="Enter your full name">
-    </div>
-    <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" id="email" placeholder="example@gmail.com">
-    </div>
-    <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="password" placeholder="Min 6 characters">
-    </div>
-    
-    <button class="btn-reg" id="regBtn">Create Account</button>
-    <p>Already have an account? <a href="index.html">Login</a></p>
+    <h3 style="text-align:center">Create Account</h3>
+    <div id="msg"></div>
+    <input type="text" id="name" placeholder="Full Name">
+    <input type="email" id="email" placeholder="Email Address">
+    <input type="password" id="pass" placeholder="Password (Min 6 chars)">
+    <button id="btn">Sign Up</button>
 </div>
 
 <script type="module">
@@ -61,48 +41,41 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    document.getElementById("regBtn").onclick = async () => {
-        const name = document.getElementById("fullName").value;
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-        const status = document.getElementById("status");
+    document.getElementById("btn").onclick = async () => {
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value.trim().toLowerCase();
+        const pass = document.getElementById("pass").value;
+        const msg = document.getElementById("msg");
 
-        if(!name || !email || password.length < 6) {
-            status.style.color = "red";
-            status.innerText = "Please fill all fields correctly!";
+        if(!name || !email || pass.length < 6) {
+            msg.innerHTML = "<span style='color:red'>Please fill all fields!</span>";
             return;
         }
 
-        status.style.color = "blue";
-        status.innerText = "Processing... please wait.";
+        msg.style.color = "blue";
+        msg.innerText = "Creating account...";
 
         try {
-            // 1. Create Login Details
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            // 1. Create User
+            const res = await createUserWithEmailAndPassword(auth, email, pass);
             
-            // 2. Create Database Record (Collection: auwalmdtech)
-            await setDoc(doc(db, "auwalmdtech", email.toLowerCase()), {
+            // 2. Create Firestore Data
+            await setDoc(doc(db, "auwalmdtech", email), {
                 fullName: name,
                 balance: 0,
                 role: "user",
-                email: email.toLowerCase(),
-                createdAt: new Date().toISOString()
+                email: email
             });
 
-            status.style.color = "green";
-            status.innerText = "Account Created Successfully!";
-            
-            setTimeout(() => {
-                window.location.href = "dashboard.html";
-            }, 1500);
+            msg.style.color = "green";
+            msg.innerText = "Success! Opening dashboard...";
+            setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
 
-        } catch (error) {
-            status.style.color = "red";
-            status.innerText = "Error: " + error.message;
-            console.error(error);
+        } catch (e) {
+            msg.style.color = "red";
+            msg.innerText = e.message;
         }
     };
 </script>
-
 </body>
 </html>
