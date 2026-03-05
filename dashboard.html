@@ -1,35 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auwal MD Tech Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #00AEEF; --dark: #0f172a; --bg: #f1f5f9; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg); }
+
+        /* Nav */
+        nav { background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .logo { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+        .logo img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary); }
+        .logout { color: #ff4757; text-decoration: none; font-size: 14px; font-weight: 600; }
+
+        .container { padding: 20px 5%; max-width: 1200px; margin: auto; }
+
+        /* Balance Card */
+        .balance-card { background: var(--dark); color: #fff; padding: 25px; border-radius: 20px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
+        .balance-card h1 { font-size: 28px; }
+        .deposit-btn { background: var(--primary); color: #fff; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-size: 14px; }
+
+        /* Admin Section (Hidden by default) */
+        #adminSection { display: none; background: #fffbeb; border: 2px dashed #f59e0b; padding: 20px; border-radius: 15px; margin-bottom: 25px; }
+
+        /* Services Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
+        .card { background: #fff; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.03); cursor: pointer; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .card img { width: 45px; margin-bottom: 10px; }
+        .card p { font-size: 13px; font-weight: 500; }
+
+        /* WhatsApp Button */
+        .whatsapp { position: fixed; bottom: 30px; right: 30px; background: #25D366; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo"><img src="Image_1.png" alt="Logo"> Auwal MD Tech</div>
+    <a href="#" class="logout" id="logoutBtn">Logout</a>
+</nav>
+
 <div class="container">
-    <div class="wallet-card">
-        <div class="balance-info">
-            <h4>Wallet Balance</h4>
-            <h1 id="userBalance">₦0.00</h1>
+    <div class="balance-card">
+        <div>
+            <p style="opacity: 0.7; font-size: 13px;">Wallet Balance</p>
+            <h1 id="balanceText">₦0.00</h1>
         </div>
-        <a href="#" class="deposit-btn" onclick="openPaystack()">+ Add Funds</a>
+        <a href="#" class="deposit-btn">Deposit</a>
     </div>
 
-    <h2 style="margin-bottom: 15px; font-size: 18px;">Verification Services</h2>
-    <div class="grid">
-        <div class="card service-item" onclick="alert('NIN Service selected')">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/NIMC_logo.png/640px-NIMC_logo.png" width="40" alt="NIMC">
-            <p>NIN Verification</p>
-        </div>
-        <div class="card service-item">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0R4U3-m6X-l_66hYhW_G_G-G_G-G_G-G_G&s" width="40" alt="BVN">
-            <p>BVN Verification</p>
+    <div id="adminSection">
+        <h3 style="color: #b45309; margin-bottom: 10px;">Admin Control Panel 👑</h3>
+        <div style="display: flex; gap: 10px;">
+            <button onclick="alert('Manage Users')" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #f59e0b; background: #fff;">View Users</button>
+            <button onclick="alert('Transaction Logs')" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #f59e0b; background: #fff;">Total Sales</button>
         </div>
     </div>
 
-    <h2 style="margin-top: 30px; margin-bottom: 15px; font-size: 18px;">Bills & Data</h2>
+    <h3 style="margin-bottom: 15px;">Verification Services</h3>
     <div class="grid">
-        <div class="card">
-            <h3>Buy Data</h3>
-            <p>SME, CG & Gifting Data at cheap rates.</p>
-            <button class="btn-action">Purchase</button>
-        </div>
-        <div class="card">
-            <h3>Buy Airtime</h3>
-            <p>VTU Airtime for all networks with discount.</p>
-            <button class="btn-action">Buy Now</button>
-        </div>
+        <div class="card"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/NIMC_logo.png/640px-NIMC_logo.png"><p>NIN Verify</p></div>
+        <div class="card"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0R4U3-m6X-l_66hYhW_G_G-G_G-G_G-G_G&s"><p>BVN Verify</p></div>
+        <div class="card"><img src="https://cdn-icons-png.flaticon.com/512/281/281183.png"><p>Voters Card</p></div>
+    </div>
+
+    <h3 style="margin: 25px 0 15px;">Telecom Services</h3>
+    <div class="grid">
+        <div class="card"><img src="https://cdn-icons-png.flaticon.com/512/2099/2099201.png"><p>Buy Data</p></div>
+        <div class="card"><img src="https://cdn-icons-png.flaticon.com/512/3616/3616523.png"><p>Airtime VTU</p></div>
+        <div class="card"><img src="https://cdn-icons-png.flaticon.com/512/3105/3105062.png"><p>Utility Bills</p></div>
     </div>
 </div>
+
+<div class="whatsapp" onclick="window.open('https://wa.me/2349137904300')">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="30" style="filter: invert(1);">
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
+        authDomain: "auwalmdtech.firebaseapp.com",
+        projectId: "auwalmdtech",
+        storageBucket: "auwalmdtech.firebasestorage.app",
+        messagingSenderId: "202329584080",
+        appId: "1:202329584080:web:e989d7df53d3c3024609d5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // BINCIKE: Idan Gmail din Auwal ne, nuna masa Admin Section
+            if (user.email === "yau789452@gmail.com") {
+                document.getElementById("adminSection").style.display = "block";
+            }
+        } else {
+            window.location.href = "index.html";
+        }
+    });
+
+    document.getElementById("logoutBtn").onclick = () => signOut(auth).then(() => window.location.href = "index.html");
+</script>
+
+</body>
+</html>
