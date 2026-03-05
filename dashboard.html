@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auwal MD Tech | Portal</title>
+    <title>Auwal MD Tech | Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #00AEEF; --dark: #0f172a; --bg: #f8fafc; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg); padding-bottom: 30px; }
+        body { background: var(--bg); color: var(--dark); padding-bottom: 50px; }
 
         nav { background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
         .logo { display: flex; align-items: center; gap: 10px; font-weight: 600; }
@@ -19,28 +19,23 @@
         .wallet-card { background: var(--dark); color: #fff; padding: 25px; border-radius: 20px; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .wallet-card h1 { font-size: 32px; margin-top: 5px; }
 
-        h3 { margin-bottom: 15px; font-size: 16px; border-left: 4px solid var(--primary); padding-left: 10px; }
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; }
+        h3 { margin-bottom: 15px; font-size: 16px; border-left: 4px solid var(--primary); padding-left: 10px; margin-top: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         
-        /* Service Cards */
-        .card { background: #fff; padding: 20px; border-radius: 18px; text-align: center; cursor: pointer; border: 1px solid #f1f5f9; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
-        .card i { font-size: 35px; margin-bottom: 10px; display: block; }
-        
-        /* Modal Styles */
+        .card { background: #fff; padding: 20px; border-radius: 18px; text-align: center; cursor: pointer; border: 1px solid #f1f5f9; transition: 0.3s; }
+        .card:active { transform: scale(0.95); }
+        .card i { font-size: 35px; margin-bottom: 10px; display: block; color: var(--primary); }
+
+        /* Modal Settings */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
         .modal-content { background: #fff; width: 100%; max-width: 400px; padding: 25px; border-radius: 25px; position: relative; text-align: center; }
-        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #94a3b8; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; }
 
-        /* Network Icons Fixed with Colors */
+        /* Network Logos Styling */
         .network-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
         .network-item { border: 1.5px solid #f1f5f9; padding: 15px; border-radius: 15px; text-align: center; cursor: pointer; background: #fff; transition: 0.3s; }
-        .network-item:hover { border-color: var(--primary); background: #f0f9ff; }
-        
-        .net-icon { font-size: 40px; margin-bottom: 8px; display: block; }
-        .mtn { color: #FFCC00; }   /* Yellow */
-        .airtel { color: #ED1C24; } /* Red */
-        .glo { color: #2E8B57; }    /* Green */
-        .mobile9 { color: #006651; } /* Dark Green */
+        .network-item img { width: 50px; height: 50px; border-radius: 10px; margin-bottom: 8px; object-fit: contain; }
+        .network-item p { font-size: 13px; font-weight: 600; }
 
         .form-group { margin-top: 15px; text-align: left; }
         label { font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 5px; display: block; }
@@ -62,13 +57,13 @@
         <h1 id="userBalance">₦0.00</h1>
     </div>
 
-    <h3>Identity Verification</h3>
+    <h3>Verification Services</h3>
     <div class="grid">
-        <div class="card" onclick="alert('NIN Verification Service')">
+        <div class="card" onclick="alert('NIN Verification Under Maintenance')">
             <i class="fa-solid fa-id-card" style="color: #059669;"></i>
             <p>NIN Verify</p>
         </div>
-        <div class="card" onclick="alert('BVN Verification Service')">
+        <div class="card" onclick="alert('BVN Verification Under Maintenance')">
             <i class="fa-solid fa-fingerprint" style="color: #dc2626;"></i>
             <p>BVN Verify</p>
         </div>
@@ -95,31 +90,31 @@
             <h3 style="border:none; text-align:center;">Select Network</h3>
             <div class="network-grid">
                 <div class="network-item" onclick="openStep2('MTN')">
-                    <i class="fa-solid fa-square net-icon mtn"></i>
+                    <img src="mtn.png" alt="MTN" onerror="this.src='https://placehold.co/50x50?text=MTN'">
                     <p>MTN</p>
                 </div>
                 <div class="network-item" onclick="openStep2('Airtel')">
-                    <i class="fa-solid fa-square net-icon airtel"></i>
+                    <img src="airtel.png" alt="Airtel" onerror="this.src='https://placehold.co/50x50?text=Airtel'">
                     <p>Airtel</p>
                 </div>
                 <div class="network-item" onclick="openStep2('Glo')">
-                    <i class="fa-solid fa-square net-icon glo"></i>
+                    <img src="glo.png" alt="Glo" onerror="this.src='https://placehold.co/50x50?text=Glo'">
                     <p>Glo</p>
                 </div>
                 <div class="network-item" onclick="openStep2('9mobile')">
-                    <i class="fa-solid fa-square net-icon mobile9"></i>
+                    <img src="9mobile.png" alt="9mobile" onerror="this.src='https://placehold.co/50x50?text=9mobile'">
                     <p>9mobile</p>
                 </div>
             </div>
         </div>
 
         <div id="step2" class="hidden">
-            <h3 id="formTitle" style="border:none;">Form</h3>
+            <h3 id="formTitle" style="border:none;">Order Details</h3>
             <p id="selectedDetails" style="font-size:12px; color:var(--primary); margin-bottom:15px; font-weight:600;"></p>
             
             <div class="form-group">
                 <label>Phone Number</label>
-                <input type="number" id="phone" placeholder="08123456789">
+                <input type="number" id="phone" placeholder="08137904300">
             </div>
 
             <div class="form-group" id="amountGroup">
@@ -130,14 +125,14 @@
             <div class="form-group hidden" id="dataGroup">
                 <label>Select Data Plan</label>
                 <select id="dataPlan">
-                    <option value="500MB (₦150)">500MB - ₦150</option>
-                    <option value="1GB (₦250)">1GB - ₦250</option>
-                    <option value="2GB (₦500)">2GB - ₦500</option>
+                    <option value="1GB (₦250)">1GB - ₦250 (30 Days)</option>
+                    <option value="2GB (₦500)">2GB - ₦500 (30 Days)</option>
+                    <option value="5GB (₦1,200)">5GB - ₦1,200 (30 Days)</option>
                 </select>
             </div>
 
             <button class="btn-submit" onclick="processToWhatsApp()">Purchase Now</button>
-            <p onclick="backToStep1()" style="font-size:12px; margin-top:15px; cursor:pointer; color:#94a3b8;">← Back</p>
+            <p onclick="backToStep1()" style="font-size:12px; margin-top:15px; cursor:pointer; color:#94a3b8;">← Change Network</p>
         </div>
     </div>
 </div>
@@ -176,9 +171,9 @@
         const phone = document.getElementById('phone').value;
         const amount = document.getElementById('amount').value;
         const dataPlan = document.getElementById('dataPlan').value;
-        if(phone.length < 11) return alert("Phone number error");
+        if(phone.length < 11) return alert("Please check phone number");
 
-        let msg = `*NEW ORDER AUWAL MD TECH*%0A*Service:* ${serviceType}%0A*Network:* ${selectedNet}%0A*Phone:* ${phone}`;
+        let msg = `*NEW ORDER - AUWAL MD TECH*%0A*Service:* ${serviceType}%0A*Network:* ${selectedNet}%0A*Phone:* ${phone}`;
         if(serviceType==='Airtime') msg += `%0A*Amount:* ₦${amount}`;
         else msg += `%0A*Plan:* ${dataPlan}`;
 
