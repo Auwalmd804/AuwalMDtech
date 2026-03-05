@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Auwal MD Tech</title>
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; padding: 20px; }
+        .admin-card { background: white; max-width: 800px; margin: auto; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #0f172a; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background: #00AEEF; color: white; }
+        .btn-fund { background: #10b981; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="admin-card">
+    <h2>User Management (Admin Only)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Balance</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="userList"></tbody>
+    </table>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, doc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
+        authDomain: "auwalmdtech.firebaseapp.com",
+        projectId: "auwalmdtech",
+        storageBucket: "auwalmdtech.firebasestorage.app",
+        messagingSenderId: "202329584080",
+        appId: "1:202329584080:web:e989d7df53d3c3024609d5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    // Kare shafin: Kai kadai zaka iya gani
+    onAuthStateChanged(auth, (user) => {
+        if (!user || user.email !== "yau789452@gmail.com") {
+            window.location.href = "index.html";
+        }
+    });
+
+    onSnapshot(collection(db, "auwalmdtech"), (snapshot) => {
+        const list = document.getElementById("userList");
+        list.innerHTML = "";
+        snapshot.forEach((userDoc) => {
+            const data = userDoc.data();
+            list.innerHTML += `
+                <tr>
+                    <td>${userDoc.id}</td>
+                    <td>₦${data.balance || 0}</td>
+                    <td><button class="btn-fund" onclick="fundUser('${userDoc.id}')">Add Money</button></td>
+                </tr>
+            `;
+        });
+    });
+
+    window.fundUser = async (email) => {
+        const amount = prompt("Enter amount to add:");
+        if (amount) {
+            const userRef = doc(db, "auwalmdtech", email);
+            await setDoc(userRef, { balance: Number(amount) }, { merge: true });
+            alert("Wallet updated!");
+        }
+    };
+</script>
+</body>
+</html>
