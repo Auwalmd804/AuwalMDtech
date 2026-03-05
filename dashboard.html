@@ -9,12 +9,11 @@
     <style>
         :root { --primary: #00AEEF; --dark: #0f172a; --bg: #f8fafc; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg); color: var(--dark); padding-bottom: 50px; }
+        body { background: var(--bg); padding-bottom: 30px; }
 
         nav { background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
         .logo { display: flex; align-items: center; gap: 10px; font-weight: 600; }
         .logo img { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--primary); }
-        .logout { color: #ff4757; text-decoration: none; font-size: 13px; font-weight: 600; background: #fff1f2; padding: 5px 12px; border-radius: 6px; }
 
         .container { padding: 20px 5%; max-width: 800px; margin: auto; }
         .wallet-card { background: var(--dark); color: #fff; padding: 25px; border-radius: 20px; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
@@ -22,22 +21,26 @@
 
         h3 { margin-bottom: 15px; font-size: 16px; border-left: 4px solid var(--primary); padding-left: 10px; }
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; }
+        
+        /* Service Cards */
         .card { background: #fff; padding: 20px; border-radius: 18px; text-align: center; cursor: pointer; border: 1px solid #f1f5f9; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
-        .card i { font-size: 30px; margin-bottom: 10px; display: block; color: var(--primary); }
-
-        /* Modal */
+        .card i { font-size: 35px; margin-bottom: 10px; display: block; }
+        
+        /* Modal Styles */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
         .modal-content { background: #fff; width: 100%; max-width: 400px; padding: 25px; border-radius: 25px; position: relative; text-align: center; }
         .close-modal { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #94a3b8; }
 
-        /* Network Icons Fixed */
+        /* Network Icons Fixed with Colors */
         .network-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
-        .network-item { border: 1.5px solid #f1f5f9; padding: 10px; border-radius: 15px; text-align: center; cursor: pointer; background: #fff; }
+        .network-item { border: 1.5px solid #f1f5f9; padding: 15px; border-radius: 15px; text-align: center; cursor: pointer; background: #fff; transition: 0.3s; }
         .network-item:hover { border-color: var(--primary); background: #f0f9ff; }
         
-        /* Idan hoton ya ki fitowa, wannan zai nuna sunan a karkashi */
-        .net-img { width: 55px; height: 55px; border-radius: 50%; margin-bottom: 8px; object-fit: cover; display: block; margin-left: auto; margin-right: auto; background: #eee; border: 1px solid #ddd; }
-        .network-item p { font-size: 13px; font-weight: 600; }
+        .net-icon { font-size: 40px; margin-bottom: 8px; display: block; }
+        .mtn { color: #FFCC00; }   /* Yellow */
+        .airtel { color: #ED1C24; } /* Red */
+        .glo { color: #2E8B57; }    /* Green */
+        .mobile9 { color: #006651; } /* Dark Green */
 
         .form-group { margin-top: 15px; text-align: left; }
         label { font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 5px; display: block; }
@@ -50,7 +53,7 @@
 
 <nav>
     <div class="logo"><img src="Image_1.png" alt="Logo"> Auwal MD Tech</div>
-    <a href="#" class="logout" id="logoutBtn">Logout</a>
+    <a href="#" style="color:#ff4757; text-decoration:none; font-size:13px; font-weight:600;">Logout</a>
 </nav>
 
 <div class="container">
@@ -59,14 +62,26 @@
         <h1 id="userBalance">₦0.00</h1>
     </div>
 
+    <h3>Identity Verification</h3>
+    <div class="grid">
+        <div class="card" onclick="alert('NIN Verification Service')">
+            <i class="fa-solid fa-id-card" style="color: #059669;"></i>
+            <p>NIN Verify</p>
+        </div>
+        <div class="card" onclick="alert('BVN Verification Service')">
+            <i class="fa-solid fa-fingerprint" style="color: #dc2626;"></i>
+            <p>BVN Verify</p>
+        </div>
+    </div>
+
     <h3>Telecom Services</h3>
     <div class="grid">
         <div class="card" onclick="openStep1('Airtime')">
-            <i class="fa-solid fa-phone-volume"></i>
+            <i class="fa-solid fa-phone-volume" style="color: #f59e0b;"></i>
             <p>Buy Airtime</p>
         </div>
         <div class="card" onclick="openStep1('Data')">
-            <i class="fa-solid fa-wifi"></i>
+            <i class="fa-solid fa-wifi" style="color: #2563eb;"></i>
             <p>Buy Data</p>
         </div>
     </div>
@@ -77,22 +92,22 @@
         <span class="close-modal" onclick="closeModal()">&times;</span>
         
         <div id="step1">
-            <h3 style="border:none;">Select Network</h3>
+            <h3 style="border:none; text-align:center;">Select Network</h3>
             <div class="network-grid">
                 <div class="network-item" onclick="openStep2('MTN')">
-                    <img src="https://img.freepik.com/free-icon/mtn_318-566000.jpg" class="net-img" alt="MTN">
+                    <i class="fa-solid fa-square net-icon mtn"></i>
                     <p>MTN</p>
                 </div>
                 <div class="network-item" onclick="openStep2('Airtel')">
-                    <img src="https://logowik.com/content/uploads/images/airtel-new-20238475.logowik.com.webp" class="net-img" alt="Airtel">
+                    <i class="fa-solid fa-square net-icon airtel"></i>
                     <p>Airtel</p>
                 </div>
                 <div class="network-item" onclick="openStep2('Glo')">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/7/76/Globacom_Limited_Logo.svg/1200px-Globacom_Limited_Logo.svg.png" class="net-img" alt="Glo">
+                    <i class="fa-solid fa-square net-icon glo"></i>
                     <p>Glo</p>
                 </div>
                 <div class="network-item" onclick="openStep2('9mobile')">
-                    <img src="https://i0.wp.com/9mobile.com.ng/wp-content/uploads/2017/07/9mobile-logo.png" class="net-img" alt="9mobile">
+                    <i class="fa-solid fa-square net-icon mobile9"></i>
                     <p>9mobile</p>
                 </div>
             </div>
@@ -163,7 +178,7 @@
         const dataPlan = document.getElementById('dataPlan').value;
         if(phone.length < 11) return alert("Phone number error");
 
-        let msg = `*NEW ORDER*%0A*Service:* ${serviceType}%0A*Network:* ${selectedNet}%0A*Phone:* ${phone}`;
+        let msg = `*NEW ORDER AUWAL MD TECH*%0A*Service:* ${serviceType}%0A*Network:* ${selectedNet}%0A*Phone:* ${phone}`;
         if(serviceType==='Airtime') msg += `%0A*Amount:* ₦${amount}`;
         else msg += `%0A*Plan:* ${dataPlan}`;
 
