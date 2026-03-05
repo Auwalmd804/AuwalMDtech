@@ -11,13 +11,11 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg); padding-bottom: 50px; }
         nav { background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .logo { display: flex; align-items: center; gap: 10px; font-weight: 600; }
-        .logo img { width: 35px; height: 35px; border-radius: 50%; }
         .logout-btn { color: #ff4757; text-decoration: none; font-size: 13px; font-weight: 600; cursor: pointer; background: #fff1f2; padding: 5px 12px; border-radius: 6px; border: none; }
         .container { padding: 20px 5%; max-width: 800px; margin: auto; }
         .wallet-card { background: var(--dark); color: #fff; padding: 25px; border-radius: 20px; margin-bottom: 25px; }
-        .wallet-card h1 { font-size: 32px; margin-top: 5px; color: #fff; }
-        .status-msg { font-size: 11px; color: #fbbf24; margin-top: 10px; display: block; }
+        .wallet-card h1 { font-size: 32px; margin-top: 5px; }
+        #dbStatus { font-size: 11px; color: #fbbf24; display: block; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -30,16 +28,10 @@
 <div class="container">
     <div class="wallet-card">
         <p style="font-size:12px; opacity:0.8;">Wallet Balance</p>
-        <h1 id="userBalance">Loading...</h1>
-        <span id="dbStatus" class="status-msg">Checking database...</span>
+        <h1 id="userBalance">₦0.00</h1>
+        <span id="dbStatus">Loading database...</span>
     </div>
-
-    <div id="adminSection" style="display:none; background:#ecfdf5; padding:10px; border-radius:10px; margin-bottom:20px; color:#065f46; font-size:13px;">
-        <i class="fa-solid fa-user-shield"></i> Admin: Auwal MD
-    </div>
-
-    <h3 style="margin-bottom:15px; font-size:16px;">Services</h3>
-    <p>Danna daya daga cikin wadannan don gwada ayyukanmu.</p>
+    <p>Barka da zuwa dashboard dinka, Auwal.</p>
 </div>
 
 <script type="module">
@@ -60,41 +52,28 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // FIX: Logout Button
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-        signOut(auth).then(() => {
-            window.location.href = "index.html";
-        }).catch(err => alert("Logout failed: " + err.message));
-    });
+    // Logout Function
+    document.getElementById("logoutBtn").onclick = () => {
+        signOut(auth).then(() => window.location.href = "index.html");
+    };
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            document.getElementById("dbStatus").innerText = "Connected as: " + user.email;
-
-            // Nuna Admin Section idan kai ne
-            if (user.email === "yau789452@gmail.com") {
-                document.getElementById("adminSection").style.display = "block";
-            }
-
-            // KARANTO BALANCE
-            // MUHIMMI: Sunan Collection "AuwalMDtech" ne kamar yadda ka ce
-            const userDoc = doc(db, "AuwalMDtech", user.email);
+            // YANZU SUNAN YA DAICE DA "auwalmdtech" KAMAR YADDA KA SAKA
+            const userDoc = doc(db, "auwalmdtech", user.email);
 
             onSnapshot(userDoc, (docSnap) => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    // Tabbatar "balance" ne sunan field din a Firebase (kananan haruffa)
-                    const bal = data.balance !== undefined ? data.balance : "No 'balance' field";
+                    const bal = data.balance || 0;
                     document.getElementById("userBalance").innerText = "₦" + bal.toLocaleString();
-                    document.getElementById("dbStatus").innerText = "Database sync active";
+                    document.getElementById("dbStatus").innerText = "Status: Connected to " + user.email;
                 } else {
-                    document.getElementById("userBalance").innerText = "₦0.00";
-                    document.getElementById("dbStatus").innerText = "Error: Document not found in 'AuwalMDtech' collection.";
+                    document.getElementById("dbStatus").innerText = "Status: User document not found in 'auwalmdtech' collection.";
                 }
             }, (error) => {
-                document.getElementById("dbStatus").innerText = "Database Error: " + error.message;
+                document.getElementById("dbStatus").innerText = "Error: " + error.message;
             });
-
         } else {
             window.location.href = "index.html";
         }
