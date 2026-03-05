@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auwal MD Tech | Create Account</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #00AEEF; --dark: #0f172a; --bg: #f8fafc; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .card { background: #fff; width: 100%; max-width: 400px; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        h2 { color: var(--dark); margin-bottom: 20px; text-align: center; }
+        .form-group { margin-bottom: 15px; }
+        label { font-size: 13px; font-weight: 600; color: #64748b; display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; outline: none; }
+        .btn-reg { width: 100%; padding: 14px; background: var(--primary); color: #fff; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        p { text-align: center; font-size: 13px; margin-top: 20px; color: #64748b; }
+        a { color: var(--primary); text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Create Account</h2>
+    <div id="status" style="color: red; font-size: 12px; text-align: center; margin-bottom: 10px;"></div>
+    
+    <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="fullName" placeholder="Enter your name">
+    </div>
+    <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="email" placeholder="example@mail.com">
+    </div>
+    <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Min 6 characters">
+    </div>
+    
+    <button class="btn-reg" id="regBtn">Register Now</button>
+    <p>Already have an account? <a href="index.html">Login</a></p>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
+        authDomain: "auwalmdtech.firebaseapp.com",
+        projectId: "auwalmdtech",
+        storageBucket: "auwalmdtech.firebasestorage.app",
+        messagingSenderId: "202329584080",
+        appId: "1:202329584080:web:e989d7df53d3c3024609d5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    document.getElementById("regBtn").onclick = async () => {
+        const name = document.getElementById("fullName").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const status = document.getElementById("status");
+
+        if(!name || !email || password.length < 6) {
+            status.innerText = "Please fill all fields correctly!";
+            return;
+        }
+
+        status.style.color = "blue";
+        status.innerText = "Creating account...";
+
+        try {
+            // 1. Create User in Firebase Auth
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            // 2. Create User Profile in "auwalmdtech" collection
+            await setDoc(doc(db, "auwalmdtech", email), {
+                fullName: name,
+                balance: 0,
+                role: "user",
+                createdAt: new Date().toISOString()
+            });
+
+            alert("Registration Successful!");
+            window.location.href = "dashboard.html";
+
+        } catch (error) {
+            status.style.color = "red";
+            status.innerText = error.message;
+        }
+    };
+</script>
+
+</body>
+</html>
