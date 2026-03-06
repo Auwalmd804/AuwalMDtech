@@ -2,86 +2,42 @@
 <html lang="ha">
 <head>
     <meta charset="UTF-8">
-    <title>AUWAL MD TECHNOLOGY - Professional Admin Control</title>
+    <title>Admin - Auwal MD Tech</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        body { background: #0f172a; color: #f8fafc; font-family: 'Poppins', sans-serif; overflow-x: hidden; }
-        .admin-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; transition: 0.4s; }
-        .admin-card:hover { transform: scale(1.02); border-color: #38bdf8; }
-        .stat-icon { font-size: 2rem; color: #38bdf8; }
-        .gold-text { color: #fbbf24; font-weight: bold; }
-        .btn-update { background: linear-gradient(90deg, #3b82f6, #2dd4bf); border: none; color: white; padding: 12px; border-radius: 12px; font-weight: bold; width: 100%; }
-        #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0f172a; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        body { background: #1a1a1a; color: white; padding: 30px; }
+        .card { background: #2d2d2d; border: none; color: white; border-radius: 15px; }
     </style>
 </head>
 <body>
-
-<div id="lock-screen" class="animate__animated animate__fadeIn">
-    <div class="text-center p-5 card admin-card shadow-lg" style="width: 380px;">
-        <h4 class="mb-2 gold-text">AUWAL MD TECH</h4>
-        <p class="small text-muted mb-4">Admin Security Portal</p>
-        <input type="password" id="adminPass" class="form-control mb-3 bg-dark text-white border-secondary" placeholder="Saka Password dinka...">
-        <button onclick="checkAccess()" class="btn-update">Bude Ikon Website</button>
-        <p id="errorMsg" class="text-danger mt-2 small d-none">Password ba daidai ba!</p>
+    <div id="admin-login" class="text-center">
+        <h4>Admin Security</h4>
+        <input type="password" id="pass" class="form-control mb-2" placeholder="Saka Password">
+        <button onclick="login()" class="btn btn-primary">Login</button>
     </div>
-</div>
 
-<div id="adminContent" class="container py-5 d-none">
-    <div class="row animate__animated animate__slideInDown">
-        <div class="col-12 mb-4 d-flex justify-content-between align-items-center">
-            <h2 class="fw-bold">Barka da Zuwa, <span class="gold-text">Auwal MD</span></h2>
-            <a href="dashboard.html" class="btn btn-outline-light rounded-pill px-4">Koma Dashboard</a>
+    <div id="admin-panel" style="display:none;" class="container">
+        <h3 class="fw-bold text-warning">AUWAL MD TECH - Ikon Website</h3>
+        <div class="card p-4 mt-4 shadow">
+            <h5>Saka Wa Customer Kudi (Credit User)</h5>
+            <p class="small text-muted">Wannan zai canza balance din customer a wayarsa.</p>
+            <input type="number" id="new-bal" class="form-control mb-3" placeholder="Saka Adadin Kudi (misali 2000)">
+            <button onclick="updateBalance()" class="btn btn-success w-100 fw-bold">UPDATE BALANCE</button>
         </div>
     </div>
 
-    <div class="row g-4 mb-5 animate__animated animate__fadeInUp">
-        <div class="col-md-4">
-            <div class="card admin-card p-4 text-center">
-                <div class="stat-icon">💰</div>
-                <div class="small opacity-70 mt-2">Jimillar Riba (Today)</div>
-                <h3 class="fw-bold gold-text">₦12,450.00</h3>
-            </div>
-        </div>
-        <div class="col-md-8">
-            <div class="card admin-card p-4">
-                <h6 class="gold-text mb-3">Customer Balances</h6>
-                <div class="table-responsive">
-                    <table class="table table-dark table-hover table-sm small">
-                        <thead>
-                            <tr>
-                                <th>Gmail</th>
-                                <th>Balance (₦)</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>customer1@gmail.com</td>
-                                <td>₦4,500</td>
-                                <td class="text-success">Active</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    function checkAccess() {
-        let pass = document.getElementById('adminPass').value;
-        if(pass === "Auwal@00") {
-            document.getElementById('lock-screen').classList.add('animate__fadeOut');
-            setTimeout(() => {
-                document.getElementById('lock-screen').classList.add('d-none');
-                document.getElementById('adminContent').classList.remove('d-none');
-            }, 500);
-        } else {
-            document.getElementById('errorMsg').classList.remove('d-none');
+    <script>
+        function login() {
+            if(document.getElementById('pass').value === "Auwal@00") {
+                document.getElementById('admin-login').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+            } else { alert("Password ba daidai ba!"); }
         }
-    }
-</script>
+        function updateBalance() {
+            let amount = document.getElementById('new-bal').value;
+            localStorage.setItem('userBalance', amount);
+            alert("An saka wa customer kudi: ₦" + amount);
+        }
+    </script>
 </body>
 </html>
