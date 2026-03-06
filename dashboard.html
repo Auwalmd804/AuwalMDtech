@@ -3,106 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - IM SMART VTU</title>
+    <title>Dashboard - Auwal MD Technology Company</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background-color: #f0f2f5; font-family: 'Ubuntu', sans-serif; }
-        .header-logo { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
-        .card { border: none; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .wallet-box { background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; padding: 25px; border-radius: 20px; }
-        .network-card { cursor: pointer; transition: 0.3s; border: 1px solid #eee; }
-        .network-card:hover { transform: translateY(-5px); border-color: #3b82f6; }
-        .network-logo { width: 50px; height: 50px; border-radius: 10px; margin-bottom: 10px; }
-        .slip-card { border: 2px solid #eee; border-radius: 15px; padding: 15px; text-align: center; cursor: pointer; }
-        input[type="radio"]:checked + .slip-card { border-color: #3b82f6; background-color: #eff6ff; }
-        .admin-link { position: fixed; bottom: 80px; right: 20px; background: #dc3545; color: white; padding: 10px 20px; border-radius: 30px; text-decoration: none; font-weight: bold; }
+        body { background-color: #f4f7f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .card { border: none; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .company-header { background: white; padding: 15px; border-bottom: 2px solid #0d6efd; }
+        .wallet-card { background: linear-gradient(135deg, #0d6efd, #00c6ff); color: white; padding: 25px; border-radius: 25px; }
+        .nav-icon { width: 50px; height: 50px; border-radius: 12px; margin-bottom: 8px; transition: 0.3s; object-fit: cover; }
+        .network-card:active { transform: scale(0.9); }
+        .slip-option { border: 2px solid #eee; border-radius: 15px; padding: 10px; cursor: pointer; position: relative; }
+        input[type="radio"]:checked + .slip-option { border-color: #0d6efd; background: #f0f7ff; }
+        .logout-btn { color: #dc3545; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="container py-3">
-    <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 rounded-pill shadow-sm">
-        <div class="d-flex align-items-center">
-            <img src="https://via.placeholder.com/50" alt="Logo" class="header-logo me-2"> <span class="fw-bold">IM SMART</span>
-        </div>
-        <div class="text-primary fw-bold">ID: #00123</div>
+<div class="company-header d-flex justify-content-between align-items-center mb-4 shadow-sm">
+    <div class="d-flex align-items-center">
+        <img src="AuwaldMDtech.png" alt="Logo" style="width: 40px; height: 40px; border-radius: 50%;" onerror="this.src='https://via.placeholder.com/40?text=AM'">
+        <h6 class="ms-2 mb-0 fw-bold text-primary">AUWAL MD TECH</h6>
     </div>
+    <div class="logout-btn" onclick="window.location.href='index.html'"><i class="fas fa-sign-out-alt"></i> Logout</div>
+</div>
 
-    <div class="wallet-box mb-4">
-        <p class="mb-1 opacity-75">Adadin Kudinka</p>
-        <h2 class="fw-bold mb-3">₦5,450.00</h2>
-        <button class="btn btn-light btn-sm px-4 fw-bold">Saka Kudi</button>
-    </div>
-
-    <h6 class="fw-bold mb-3 text-secondary">SAYI DATA DA AIRTIME</h6>
-    <div class="row g-3 mb-4">
-        <div class="col-3 text-center">
-            <div class="card p-2 network-card">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/MTN_Logo.svg" class="network-logo mx-auto">
-                <div style="font-size: 10px; font-weight: bold;">MTN</div>
-            </div>
-        </div>
-        <div class="col-3 text-center">
-            <div class="card p-2 network-card">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Airtel_logo.png" class="network-logo mx-auto">
-                <div style="font-size: 10px; font-weight: bold;">AIRTEL</div>
-            </div>
-        </div>
-        <div class="col-3 text-center">
-            <div class="card p-2 network-card">
-                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/7/75/Glo_Limited_logo.png/220px-Glo_Limited_logo.png" class="network-logo mx-auto">
-                <div style="font-size: 10px; font-weight: bold;">GLO</div>
-            </div>
-        </div>
-        <div class="col-3 text-center">
-            <div class="card p-2 network-card">
-                <img src="https://upload.wikimedia.org/wikipedia/en/3/33/9mobile_Logo.png" class="network-logo mx-auto">
-                <div style="font-size: 10px; font-weight: bold;">9MOBILE</div>
-            </div>
+<div class="container">
+    <div class="wallet-card mb-4 animate__animated animate__fadeInIn">
+        <small class="opacity-75">Adadin Kudinka (Balance)</small>
+        <h2 class="fw-bold">₦5,450.00</h2>
+        <div class="d-flex gap-2 mt-3">
+            <button class="btn btn-light btn-sm fw-bold px-3 shadow-sm">Saka Kudi</button>
+            <button class="btn btn-outline-light btn-sm fw-bold px-3">History</button>
         </div>
     </div>
 
-    <div class="card p-4 mb-5">
-        <h5 class="fw-bold text-primary mb-3 text-uppercase" style="font-size: 14px;">NIN Slip & Information</h5>
-        <div class="row g-3">
+    <h6 class="fw-bold mb-3 text-secondary">SAYI AIRTIME KO DATA</h6>
+    <div class="row g-3 mb-4 text-center">
+        <div class="col-3 network-card" onclick="selectService('MTN')">
+            <div class="card p-2 shadow-sm">
+                <img src="mtn.png" class="nav-icon mx-auto" onerror="this.src='https://logodownload.org/wp-content/uploads/2022/03/mtn-logo-0.png'">
+                <div class="small fw-bold">MTN</div>
+            </div>
+        </div>
+        <div class="col-3 network-card" onclick="selectService('Airtel')">
+            <div class="card p-2 shadow-sm">
+                <img src="airtel.png" class="nav-icon mx-auto" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/e/e1/Airtel_logo.png'">
+                <div class="small fw-bold">Airtel</div>
+            </div>
+        </div>
+        <div class="col-3 network-card" onclick="selectService('Glo')">
+            <div class="card p-2 shadow-sm">
+                <img src="glo.png" class="nav-icon mx-auto" onerror="this.src='https://upload.wikimedia.org/wikipedia/en/thumb/7/75/Glo_Limited_logo.png/220px-Glo_Limited_logo.png'">
+                <div class="small fw-bold">Glo</div>
+            </div>
+        </div>
+        <div class="col-3 network-card" onclick="selectService('9mobile')">
+            <div class="card p-2 shadow-sm">
+                <img src="9mobile.png" class="nav-icon mx-auto" onerror="this.src='https://upload.wikimedia.org/wikipedia/en/3/33/9mobile_Logo.png'">
+                <div class="small fw-bold">9mobile</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card p-4 mb-5 border-0 shadow">
+        <h6 class="fw-bold text-primary mb-4 border-bottom pb-2">
+            <i class="fas fa-id-card me-2"></i> NIN SLIP & RETRIEVAL
+        </h6>
+        
+        <div class="row g-2 mb-4">
             <div class="col-6">
                 <label class="w-100">
-                    <input type="radio" name="nin_type" class="d-none" checked>
-                    <div class="slip-card">
+                    <input type="radio" name="nin_type" value="180" class="d-none" checked>
+                    <div class="slip-option text-center">
                         <div class="small fw-bold">Standard</div>
-                        <div class="text-primary fw-bold">₦180.00</div>
+                        <div class="text-success fw-bold">₦180.00</div>
                     </div>
                 </label>
             </div>
             <div class="col-6">
                 <label class="w-100">
-                    <input type="radio" name="nin_type" class="d-none">
-                    <div class="slip-card">
+                    <input type="radio" name="nin_type" value="170" class="d-none">
+                    <div class="slip-option text-center">
+                        <div class="small fw-bold">Regular</div>
+                        <div class="text-success fw-bold">₦170.00</div>
+                    </div>
+                </label>
+            </div>
+            <div class="col-6">
+                <label class="w-100">
+                    <input type="radio" name="nin_type" value="200" class="d-none">
+                    <div class="slip-option text-center">
                         <div class="small fw-bold">Premium</div>
-                        <div class="text-primary fw-bold">₦200.00</div>
+                        <div class="text-success fw-bold">₦200.00</div>
+                    </div>
+                </label>
+            </div>
+            <div class="col-6">
+                <label class="w-100">
+                    <input type="radio" name="nin_type" value="160" class="d-none">
+                    <div class="slip-option text-center">
+                        <div class="small fw-bold">Information</div>
+                        <div class="text-success fw-bold">₦160.00</div>
                     </div>
                 </label>
             </div>
         </div>
-        <div class="mt-3">
-            <label class="small fw-bold mb-1">Saka Lambar Waya ko NIN</label>
-            <input type="number" class="form-control form-control-lg" placeholder="11112222333">
+
+        <div class="mb-4">
+            <label class="small fw-bold mb-2">Saka Phone Number/NIN</label>
+            <input type="number" class="form-control form-control-lg bg-light border-0" placeholder="080XXXXXXXX" style="border-radius: 12px;">
         </div>
-        <button class="btn btn-primary w-100 mt-3 py-3">FITAR DA SLIP YANZU</button>
+
+        <button class="btn btn-primary w-100 py-3 fw-bold shadow" style="border-radius: 15px;">FITAR DA SLIP YANZU</button>
     </div>
 </div>
 
-<a href="admin.html" class="admin-link shadow">
-    <i class="fas fa-user-shield me-2"></i> Admin Panel
+<a href="admin.html" class="btn btn-danger btn-sm rounded-pill shadow" style="position: fixed; bottom: 85px; right: 20px; z-index: 1000; font-size: 11px;">
+    <i class="fas fa-lock me-1"></i> Admin Panel
 </a>
 
 <nav class="fixed-bottom bg-white border-top p-2 d-flex justify-content-around shadow-lg">
-    <div class="text-center text-primary"><i class="fas fa-home fs-5"></i></div>
-    <div class="text-center text-muted"><i class="fas fa-history fs-5"></i></div>
-    <div class="text-center text-muted"><i class="fas fa-wallet fs-5"></i></div>
-    <div class="text-center text-muted"><i class="fas fa-cog fs-5"></i></div>
+    <div class="text-center text-primary"><i class="fas fa-home fs-5"></i><div style="font-size: 10px;">Home</div></div>
+    <div class="text-center text-muted"><i class="fas fa-history fs-5"></i><div style="font-size: 10px;">History</div></div>
+    <div class="text-center text-muted"><i class="fas fa-wallet fs-5"></i><div style="font-size: 10px;">Wallet</div></div>
+    <div class="text-center text-muted"><i class="fas fa-cog fs-5"></i><div style="font-size: 10px;">Settings</div></div>
 </nav>
+
+<script>
+    function selectService(network) {
+        let choice = confirm("Zaka sayi AIRTIME ne ko DATA na " + network + "?\n\nOk = DATA\nCancel = AIRTIME");
+        if (choice) {
+            alert("Ka zabi sayen DATA na " + network + ". Muna hadawa da VTPass yanzu...");
+        } else {
+            alert("Ka zabi sayen AIRTIME na " + network + ". Muna hadawa da VTPass yanzu...");
+        }
+    }
+</script>
 
 </body>
 </html>
