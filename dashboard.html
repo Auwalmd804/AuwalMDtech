@@ -140,17 +140,54 @@
     function openVTU(n) { net = n; document.getElementById('vtuTitle').innerText = n + " Order"; vModal.show(); }
 
     function sendOrder(mode) {
-        document.getElementById('loader').style.display = 'flex';
-        let msg = "";
-        setTimeout(() => {
-            if(mode==='VTU') msg = `Order: ${net} ${document.getElementById('v-type').value}\nAmount: N${document.getElementById('v-amt').value}\nPhone: ${document.getElementById('v-ph').value}`;
-            else if(mode==='NIN') msg = `Order: NIN Slip\nType: ${document.getElementById('nin_type').value}\nDetails: ${document.getElementById('nin_val').value}`;
-            else if(mode==='SIM') msg = `Order: ${document.getElementById('sim_task').value}\nNetwork: ${document.getElementById('sim_net').value}\nDetails: ${document.getElementById('sim_ph').value}`;
-            else msg = `Order: Graphics Design\nType: ${document.getElementById('gd_type').value}\nName: ${document.getElementById('gd_name').value}`;
-            
-            window.location.href = `https://wa.me/2349137904300?text=${encodeURIComponent("HELLO AUWAL MD TECH,\n\n"+msg)}`;
-        }, 2000);
-    }
+    // Show the loading arrow
+    document.getElementById('loader').style.display = 'flex';
+    
+    let msg = "";
+    let serviceName = "";
+    let subDetails = "";
+
+    setTimeout(() => {
+        // Logic for Airtime and Data
+        if(mode==='VTU') {
+            serviceName = `${net} ${document.getElementById('v-type').value}`;
+            subDetails = `N${document.getElementById('v-amt').value}`;
+            msg = `Order: ${serviceName}\nAmount: ${subDetails}\nPhone: ${document.getElementById('v-ph').value}`;
+        } 
+        // Logic for NIN Slips
+        else if(mode==='NIN') {
+            serviceName = "NIN Slip Service";
+            subDetails = document.getElementById('nin_type').value;
+            msg = `Order: NIN Slip\nType: ${subDetails}\nDetails: ${document.getElementById('nin_val').value}`;
+        }
+        // Logic for SIM and POS
+        else if(mode==='SIM') {
+            serviceName = document.getElementById('sim_task').value;
+            subDetails = document.getElementById('sim_net').value;
+            msg = `Order: ${serviceName}\nNetwork: ${subDetails}\nDetails: ${document.getElementById('sim_ph').value}`;
+        }
+        // Logic for Graphics Design
+        else {
+            serviceName = "Graphics Design";
+            subDetails = document.getElementById('gd_type').value;
+            msg = `Order: Graphics Design\nType: ${subDetails}\nName: ${document.getElementById('gd_name').value}`;
+        }
+
+        // SAVE TO HISTORY
+        let now = new Date();
+        let txns = JSON.parse(localStorage.getItem('my_txns')) || [];
+        txns.push({
+            service: serviceName,
+            details: subDetails,
+            date: now.toLocaleDateString(),
+            time: now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+        });
+        localStorage.setItem('my_txns', JSON.stringify(txns));
+
+        // Redirect to WhatsApp
+        window.location.href = `https://wa.me/2349137904300?text=${encodeURIComponent("HELLO AUWAL MD TECH,\n\n"+msg)}`;
+    }, 2000);
+}
 </script>
 </body>
 </html>
