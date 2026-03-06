@@ -1,146 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ha">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Auwal MD Tech</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>User Dashboard - IM Smart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #00AEEF; --dark: #0f172a; --bg: #f1f5f9; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); padding: 15px; }
-        .card { background: var(--dark); color: white; padding: 20px; border-radius: 20px; text-align: center; margin-bottom: 20px; }
-        .balance-label { font-size: 14px; opacity: 0.8; }
-        .balance-amount { font-size: 32px; font-weight: bold; margin: 5px 0; }
-        
-        .bank-card { background: white; padding: 15px; border-radius: 15px; border: 1px dashed var(--primary); margin-bottom: 20px; }
-        .bank-label { font-size: 11px; color: #64748b; text-transform: uppercase; }
-        
-        .buy-section { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        h3 { margin-bottom: 15px; color: var(--dark); font-size: 16px; }
-        select, input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #e2e8f0; border-radius: 10px; outline: none; }
-        
-        .btn-buy { background: var(--primary); color: white; width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
-        .btn-logout { background: transparent; color: #ef4444; border: none; margin-top: 20px; width: 100%; cursor: pointer; font-weight: bold; }
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .card { border-radius: 15px; border: none; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .btn-primary { background-color: #007bff; border: none; border-radius: 10px; padding: 12px; font-weight: bold; }
+        .wallet-card { background: linear-gradient(45deg, #007bff, #00d4ff); color: white; }
+        .slip-option { border: 2px solid #eee; border-radius: 10px; padding: 10px; cursor: pointer; transition: 0.3s; }
+        .slip-option:hover { border-color: #007bff; background: #f0f8ff; }
+        input[type="radio"] { display: none; }
+        input[type="radio"]:checked + .slip-content { border: 2px solid #007bff; background: #f0f8ff; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <p class="balance-label">Available Balance</p>
-        <h1 id="userBalance" class="balance-amount">₦0.00</h1>
-        <p id="userEmailDisplay" style="font-size: 12px; color: #10b981;"></p>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold text-dark">Barka da Zuwa, Auwal!</h4>
+        <i class="fas fa-bell fs-4 text-muted"></i>
     </div>
 
-    <div class="bank-card">
-        <p class="bank-label"><i class="fas fa-university"></i> Funding Account (Auto-Wallet)</p>
-        <h4 id="bankName" style="margin-top: 5px; color: #334155;">Setting up Bank...</h4>
-        <h2 id="accNo" style="color: var(--primary); letter-spacing: 1px; margin: 5px 0;">Generating...</h2>
-        <p id="accName" style="font-size: 12px; font-weight: bold; color: #475569;"></p>
+    <div class="card wallet-card p-4">
+        <div class="small">Adadin Kudinka (Wallet Balance)</div>
+        <h2 class="fw-bold">₦5,450.00</h2>
+        <div class="d-flex gap-2 mt-2">
+            <button class="btn btn-light btn-sm fw-bold">Fund Wallet</button>
+            <button class="btn btn-outline-light btn-sm fw-bold">History</button>
+        </div>
     </div>
 
-    <div class="buy-section">
-        <h3><i class="fas fa-bolt" style="color: #fbbf24;"></i> Quick Buy Data</h3>
-        
-        <label style="font-size: 12px;">Select Network</label>
-        <select id="network">
-            <option value="MTN">MTN (SME)</option>
-            <option value="GLO">GLO</option>
-            <option value="AIRTEL">AIRTEL</option>
-            <option value="9MOBILE">9MOBILE</option>
-        </select>
-
-        <label style="font-size: 12px;">Select Data Plan</label>
-        <select id="plan">
-            <option value="260">1GB (SME) - ₦260</option>
-            <option value="520">2GB (SME) - ₦520</option>
-            <option value="1300">5GB (SME) - ₦1,300</option>
-            <option value="2600">10GB (SME) - ₦2,600</option>
-        </select>
-
-        <label style="font-size: 12px;">Recipient Phone Number</label>
-        <input type="number" id="phone" placeholder="08123456789">
-
-        <button class="btn-buy" id="buyBtn">Purchase Now</button>
-        <p id="txStatus" style="text-align: center; font-size: 12px; margin-top: 10px;"></p>
+    <div class="row g-3 mb-4">
+        <div class="col-6 text-center">
+            <div class="card p-3">
+                <i class="fas fa-mobile-alt fs-2 text-primary mb-2"></i>
+                <div class="small fw-bold">Sayi Airtime</div>
+            </div>
+        </div>
+        <div class="col-6 text-center">
+            <div class="card p-3">
+                <i class="fas fa-wifi fs-2 text-success mb-2"></i>
+                <div class="small fw-bold">Sayi Data</div>
+            </div>
+        </div>
     </div>
 
-    <button class="btn-logout" id="logoutBtn">Logout</button>
-
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getFirestore, doc, onSnapshot, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
-        authDomain: "auwalmdtech.firebaseapp.com",
-        projectId: "auwalmdtech",
-        storageBucket: "auwalmdtech.firebasestorage.app",
-        messagingSenderId: "202329584080",
-        appId: "1:202329584080:web:e989d7df53d3c3024609d5"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            const userEmail = user.email.toLowerCase();
-            document.getElementById("userEmailDisplay").innerText = userEmail;
+    <div class="card p-4">
+        <h5 class="fw-bold text-primary mb-3">
+            <i class="fas fa-id-card me-2"></i> NIN Slip & Retrieval
+        </h5>
+        <form id="ninForm">
+            <label class="form-label fw-bold mb-3 text-secondary">Zabi Nau'in Slip Din Da Kake So:</label>
             
-            // Listen for data changes (Balance and Account)
-            onSnapshot(doc(db, "auwalmdtech", userEmail), (docSnap) => {
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    document.getElementById("userBalance").innerText = "₦" + (data.balance || 0).toLocaleString();
-                    
-                    if (data.accountNumber) {
-                        document.getElementById("bankName").innerText = data.bankName || "Wema Bank";
-                        document.getElementById("accNo").innerText = data.accountNumber;
-                        document.getElementById("accName").innerText = "NAME: AMD-" + (data.fullName || "USER");
-                    }
-                }
-            });
-        } else {
-            window.location.href = "index.html";
-        }
-    });
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-md-3">
+                    <label class="w-100">
+                        <input type="radio" name="slip_type" value="standard" checked>
+                        <div class="slip-content p-2 border text-center">
+                            <img src="https://via.placeholder.com/60x40?text=Standard" class="mb-1">
+                            <div class="small fw-bold">Standard</div>
+                            <div class="text-success small">₦180.00</div>
+                        </div>
+                    </label>
+                </div>
+                <div class="col-6 col-md-3">
+                    <label class="w-100">
+                        <input type="radio" name="slip_type" value="regular">
+                        <div class="slip-content p-2 border text-center">
+                            <img src="https://via.placeholder.com/60x40?text=Regular" class="mb-1">
+                            <div class="small fw-bold">Regular</div>
+                            <div class="text-success small">₦170.00</div>
+                        </div>
+                    </label>
+                </div>
+                <div class="col-6 col-md-3">
+                    <label class="w-100">
+                        <input type="radio" name="slip_type" value="premium">
+                        <div class="slip-content p-2 border text-center">
+                            <img src="https://via.placeholder.com/60x40?text=Premium" class="mb-1">
+                            <div class="small fw-bold">Premium</div>
+                            <div class="text-success small">₦200.00</div>
+                        </div>
+                    </label>
+                </div>
+                <div class="col-6 col-md-3">
+                    <label class="w-100">
+                        <input type="radio" name="slip_type" value="info">
+                        <div class="slip-content p-2 border text-center">
+                            <img src="https://via.placeholder.com/60x40?text=Info" class="mb-1">
+                            <div class="small fw-bold">Information</div>
+                            <div class="text-success small">₦160.00</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
 
-    // Buying Data Logic
-    document.getElementById("buyBtn").onclick = async () => {
-        const phone = document.getElementById("phone").value;
-        const price = Number(document.getElementById("plan").value);
-        const status = document.getElementById("txStatus");
-        const user = auth.currentUser;
+            <div class="mb-3">
+                <label class="form-label fw-bold">Saka Lambar Waya ko NIN</label>
+                <input type="number" class="form-control" placeholder="080XXXXXXXX" required>
+            </div>
 
-        if (phone.length < 10) return alert("Enter a valid phone number!");
+            <div class="form-check mb-4">
+                <input class="form-check-input" type="checkbox" id="agree" required>
+                <label class="form-check-label small" for="agree">Na yarda cewa bayanan nan nawa ne ko kuma na samu izini.</label>
+            </div>
 
-        status.innerText = "Processing...";
-        status.style.color = "blue";
+            <button type="submit" class="btn btn-primary w-100">FITAR DA SLIP YANZU</button>
+        </form>
+    </div>
 
-        const userRef = doc(db, "auwalmdtech", user.email.toLowerCase());
-        const userSnap = await getDoc(userRef);
-        const currentBal = userSnap.data().balance || 0;
+</div>
 
-        if (currentBal < price) {
-            status.innerText = "Insufficient Balance!";
-            status.style.color = "red";
-            return;
-        }
+<nav class="fixed-bottom bg-white border-top p-2 d-flex justify-content-around">
+    <div class="text-center text-primary"><i class="fas fa-home"></i><div class="small">Home</div></div>
+    <div class="text-center text-muted"><i class="fas fa-history"></i><div class="small">Transactions</div></div>
+    <div class="text-center text-muted"><i class="fas fa-user"></i><div class="small">Profile</div></div>
+</nav>
 
-        try {
-            await updateDoc(userRef, { balance: currentBal - price });
-            status.innerText = "Transaction Successful! Data sent to " + phone;
-            status.style.color = "green";
-            alert("Data Purchase Success!");
-        } catch (e) {
-            status.innerText = "Error: " + e.message;
-            status.style.color = "red";
-        }
-    };
-
-    document.getElementById("logoutBtn").onclick = () => signOut(auth);
-</script>
 </body>
 </html>
