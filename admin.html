@@ -1,101 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ha">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel | Auwal MD Tech</title>
+    <title>Admin Panel - IM SMART</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; padding: 20px; }
-        .admin-card { background: white; max-width: 800px; margin: auto; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #00AEEF; margin-bottom: 20px; }
-        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #eee; }
-        .user-info b { font-size: 14px; color: #333; }
-        .user-info p { font-size: 12px; color: #666; margin: 0; }
-        .btn-fund { background: #10b981; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        #loader { text-align: center; color: #888; padding: 20px; }
+        body { background: #2f3542; color: white; }
+        .admin-card { background: #3f4452; border: none; color: white; margin-bottom: 15px; }
     </style>
 </head>
-<body>
+<body class="p-4">
+    <h3 class="fw-bold mb-4 text-warning">Barka da Zuwa Admin (Auwal)</h3>
+    
+    <div class="row">
+        <div class="col-6 mb-3">
+            <div class="card admin-card p-3">
+                <small>Duk Mutanenka</small>
+                <h4 class="fw-bold text-info">128</h4>
+            </div>
+        </div>
+        <div class="col-6 mb-3">
+            <div class="card admin-card p-3">
+                <small>Riba (Today)</small>
+                <h4 class="fw-bold text-success">₦4,200</h4>
+            </div>
+        </div>
+    </div>
 
-<div class="admin-card">
-    <h2>Auwal MD Tech Admin</h2>
-    <div id="loader">Searching for registered users...</div>
-    <div id="userList"></div>
-</div>
+    <div class="card admin-card p-3 mt-3">
+        <h6 class="fw-bold mb-3 border-bottom pb-2 text-warning">Saita Farashin NIN Slips</h6>
+        <div class="mb-3">
+            <label class="small">Standard Slip (₦)</label>
+            <input type="number" class="form-control bg-dark text-white border-secondary" value="180">
+        </div>
+        <div class="mb-3">
+            <label class="small">Premium Slip (₦)</label>
+            <input type="number" class="form-control bg-dark text-white border-secondary" value="200">
+        </div>
+        <button class="btn btn-warning w-100 fw-bold">Update Prices</button>
+    </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
-        authDomain: "auwalmdtech.firebaseapp.com",
-        projectId: "auwalmdtech",
-        storageBucket: "auwalmdtech.firebasestorage.app",
-        messagingSenderId: "202329584080",
-        appId: "1:202329584080:web:e989d7df53d3c3024609d5"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
-
-    onAuthStateChanged(auth, (user) => {
-        if (user && user.email === "yau789452@gmail.com") {
-            // Idan kai ne, to karanto kowa
-            loadUsers();
-        } else {
-            alert("Baka da izinin shiga nan!");
-            window.location.href = "index.html";
-        }
-    });
-
-    function loadUsers() {
-        const userListDiv = document.getElementById("userList");
-        const loader = document.getElementById("loader");
-
-        onSnapshot(collection(db, "auwalmdtech"), (snapshot) => {
-            loader.style.display = "none";
-            userListDiv.innerHTML = "";
-            
-            if (snapshot.empty) {
-                userListDiv.innerHTML = "<p style='text-align:center'>Babu kowa a jerin tukuna.</p>";
-            }
-
-            snapshot.forEach((userDoc) => {
-                const data = userDoc.data();
-                const email = userDoc.id;
-                const balance = data.balance || 0;
-                const name = data.fullName || "No Name";
-
-                userListDiv.innerHTML += `
-                    <div class="user-row">
-                        <div class="user-info">
-                            <b>${name}</b>
-                            <p>${email}</p>
-                            <b style="color:#00AEEF">Balance: ₦${balance}</b>
-                        </div>
-                        <button class="btn-fund" onclick="fundUser('${email}')">Add Money</button>
-                    </div>
-                `;
-            });
-        });
-    }
-
-    window.fundUser = async (email) => {
-        const amount = prompt("Nawa kake son sakawa " + email + "?");
-        if (amount !== null && amount !== "") {
-            try {
-                const userRef = doc(db, "auwalmdtech", email);
-                // merge: true yana sa idan folder din bata nan, ya bude ta
-                await setDoc(userRef, { balance: Number(amount) }, { merge: true });
-                alert("An yi nasarar tura ₦" + amount);
-            } catch (e) {
-                alert("Error: " + e.message);
-            }
-        }
-    };
-</script>
+    <a href="dashboard.html" class="btn btn-outline-light btn-sm mt-5">Koma Dashboard</a>
 </body>
 </html>
