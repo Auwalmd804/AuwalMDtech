@@ -1,108 +1,148 @@
 <!DOCTYPE html>
-<html lang="ha">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auwal MD Technology Company</title>
+    <title>Auwal MD Technology - Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        body { background: #f8f9fa; font-family: 'Poppins', sans-serif; }
-        .header { background: white; padding: 15px; border-bottom: 2px solid #0d6efd; display: flex; justify-content: space-between; align-items: center; }
-        .logo-img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #0d6efd; }
-        .wallet-card { background: linear-gradient(135deg, #0d6efd, #0056b3); color: white; border-radius: 20px; padding: 25px; margin-top: 20px; }
-        .net-card { background: white; border-radius: 15px; padding: 10px; text-align: center; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .net-card:hover { transform: translateY(-5px); }
-        .net-img { width: 50px; height: 50px; border-radius: 10px; margin-bottom: 5px; }
-        .nin-box { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        .slip-card { border: 2px solid #eee; border-radius: 12px; padding: 10px; cursor: pointer; text-align: center; }
-        input[type="radio"]:checked + .slip-card { border-color: #0d6efd; background: #e7f1ff; }
-        #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; display: none; align-items: center; justify-content: center; color: white; flex-direction: column; }
-        .spin-arrow { font-size: 3rem; animation: spin 2s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        body { background: #f0f2f5; font-family: 'Poppins', sans-serif; color: #333; }
+        .header { background: #fff; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0d6efd; }
+        .logo-img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #0d6efd; }
+        
+        /* Virtual Debit Card Styling */
+        .v-card { 
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); 
+            color: white; border-radius: 20px; padding: 25px; 
+            position: relative; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            margin-top: 20px; height: 180px;
+        }
+        .v-card::after { content: ''; position: absolute; top: -50%; right: -20%; width: 200px; height: 200px; background: rgba(255,255,255,0.1); border-radius: 50%; }
+        .chip { width: 40px; height: 30px; background: #fbbf24; border-radius: 5px; margin-bottom: 20px; }
+        
+        .service-card { background: white; border-radius: 15px; padding: 15px; text-align: center; transition: 0.3s; cursor: pointer; border: 1px solid #eee; }
+        .service-card:hover { transform: translateY(-5px); border-color: #0d6efd; }
+        .net-icon { width: 45px; height: 45px; border-radius: 10px; margin-bottom: 8px; }
+        
+        #proc-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; display: none; align-items: center; justify-content: center; color: white; flex-direction: column; }
+        .loader-arrow { font-size: 3.5rem; animation: rotate 1.5s linear infinite; color: #fbbf24; }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-<div id="loading-overlay">
-    <div class="spin-arrow"><i class="fas fa-sync-alt"></i></div>
-    <h5 class="mt-3">Muna Duba Bayanai...</h5>
+<div id="proc-overlay">
+    <div class="loader-arrow"><i class="fas fa-sync-alt"></i></div>
+    <h5 class="mt-3 animate__animated animate__pulse animate__infinite">Processing Request...</h5>
 </div>
 
 <div class="header shadow-sm">
     <div class="d-flex align-items-center">
-        <img src="AuwaldMDtech" class="logo-img" onerror="this.src='https://via.placeholder.com/45?text=AMD'">
+        <img src="Image_1.png" class="logo-img" onerror="this.src='https://via.placeholder.com/45?text=AMD'">
         <div class="ms-2">
-            <div class="fw-bold text-dark" style="font-size: 14px;">AUWAL MD TECH</div>
-            <div style="font-size: 10px; color: gray;">Sauri da Inganci</div>
+            <div class="fw-bold" style="font-size: 14px;">AUWAL MD TECH</div>
+            <div style="font-size: 9px; color: #0d6efd;">Premium Digital Services</div>
         </div>
     </div>
-    <i class="fas fa-user-circle fs-3 text-secondary"></i>
+    <div onclick="window.location.href='index.html'" class="text-danger fw-bold small cursor-pointer"><i class="fas fa-sign-out-alt"></i> Logout</div>
 </div>
 
-<div class="container">
-    <div class="wallet-card shadow">
-        <small class="opacity-75">Adadin Kudinka</small>
-        <h2 class="fw-bold" id="user-balance">₦0.00</h2>
-        <button class="btn btn-light btn-sm fw-bold px-3 mt-2" data-bs-toggle="modal" data-bs-target="#fundModal">Saka Kudi</button>
+<div class="container pb-5">
+    <div class="v-card animate__animated animate__fadeIn">
+        <div class="d-flex justify-content-between">
+            <div class="chip"></div>
+            <i class="fab fa-cc-visa fs-2 opacity-50"></i>
+        </div>
+        <div class="mt-2">
+            <small class="opacity-75">Wallet Status</small>
+            <h4 class="fw-bold text-uppercase tracking-widest">AUWAL MD</h4>
+        </div>
+        <div class="d-flex justify-content-between align-items-end mt-2">
+            <div style="font-size: 12px;">Valid Thru: 12/29</div>
+            <div class="badge bg-warning text-dark px-3">ACTIVE WALLET</div>
+        </div>
     </div>
 
-    <h6 class="fw-bold mt-4 mb-3 text-secondary">SAYI DATA DA AIRTIME</h6>
+    <h6 class="fw-bold mt-4 mb-3"><i class="fas fa-bolt text-warning"></i> AIRTIME & DATA</h6>
     <div class="row g-2 mb-4">
-        <div class="col-3" onclick="processOrder('MTN Airtime/Data')"><div class="net-card"><img src="mtn.png" class="net-img"><br><small>MTN</small></div></div>
-        <div class="col-3" onclick="processOrder('Airtel Airtime/Data')"><div class="net-card"><img src="airtel.png" class="net-img"><br><small>Airtel</small></div></div>
-        <div class="col-3" onclick="processOrder('Glo Airtime/Data')"><div class="net-card"><img src="glo.png" class="net-img"><br><small>Glo</small></div></div>
-        <div class="col-3" onclick="processOrder('9mobile Airtime/Data')"><div class="net-card"><img src="9mobile.png" class="net-img"><br><small>9mobile</small></div></div>
+        <div class="col-3" onclick="openService('MTN')"><div class="service-card"><img src="mtn.png" class="net-icon"><br><small class="fw-bold">MTN</small></div></div>
+        <div class="col-3" onclick="openService('Airtel')"><div class="service-card"><img src="airtel.png" class="net-icon"><br><small class="fw-bold">Airtel</small></div></div>
+        <div class="col-3" onclick="openService('Glo')"><div class="service-card"><img src="glo.png" class="net-icon"><br><small class="fw-bold">Glo</small></div></div>
+        <div class="col-3" onclick="openService('9mobile')"><div class="service-card"><img src="9mobile.png" class="net-icon"><br><small class="fw-bold">9mobile</small></div></div>
     </div>
 
-    <div class="nin-box mb-5">
+    <div class="bg-white p-3 rounded-4 shadow-sm mb-4">
         <h6 class="fw-bold text-primary mb-3"><i class="fas fa-id-card me-2"></i>NIN SLIP SERVICES</h6>
         <div class="row g-2 mb-3">
-            <div class="col-6"><label class="w-100"><input type="radio" name="nin" value="Standard (N180)" class="d-none" checked><div class="slip-card"><small>Standard</small><div class="text-primary fw-bold">₦180</div></div></label></div>
-            <div class="col-6"><label class="w-100"><input type="radio" name="nin" value="Premium (N200)" class="d-none"><div class="slip-card"><small>Premium</small><div class="text-primary fw-bold">₦200</div></div></label></div>
-            <div class="col-6"><label class="w-100"><input type="radio" name="nin" value="Regular (N170)" class="d-none"><div class="slip-card"><small>Regular</small><div class="text-primary fw-bold">₦170</div></div></label></div>
-            <div class="col-6"><label class="w-100"><input type="radio" name="nin" value="Information (N160)" class="d-none"><div class="slip-card"><small>Info</small><div class="text-primary fw-bold">₦160</div></div></label></div>
+            <div class="col-4"><label class="w-100"><input type="radio" name="nin" value="Standard (N250)" class="d-none" checked><div class="p-2 border rounded text-center small">Standard<br><b>N250</b></div></label></div>
+            <div class="col-4"><label class="w-100"><input type="radio" name="nin" value="Premium (N250)" class="d-none"><div class="p-2 border rounded text-center small">Premium<br><b>N250</b></div></label></div>
+            <div class="col-4"><label class="w-100"><input type="radio" name="nin" value="Performance (N300)" class="d-none"><div class="p-2 border rounded text-center small text-danger">Fafomas<br><b>N300</b></div></label></div>
         </div>
-        <input type="number" id="target_number" class="form-control mb-3" placeholder="Saka Phone Number/NIN">
-        <button onclick="processOrder('NIN Slip')" class="btn btn-primary w-100 fw-bold py-2">FITAR DA SLIP YANZU</button>
+        <input type="number" id="nin_num" class="form-control mb-2" placeholder="Enter NIN/Phone Number">
+        <button onclick="sendOrder('NIN')" class="btn btn-primary w-100 fw-bold">ORDER SLIP</button>
+    </div>
+
+    <div class="bg-white p-3 rounded-4 shadow-sm border border-warning">
+        <h6 class="fw-bold text-warning mb-3"><i class="fas fa-paint-brush me-2"></i>GRAPHICS DESIGN (N500)</h6>
+        <select id="design_type" class="form-select mb-2">
+            <option value="Logo Design">Logo Design</option>
+            <option value="School Badge">School Badge</option>
+            <option value="ID Card Design">ID Card Design</option>
+        </select>
+        <input type="text" id="design_desc" class="form-control mb-2" placeholder="School/Company Name">
+        <button onclick="sendOrder('Design')" class="btn btn-warning w-100 fw-bold">ORDER DESIGN</button>
     </div>
 </div>
 
-<div class="modal fade" id="fundModal" tabindex="-1">
+<div class="modal fade" id="orderModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content text-dark">
-            <div class="modal-header"><h5 class="modal-title fw-bold">Yadda Zaka Saka Kudi</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-content">
+            <div class="modal-header"><h5 id="m-title" class="fw-bold"></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
             <div class="modal-body">
-                <p>Tura kudin zuwa daya daga cikin wadannan account din, sannan ka turo screenshot a WhatsApp.</p>
-                <div class="p-3 bg-light rounded mb-2"><strong>Paga:</strong> 8164712102<br>Muhammad Ibrahim Yau</div>
-                <div class="p-3 bg-light rounded"><strong>Opay:</strong> 9072050889<br>Auwal MD</div>
-                <a href="https://wa.me/2349137904300" class="btn btn-success w-100 mt-3">Tura Screenshot Zuwa WhatsApp</a>
+                <select id="s-type" class="form-select mb-3"><option>Airtime</option><option>Data</option></select>
+                <input type="number" id="s-phone" class="form-control mb-3" placeholder="Phone Number">
+                <input type="number" id="s-amt" class="form-control mb-3" placeholder="Amount (N)">
+                <button onclick="sendOrder('VTU')" class="btn btn-primary w-100 fw-bold">PROCEED</button>
             </div>
         </div>
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Load Balance from LocalStorage
-    let balance = localStorage.getItem('userBalance') || "0.00";
-    document.getElementById('user-balance').innerText = "₦" + balance;
+    let currentNet = "";
+    const modal = new bootstrap.Modal('#orderModal');
 
-    function processOrder(service) {
-        let number = document.getElementById('target_number').value;
-        if(!number && service === 'NIN Slip') { alert("Saka lambar waya!"); return; }
+    function openService(net) {
+        currentNet = net;
+        document.getElementById('m-title').innerText = net + " Service";
+        modal.show();
+    }
+
+    function sendOrder(mode) {
+        document.getElementById('proc-overlay').style.display = 'flex';
+        let msg = "";
         
-        let overlay = document.getElementById('loading-overlay');
-        overlay.style.display = 'flex';
-
         setTimeout(() => {
-            overlay.style.display = 'none';
-            let ninType = document.querySelector('input[name="nin"]:checked').value;
-            let msg = `SABON ORDER DAGA AUWAL MD TECH:\n\nNau'i: ${service}\nBayani: ${ninType}\nLamba: ${number}\n\nDon Allah a duba min.`;
+            if(mode === 'VTU') {
+                let type = document.getElementById('s-type').value;
+                let ph = document.getElementById('s-phone').value;
+                let amt = document.getElementById('s-amt').value;
+                msg = `HELLO AUWAL MD TECH,\nI want to buy ${currentNet} ${type}.\nAmount: N${amt}\nNumber: ${ph}`;
+            } else if(mode === 'NIN') {
+                let type = document.querySelector('input[name="nin"]:checked').value;
+                let num = document.getElementById('nin_num').value;
+                msg = `HELLO AUWAL MD TECH,\nI want to order NIN Slip.\nType: ${type}\nDetails: ${num}`;
+            } else {
+                let type = document.getElementById('design_type').value;
+                let desc = document.getElementById('design_desc').value;
+                msg = `HELLO AUWAL MD TECH,\nI want to order ${type} (N500).\nName: ${desc}`;
+            }
             window.location.href = `https://wa.me/2349137904300?text=${encodeURIComponent(msg)}`;
-        }, 3000);
+        }, 2500);
     }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
