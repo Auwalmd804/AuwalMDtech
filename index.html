@@ -1,21 +1,44 @@
-<!-- Firebase CDN -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Auwal MD Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
-    authDomain: "auwalmdtech.firebaseapp.com",
-    projectId: "auwalmdtech",
-    storageBucket: "auwalmdtech.firebasestorage.app",
-    messagingSenderId: "202329584080",
-    appId: "1:202329584080:web:8f4a816bfca6c7834609d5"
-  };
+  <h2>Welcome to Auwal MD Chat</h2>
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+  <div id="auth">
+    <h3>Login / Register</h3>
+    <input type="email" id="email" placeholder="Email"><br><br>
+    <input type="password" id="password" placeholder="Password"><br><br>
+    <button onclick="register()">Register</button>
+    <button onclick="login()">Login</button>
+  </div>
 
-  console.log("Firebase connected successfully!");
-</script>
+  <hr>
+
+  <div id="app" style="display:none;">
+    <h3>Post</h3>
+    <input type="text" id="postText" placeholder="Write something">
+    <button onclick="createPost()">Post</button>
+
+    <h3>Feed</h3>
+    <div id="posts"></div>
+
+    <hr>
+
+    <h3>Chat</h3>
+    <input type="text" id="chatText" placeholder="Message">
+    <button onclick="sendMessage()">Send</button>
+
+    <div id="messages"></div>
+
+    <br><br>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+<script type="module" src="app.js"></script>
+
+</body>
+</html>
