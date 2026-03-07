@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMD Community Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background: #e5ddd5; height: 100vh; display: flex; flex-direction: column; }
+        .chat-header { background: #075e54; color: white; padding: 15px; }
+        .messages-area { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { max-width: 80%; padding: 10px; border-radius: 10px; font-size: 14px; position: relative; }
+        .msg-received { background: white; align-self: flex-start; border-bottom-left-radius: 0; }
+        .msg-sent { background: #dcf8c6; align-self: flex-end; border-bottom-right-radius: 0; }
+        .input-area { background: #f0f0f0; padding: 10px; display: flex; gap: 10px; }
+        .chat-input { flex: 1; border: none; border-radius: 20px; padding: 8px 15px; outline: none; }
+        .send-btn { background: #075e54; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; }
+    </style>
+</head>
+<body>
+
+<div class="chat-header d-flex align-items-center">
+    <a href="feed.html" class="text-white me-3"><i class="fas fa-arrow-left"></i></a>
+    <div class="fw-bold">AMD Tech Community Group</div>
+</div>
+
+<div class="messages-area" id="chatBox">
+    </div>
+
+<div class="input-area">
+    <input type="text" id="msgInp" class="chat-input" placeholder="Type a message...">
+    <button onclick="sendMsg()" class="send-btn"><i class="fas fa-paper-plane"></i></button>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // Saka config dinka a nan (Kamar na feed.html)
+    const firebaseConfig = {
+        apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
+        authDomain: "auwalmdtech.firebaseapp.com",
+        projectId: "auwalmdtech",
+        storageBucket: "auwalmdtech.firebasestorage.app",
+        messagingSenderId: "202329584080",
+        appId: "1:202329584080:web:e989d7df53d3c3024609d5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.sendMsg = async function() {
+        const txt = document.getElementById('msgInp').value;
+        if(txt.trim()==="") return;
+        await addDoc(collection(db, "chats"), {
+            text: txt,
+            user: "Auwal MD", 
+            timestamp: serverTimestamp()
+        });
+        document.getElementById('msgInp').value = "";
+    }
+
+    const q = query(collection(db, "chats"), orderBy("timestamp", "asc"));
+    onSnapshot(q, (snap) => {
+        const box = document.getElementById('chatBox');
+        box.innerHTML = "";
+        snap.forEach(doc => {
+            const d = doc.data();
+            const isMe = d.user === "Auwal MD";
+            box.innerHTML += `<div class="msg ${isMe ? 'msg-sent' : 'msg-received'} shadow-sm">
+                <small class="fw-bold d-block" style="font-size:10px; color:#075e54">${d.user}</small>
+                ${d.text}
+            </div>`;
+        });
+        box.scrollTop = box.scrollHeight;
+    });
+</script>
+</body>
+</html>
