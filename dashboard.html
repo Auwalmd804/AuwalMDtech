@@ -28,13 +28,21 @@
 <body>
 
 <div class="app-bar d-flex justify-content-between align-items-center">
-    <h4 class="mb-0 fw-bold">Auwal MD Chat</h4>
+    <div class="d-flex align-items-center">
+        <img id="myPfp" src="" style="width:35px; height:35px; border-radius:50%; margin-right:10px; border:2px solid white;">
+        <h4 id="myName" class="mb-0 fw-bold" style="font-size:18px;">Auwal MD Chat</h4>
+    </div>
     <div>
         <i class="fas fa-search me-3"></i>
         <i class="fas fa-ellipsis-v"></i>
     </div>
 </div>
 
+<script>
+    // Karanto bayanan daga LocalStorage
+    document.getElementById('myName').innerText = localStorage.getItem('amd_name') || "AMD Chat";
+    document.getElementById('myPfp').src = localStorage.getItem('amd_photo') || "Image_1.png";
+</script>
 <div class="tab-bar shadow-sm">
     <div class="tab-item" onclick="location.href='feed.html'"><i class="fas fa-users"></i> POSTS</div>
     <div class="tab-item tab-active">CHATS</div>
