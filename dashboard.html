@@ -3,201 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auwal MD Technology - Dashboard</title>
+    <title>Auwal MD Chat</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; padding-bottom: 50px; }
-        .header { background: #fff; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #0d6efd; position: sticky; top: 0; z-index: 1000; }
-        .logo-img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #0d6efd; }
+        body { background: #fdfdfd; font-family: 'Segoe UI', sans-serif; }
+        .app-bar { background: #075e54; color: white; padding: 15px; position: sticky; top: 0; z-index: 1000; }
+        .tab-bar { background: #075e54; display: flex; justify-content: space-around; padding-bottom: 5px; color: rgba(255,255,255,0.7); font-weight: bold; font-size: 14px; position: sticky; top: 55px; z-index: 999; }
+        .tab-item { padding: 10px; cursor: pointer; border-bottom: 3px solid transparent; }
+        .tab-active { color: white; border-bottom: 3px solid white; }
         
-        /* Virtual Debit Card */
-        .v-card { 
-            background: linear-gradient(135deg, #001f3f 0%, #007bff 100%); 
-            color: white; border-radius: 20px; padding: 25px; 
-            margin-top: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            position: relative; overflow: hidden; height: 190px;
-        }
-        .v-card .chip { width: 45px; height: 35px; background: #ffd700; border-radius: 6px; margin-bottom: 20px; }
-        .v-card .card-name { font-size: 1.2rem; font-weight: bold; letter-spacing: 2px; }
-        
-        /* Moniepoint/OPay Banner */
-        .promo-banner { background: #fff; border-radius: 15px; padding: 10px; margin-top: -20px; margin-left: 15px; margin-right: 15px; z-index: 10; position: relative; display: flex; align-items: center; justify-content: center; border: 1px solid #ddd; }
-        .promo-img { height: 30px; margin: 0 10px; }
+        .chat-list { padding: 10px 0; }
+        .chat-item { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #f2f2f2; transition: 0.3s; cursor: pointer; text-decoration: none; color: black; }
+        .chat-item:hover { background: #f9f9f9; }
+        .user-img { width: 55px; height: 55px; border-radius: 50%; background: #ddd; margin-right: 15px; }
+        .chat-info { flex: 1; }
+        .chat-name { font-weight: bold; font-size: 16px; margin-bottom: 2px; }
+        .chat-last-msg { color: gray; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+        .chat-time { font-size: 11px; color: #25d366; }
 
-        .service-box { background: #fff; border-radius: 15px; padding: 15px; margin-top: 20px; border: 1px solid #eee; }
-        .btn-custom { border-radius: 12px; font-weight: bold; padding: 12px; }
-        
-        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; display: none; align-items: center; justify-content: center; color: white; flex-direction: column; }
-        .spin { font-size: 3rem; animation: rotate 1s linear infinite; color: #ffd700; }
-        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        .fab { position: fixed; bottom: 30px; right: 20px; width: 60px; height: 60px; background: #25d366; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div id="loader">
-    <div class="spin"><i class="fas fa-sync-alt"></i></div>
-    <h5 class="mt-3">Processing Request...</h5>
-</div>
-
-<div class="header shadow-sm">
-    <div class="d-flex align-items-center">
-        <img src="Image_1.png" class="logo-img" onerror="this.src='https://via.placeholder.com/45?text=AMD'">
-        <div class="ms-2">
-            <div class="fw-bold" style="font-size: 14px;">AUWAL MD TECH</div>
-            <div style="font-size: 9px; color: #0d6efd;">Premium Digital Services</div>
-        </div>
-    </div>
-    <div class="d-flex align-items-center">
-        <a href="feed.html" class="text-success me-3 text-decoration-none fw-bold small">
-            <i class="fas fa-users"></i> Feed
-        </a>
-        <a href="history.html" class="text-primary me-3 text-decoration-none fw-bold small">
-            <i class="fas fa-history"></i> History
-        </a>
-        <div onclick="window.location.href='index.html'" class="text-danger fw-bold small cursor-pointer">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </div>
+<div class="app-bar d-flex justify-content-between align-items-center">
+    <h4 class="mb-0 fw-bold">Auwal MD Chat</h4>
+    <div>
+        <i class="fas fa-search me-3"></i>
+        <i class="fas fa-ellipsis-v"></i>
     </div>
 </div>
 
-<div class="container">
-    <div class="v-card">
-        <div class="d-flex justify-content-between"><div class="chip"></div><i class="fab fa-cc-visa fs-1 opacity-50"></i></div>
-        <div class="card-name text-uppercase">AUWAL MD</div>
-        <div class="mt-3 d-flex justify-content-between align-items-end">
-            <small>Valid Thru: 12/29</small>
-            <span class="badge bg-warning text-dark">ACTIVE WALLET</span>
+<div class="tab-bar shadow-sm">
+    <div class="tab-item" onclick="location.href='feed.html'"><i class="fas fa-users"></i> POSTS</div>
+    <div class="tab-item tab-active">CHATS</div>
+    <div class="tab-item" onclick="location.href='feed.html'"><i class="fas fa-circle-notch"></i> STATUS</div>
+</div>
+
+<div class="chat-list" id="recentChats">
+    <a href="chat.html" class="chat-item">
+        <div class="user-img d-flex align-items-center justify-content-center text-white" style="background:#075e54">
+            <i class="fas fa-users fa-lg"></i>
         </div>
-    </div>
-
-    <div class="promo-banner shadow-sm">
-        <img src="moniepoint.png" class="promo-img" alt="MP">
-        <img src="opay_logo.png" class="promo-img" alt="OP">
-        <small class="fw-bold text-primary">FREE Accounts & ATM Cards</small>
-    </div>
-
-    <div class="service-box shadow-sm">
-        <h6 class="fw-bold mb-3"><i class="fas fa-mobile-alt me-2 text-primary"></i>AIRTIME & DATA</h6>
-        <div class="row g-2 text-center">
-            <div class="col-3" onclick="openVTU('MTN')"><img src="mtn.png" style="width:100%; border-radius:10px;"><br><small>MTN</small></div>
-            <div class="col-3" onclick="openVTU('Airtel')"><img src="airtel.png" style="width:100%; border-radius:10px;"><br><small>Airtel</small></div>
-            <div class="col-3" onclick="openVTU('Glo')"><img src="glo.png" style="width:100%; border-radius:10px;"><br><small>Glo</small></div>
-            <div class="col-3" onclick="openVTU('9mobile')"><img src="9mobile.png" style="width:100%; border-radius:10px;"><br><small>9mobile</small></div>
+        <div class="chat-info">
+            <div class="chat-name">AMD Community Group</div>
+            <div class="chat-last-msg">Welcome to the official group chat!</div>
         </div>
-    </div>
+        <div class="chat-time">12:45 PM</div>
+    </a>
 
-    <div class="service-box shadow-sm">
-        <h6 class="fw-bold mb-3 text-primary"><i class="fas fa-id-card me-2"></i>NIN SERVICES (N250 - N300)</h6>
-        <select id="nin_type" class="form-select mb-2">
-            <option value="Standard (N250)">Standard Slip (N250)</option>
-            <option value="Premium (N250)">Premium Slip (N250)</option>
-            <option value="Fafomas (N300)">Fafomas/Performance (N300)</option>
-        </select>
-        <input type="number" id="nin_val" class="form-control mb-2" placeholder="NIN or Phone Number">
-        <button onclick="sendOrder('NIN')" class="btn btn-primary w-100 btn-custom">ORDER SLIP</button>
-    </div>
-
-    <div class="service-box shadow-sm border-warning">
-        <h6 class="fw-bold mb-3 text-warning"><i class="fas fa-sim-card me-2"></i>SIM & POS SERVICES</h6>
-        <select id="sim_task" class="form-select mb-2">
-            <option value="SIM Registration (N1000)">SIM Registration (N1000)</option>
-            <option value="SIM Swap (N1500)">SIM Swap (N1500)</option>
-            <option value="Moniepoint Account (Free)">Open Moniepoint Account (FREE)</option>
-            <option value="OPay Account (Free)">Open OPay Account (FREE)</option>
-            <option value="POS Machine Request">Request POS Machine</option>
-        </select>
-        <select id="sim_net" class="form-select mb-2">
-            <option value="MTN">MTN</option>
-            <option value="Airtel">Airtel</option>
-            <option value="Glo">Glo</option>
-        </select>
-        <input type="number" id="sim_ph" class="form-control mb-2" placeholder="Phone Number / Details">
-        <button onclick="sendOrder('SIM')" class="btn btn-warning w-100 btn-custom">PROCEED REQUEST</button>
-    </div>
-
-    <div class="service-box shadow-sm">
-        <h6 class="fw-bold mb-3"><i class="fas fa-pen-nib me-2"></i>GRAPHICS DESIGN (N500)</h6>
-        <select id="gd_type" class="form-select mb-2">
-            <option>Logo Design</option>
-            <option>School Badge</option>
-            <option>ID Card Design</option>
-        </select>
-        <input type="text" id="gd_name" class="form-control mb-2" placeholder="School/Company Name">
-        <button onclick="sendOrder('GD')" class="btn btn-dark w-100 btn-custom">ORDER DESIGN</button>
+    <div class="chat-item">
+        <div class="user-img"><img src="Image_1.png" style="width:100%; border-radius:50%"></div>
+        <div class="chat-info">
+            <div class="chat-name">Auwal MD (Admin)</div>
+            <div class="chat-last-msg">Hello! Barka da shigowa sabon App dina.</div>
+        </div>
+        <div class="chat-time" style="color:gray">Yesterday</div>
     </div>
 </div>
 
-<div class="modal fade" id="vtuModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header"><h5 id="vtuTitle" class="fw-bold"></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
-            <div class="modal-body">
-                <select id="v-type" class="form-select mb-3"><option>Airtime</option><option>Data</option></select>
-                <input type="number" id="v-ph" class="form-control mb-3" placeholder="Phone Number">
-                <input type="number" id="v-amt" class="form-control mb-3" placeholder="Amount (N)">
-                <button onclick="sendOrder('VTU')" class="btn btn-primary w-100 fw-bold">SEND ORDER</button>
-            </div>
-        </div>
-    </div>
+<div class="fab" onclick="alert('New Chat feature coming soon!')">
+    <i class="fas fa-comment-alt"></i>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    let net = "";
-    const vModal = new bootstrap.Modal('#vtuModal');
-
-    function openVTU(n) { net = n; document.getElementById('vtuTitle').innerText = n + " Order"; vModal.show(); }
-
-    function sendOrder(mode) {
-    // Show the loading arrow
-    document.getElementById('loader').style.display = 'flex';
-    
-    let msg = "";
-    let serviceName = "";
-    let subDetails = "";
-
-    setTimeout(() => {
-        // Logic for Airtime and Data
-        if(mode==='VTU') {
-            serviceName = `${net} ${document.getElementById('v-type').value}`;
-            subDetails = `N${document.getElementById('v-amt').value}`;
-            msg = `Order: ${serviceName}\nAmount: ${subDetails}\nPhone: ${document.getElementById('v-ph').value}`;
-        } 
-        // Logic for NIN Slips
-        else if(mode==='NIN') {
-            serviceName = "NIN Slip Service";
-            subDetails = document.getElementById('nin_type').value;
-            msg = `Order: NIN Slip\nType: ${subDetails}\nDetails: ${document.getElementById('nin_val').value}`;
-        }
-        // Logic for SIM and POS
-        else if(mode==='SIM') {
-            serviceName = document.getElementById('sim_task').value;
-            subDetails = document.getElementById('sim_net').value;
-            msg = `Order: ${serviceName}\nNetwork: ${subDetails}\nDetails: ${document.getElementById('sim_ph').value}`;
-        }
-        // Logic for Graphics Design
-        else {
-            serviceName = "Graphics Design";
-            subDetails = document.getElementById('gd_type').value;
-            msg = `Order: Graphics Design\nType: ${subDetails}\nName: ${document.getElementById('gd_name').value}`;
-        }
-
-        // SAVE TO HISTORY
-        let now = new Date();
-        let txns = JSON.parse(localStorage.getItem('my_txns')) || [];
-        txns.push({
-            service: serviceName,
-            details: subDetails,
-            date: now.toLocaleDateString(),
-            time: now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-        });
-        localStorage.setItem('my_txns', JSON.stringify(txns));
-
-        // Redirect to WhatsApp
-        window.location.href = `https://wa.me/2349137904300?text=${encodeURIComponent("HELLO AUWAL MD TECH,\n\n"+msg)}`;
-    }, 2000);
-}
-</script>
 </body>
 </html>
