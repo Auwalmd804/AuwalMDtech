@@ -74,6 +74,17 @@
 <div class="fab" onclick="alert('New Chat feature coming soon!')">
     <i class="fas fa-comment-alt"></i>
 </div>
+<script>
+    // Karanto bayanan mutum daga wayar sa
+    const userName = localStorage.getItem('amd_name') || "User";
+    const userPhoto = localStorage.getItem('amd_photo') || "Image_1.png";
 
+    // Saka su a Header
+    document.getElementById('myName').innerText = userName;
+    document.getElementById('myPfp').src = userPhoto;
+
+    // Saka saƙon barka da zuwa a jerin hira
+    console.log("Welcome " + userName);
+</script>
 </body>
 </html>
