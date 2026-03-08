@@ -47,6 +47,7 @@
             overflow: hidden;
         }
 
+        /* Tsarin yadda rubutu kawai zai fito */
         .text-only-post {
             background: linear-gradient(45deg, #1e293b, #334155);
             padding: 40px 20px;
@@ -56,52 +57,25 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* GYARAN BOTTOM NAV: Mun rarraba su sosai */
         .bottom-nav { 
-            position: fixed; 
-            bottom: 0; 
-            left: 0;
-            width: 100%; 
-            background: rgba(15, 23, 42, 0.98); 
-            backdrop-filter: blur(20px);
-            display: flex; 
-            justify-content: space-around; /* Wannan zai raba su */
-            align-items: center;
-            padding: 10px 0; 
-            border-top: 1px solid rgba(255,255,255,0.1); 
-            z-index: 2000;
+            position: fixed; bottom: 0; width: 100%; 
+            background: rgba(15, 23, 42, 0.95); 
+            backdrop-filter: blur(15px);
+            display: flex; justify-content: space-around; 
+            padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.1); 
+            z-index: 1000;
         }
-
-        .nav-btn { 
-            color: #64748b; 
-            text-decoration: none; 
-            text-align: center;
-            transition: 0.3s;
-            flex: 1; /* Kowanne ya dauki sarari daya */
-        }
-
-        .nav-btn i { font-size: 20px; }
-        .nav-btn small { font-size: 10px; display: block; margin-top: 2px; }
+        .nav-btn { color: #64748b; text-decoration: none; text-align: center; }
         .nav-btn.active { color: var(--primary); }
-
-        /* Plus Button Gyara */
-        .btn-plus-wrap {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            position: relative;
-        }
 
         .btn-plus {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            width: 50px; height: 50px;
+            width: 55px; height: 55px;
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            position: absolute;
-            top: -35px; /* Ya dan fito sama */
+            margin-top: -35px;
             border: 4px solid #020617;
-            color: white; font-size: 22px;
-            box-shadow: 0 4px 15px rgba(0, 132, 255, 0.3);
+            color: white; font-size: 24px;
         }
 
         video.post-media { width: 100%; background: #000; max-height: 500px; }
@@ -128,29 +102,11 @@
 </div>
 
 <div class="bottom-nav">
-    <a href="dashboard.html" class="nav-btn active">
-        <i class="fas fa-home"></i>
-        <small>Home</small>
-    </a>
-    <a href="chats.html" class="nav-btn">
-        <i class="fas fa-comment-dots"></i>
-        <small>Chats</small>
-    </a>
-    
-    <div class="btn-plus-wrap" onclick="window.location.href='create-post.html'">
-        <div class="btn-plus">
-            <i class="fas fa-plus"></i>
-        </div>
-    </div>
-
-    <a href="explore.html" class="nav-btn">
-        <i class="fas fa-compass"></i>
-        <small>Explore</small>
-    </a>
-    <a href="profile.html" class="nav-btn">
-        <i class="fas fa-user"></i>
-        <small>Profile</small>
-    </a>
+    <a href="dashboard.html" class="nav-btn active"><i class="fas fa-home"></i><br><small>Home</small></a>
+    <a href="chats.html" class="nav-btn"><i class="fas fa-comment-dots"></i><br><small>Chats</small></a>
+    <div onclick="window.location.href='create-post.html'"><div class="btn-plus"><i class="fas fa-plus"></i></div></div>
+    <a href="explore.html" class="nav-btn"><i class="fas fa-compass"></i><br><small>Explore</small></a>
+    <a href="profile.html" class="nav-btn"><i class="fas fa-user"></i><br><small>Profile</small></a>
 </div>
 
 <script type="module">
