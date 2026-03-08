@@ -29,7 +29,7 @@
         .grid-item { aspect-ratio: 1/1; background: #0f172a; overflow: hidden; position: relative; cursor: pointer; }
         .grid-item img, .grid-item video { width: 100%; height: 100%; object-fit: cover; }
         .grid-item .video-icon { position: absolute; top: 5px; right: 5px; color: white; font-size: 12px; text-shadow: 0 0 3px black; }
-        .grid-item .text-preview { font-size: 10px; padding: 5px; color: #64748b; text-align: center; display: flex; align-items: center; height: 100%; }
+        .grid-item .text-preview { font-size: 10px; padding: 5px; color: #64748b; text-align: center; display: flex; align-items: center; height: 100%; background: #1e293b; }
 
         .nav-bottom { position: fixed; bottom: 0; width: 100%; background: #0f172a; display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
         .nav-link { color: #64748b; text-decoration: none; font-size: 20px; }
@@ -40,9 +40,9 @@
 
 <div class="profile-top">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <i class="fas fa-arrow-left fs-5" onclick="history.back()"></i>
+        <i class="fas fa-arrow-left fs-5" onclick="window.location.href='dashboard.html'"></i>
         <h6 class="m-0 fw-bold" id="topName">Profile</h6>
-        <i class="fas fa-cog fs-5"></i>
+        <i class="fas fa-cog fs-5 text-muted"></i>
     </div>
     
     <img id="mainPfp" src="https://ui-avatars.com/api/?name=User" class="pfp-main">
@@ -51,18 +51,21 @@
 
     <div class="stats-row">
         <div class="stat-item"><span class="stat-num" id="postCount">0</span><span class="stat-label">Posts</span></div>
-        <div class="stat-item"><span class="stat-num">1.2k</span><span class="stat-label">Followers</span></div>
-        <div class="stat-item"><span class="stat-num">450</span><span class="stat-label">Following</span></div>
+        <div class="stat-item"><span class="stat-num" id="followerCount">0</span><span class="stat-label">Followers</span></div>
+        <div class="stat-item"><span class="stat-num" id="followingCount">0</span><span class="stat-label">Following</span></div>
     </div>
 </div>
 
 <div class="profile-actions">
-    <button class="btn-edit" onclick="alert('Edit Profile feature coming soon!')">Edit Profile</button>
+    <button class="btn-edit" onclick="alert('Za a kawo gyaran profile nan ba da dadewa ba!')">Edit Profile</button>
     <button class="btn-logout" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i></button>
 </div>
 
 <div class="grid-container" id="userPostsGrid">
+    <div class="text-center w-100 p-5">
+        <div class="spinner-border spinner-border-sm text-primary"></div>
     </div>
+</div>
 
 <div class="nav-bottom">
     <a href="dashboard.html" class="nav-link"><i class="fas fa-home"></i></a>
@@ -88,17 +91,20 @@
     const db = getFirestore(app);
 
     const user = JSON.parse(localStorage.getItem('amd_user'));
+    
     if(!user) {
         window.location.href = "login.html";
     } else {
         document.getElementById('profileName').innerText = user.name;
         document.getElementById('topName').innerText = user.name;
         document.getElementById('mainPfp').src = user.photo || `https://ui-avatars.com/api/?name=${user.name}&background=0084ff&color=fff`;
+        
         loadUserPosts();
     }
 
     async function loadUserPosts() {
         const grid = document.getElementById('userPostsGrid');
+        // Muna neman posts inda userId yayi daidai da lambar wayar wannan user din
         const q = query(collection(db, "posts"), where("userId", "==", user.phone), orderBy("createdAt", "desc"));
         
         try {
@@ -107,7 +113,11 @@
             grid.innerHTML = "";
 
             if (querySnapshot.empty) {
-                grid.innerHTML = "<p class='text-muted text-center w-100 mt-4'>No posts yet.</p>";
+                grid.innerHTML = `
+                    <div class="text-center w-100 mt-5 text-muted">
+                        <i class="fas fa-camera fs-1 mb-2"></i>
+                        <p>Baka daura komai ba tukunna.</p>
+                    </div>`;
                 return;
             }
 
@@ -116,21 +126,23 @@
                 let itemHtml = "";
 
                 if (post.type === 'image') {
-                    itemHtml = `<div class="grid-item"><img src="${post.fileUrl}"></div>`;
+                    itemHtml = `<div class="grid-item" onclick="window.location.href='dashboard.html'"><img src="${post.fileUrl}"></div>`;
                 } else if (post.type === 'video') {
-                    itemHtml = `<div class="grid-item"><i class="fas fa-play video-icon"></i><video src="${post.fileUrl}"></video></div>`;
+                    itemHtml = `<div class="grid-item" onclick="window.location.href='dashboard.html'"><i class="fas fa-play video-icon"></i><video src="${post.fileUrl}#t=0.1"></video></div>`;
                 } else {
-                    itemHtml = `<div class="grid-item"><div class="text-preview">${post.caption.substring(0, 30)}...</div></div>`;
+                    // Idan rubutu ne (Text Post)
+                    itemHtml = `<div class="grid-item" onclick="window.location.href='dashboard.html'"><div class="text-preview text-white small">${post.caption.substring(0, 30)}...</div></div>`;
                 }
                 grid.innerHTML += itemHtml;
             });
         } catch (e) {
             console.error("Error loading posts: ", e);
+            grid.innerHTML = "<p class='text-danger text-center w-100 p-3'>An samu matsalar dauko bayanai.</p>";
         }
     }
 
     window.logoutUser = function() {
-        if(confirm("Kana son fita daga wannan account din?")) {
+        if(confirm("Shin da gaske kake son fita daga account dinka?")) {
             localStorage.removeItem('amd_user');
             window.location.href = "login.html";
         }
