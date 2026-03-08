@@ -3,127 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Auwal MD Chat</title>
+    <title>User Profile - Auwal MD Chat</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #0084ff; --bg: #020617; }
-        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; padding-bottom: 80px; }
-        .profile-card { padding: 30px 20px; text-align: center; background: #0f172a; border-bottom: 1px solid #1e293b; }
-        .pfp-wrapper { position: relative; width: 110px; height: 110px; margin: 0 auto; }
-        .pfp-img { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; }
-        .change-btn { position: absolute; bottom: 5px; right: 5px; background: var(--primary); color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: 3px solid #0f172a; cursor: pointer; }
-        .post-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 10px; }
-        .grid-item { aspect-ratio: 1/1; background: #0f172a; overflow: hidden; }
-        .grid-item img, .grid-item video { width: 100%; height: 100%; object-fit: cover; }
-        .nav-bottom { position: fixed; bottom: 0; width: 100%; background: #0f172a; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #1e293b; }
-        .nav-link { color: #64748b; font-size: 22px; text-decoration: none; }
-        .nav-link.active { color: var(--primary); }
-        #upload-loader { display: none; font-size: 12px; color: var(--primary); }
+        :root { --primary: #0084ff; --dark-bg: #020617; --card-bg: #0f172a; }
+        body { background: var(--dark-bg); color: #ffffff; font-family: 'Inter', sans-serif; padding-bottom: 80px; }
+        
+        .header-nav { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        
+        .profile-info { text-align: center; padding: 20px; }
+        .pfp-container { position: relative; width: 115px; height: 115px; margin: 0 auto; }
+        .profile-img { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; }
+        .camera-overlay { position: absolute; bottom: 5px; right: 5px; background: var(--primary); width: 32px; height: 32px; border-radius: 50%; border: 3px solid var(--card-bg); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+
+        .user-stats { display: flex; justify-content: center; gap: 35px; margin: 20px 0; }
+        .stat-box { text-align: center; }
+        .stat-count { display: block; font-weight: 800; font-size: 1.1rem; }
+        .stat-label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; }
+
+        .action-area { display: flex; gap: 10px; padding: 0 20px; margin-bottom: 25px; }
+        .btn-edit-profile { flex: 1; background: #1e293b; border: none; color: white; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 600; }
+        .btn-logout-icon { width: 50px; background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #ef4444; border-radius: 8px; }
+
+        .media-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+        .media-item { aspect-ratio: 1/1; background: var(--card-bg); overflow: hidden; }
+        .media-item img, .media-item video { width: 100%; height: 100%; object-fit: cover; }
+
+        .bottom-bar { position: fixed; bottom: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #1e293b; z-index: 1000; }
+        .bar-link { color: #64748b; font-size: 20px; text-decoration: none; }
+        .bar-link.active { color: var(--primary); }
+        
+        #uploading-msg { display: none; color: var(--primary); font-size: 12px; margin-top: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="profile-card">
-    <div class="d-flex justify-content-between mb-4">
-        <i class="fas fa-arrow-left fs-5" onclick="location.href='dashboard.html'"></i>
-        <span class="fw-bold" id="top_name">Profile</span>
-        <button class="btn btn-sm btn-outline-danger" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i></button>
-    </div>
+<div class="header-nav">
+    <i class="fas fa-chevron-left" onclick="location.href='dashboard.html'"></i>
+    <span class="fw-bold" id="top-title">Profile</span>
+    <i class="fas fa-cog text-muted"></i>
+</div>
 
-    <div class="pfp-wrapper">
-        <img id="profile_pic" src="https://ui-avatars.com/api/?name=User" class="pfp-img">
-        <label for="file-input" class="change-btn"><i class="fas fa-camera"></i></label>
-        <input type="file" id="file-input" style="display: none;" accept="image/*">
+<div class="profile-info">
+    <div class="pfp-container">
+        <img id="user-avatar" src="https://ui-avatars.com/api/?name=User" class="profile-img">
+        <label for="img-upload" class="camera-overlay">
+            <i class="fas fa-camera"></i>
+        </label>
+        <input type="file" id="img-upload" hidden accept="image/*">
     </div>
-    <div id="upload-loader" class="mt-2">Updating photo... Please wait.</div>
+    <div id="uploading-msg">Uploading to Cloud...</div>
 
-    <h5 class="mt-3 fw-bold" id="user_name">Loading...</h5>
-    <div class="d-flex justify-content-center gap-4 mt-3">
-        <div class="text-center"><span class="d-block fw-bold" id="cnt_posts">0</span><small class="text-muted">Posts</small></div>
-        <div class="text-center"><span class="d-block fw-bold">0</span><small class="text-muted">Followers</small></div>
-        <div class="text-center"><span class="d-block fw-bold">0</span><small class="text-muted">Following</small></div>
+    <h5 class="mt-3 fw-bold mb-1" id="display-name">Loading...</h5>
+    <p class="text-muted small">Auwal MD Network User</p>
+
+    <div class="user-stats">
+        <div class="stat-box"><span class="stat-count" id="post-total">0</span><span class="stat-label">Posts</span></div>
+        <div class="stat-box"><span class="stat-count">0</span><span class="stat-label">Followers</span></div>
+        <div class="stat-box"><span class="stat-count">0</span><span class="stat-label">Following</span></div>
     </div>
 </div>
 
-<div class="post-grid" id="profile_posts"></div>
+<div class="action-area">
+    <button class="btn-edit-profile" onclick="alert('Settings feature coming soon')">Edit Profile</button>
+    <button class="btn-logout-icon" onclick="appLogout()"><i class="fas fa-sign-out-alt"></i></button>
+</div>
 
-<div class="nav-bottom">
-    <a href="dashboard.html" class="nav-link"><i class="fas fa-home"></i></a>
-    <a href="chats.html" class="nav-link"><i class="fas fa-comment"></i></a>
-    <a href="create-post.html" class="nav-link"><i class="fas fa-plus-square"></i></a>
-    <a href="profile.html" class="nav-link active"><i class="fas fa-user"></i></a>
+<div class="media-grid" id="user-gallery"></div>
+
+<div class="bottom-bar">
+    <a href="dashboard.html" class="bar-link"><i class="fas fa-home"></i></a>
+    <a href="chats.html" class="bar-link"><i class="fas fa-comment"></i></a>
+    <a href="create-post.html" class="bar-link"><i class="fas fa-plus-square"></i></a>
+    <a href="profile.html" class="bar-link active"><i class="fas fa-user"></i></a>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, query, where, getDocs, orderBy, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
         authDomain: "auwalmdtech.firebaseapp.com",
         projectId: "auwalmdtech",
-        storageBucket: "auwalmdtech.firebasestorage.app", // Wannan ne bangaren Storage
+        storageBucket: "auwalmdtech.firebasestorage.app",
         messagingSenderId: "202329584080",
         appId: "1:202329584080:web:e989d7df53d3c3024609d5"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const storage = getStorage(app);
-    const user = JSON.parse(localStorage.getItem('amd_user'));
+    const authUser = JSON.parse(localStorage.getItem('amd_user'));
 
-    if(!user) { window.location.href = "index.html"; }
+    if(!authUser) { window.location.href = "index.html"; }
 
-    document.getElementById('user_name').innerText = user.name;
-    document.getElementById('top_name').innerText = user.name;
-    document.getElementById('profile_pic').src = user.photo || `https://ui-avatars.com/api/?name=${user.name}`;
+    document.getElementById('display-name').innerText = authUser.name;
+    document.getElementById('top-title').innerText = authUser.name;
+    document.getElementById('user-avatar').src = authUser.photo || `https://ui-avatars.com/api/?name=${authUser.name}`;
 
-    // Neman Posts na gaske
-    const loadPosts = async () => {
-        const q = query(collection(db, "posts"), where("userId", "==", user.phone), orderBy("createdAt", "desc"));
-        const snap = await getDocs(q);
-        document.getElementById('cnt_posts').innerText = snap.size;
-        const grid = document.getElementById('profile_posts');
-        grid.innerHTML = "";
-        snap.forEach(d => {
-            const p = d.data();
-            grid.innerHTML += `<div class="grid-item">${p.type === 'video' ? `<video src="${p.fileUrl}#t=0.5"></video>` : `<img src="${p.fileUrl || 'https://via.placeholder.com/150'}">`}</div>`;
-        });
-    };
-    loadPosts();
+    // CLOUDINARY SETTINGS
+    const CLOUD_NAME = "dpxn8b7ao"; 
+    const UPLOAD_PRESET = "ml_default"; // Change this if you created a custom preset name
 
-    // CANJA HOTO (Real Logic)
-    document.getElementById('file-input').onchange = async (e) => {
+    // 1. Upload logic
+    document.getElementById('img-upload').addEventListener('change', async (e) => {
         const file = e.target.files[0];
         if(!file) return;
 
-        const loader = document.getElementById('upload-loader');
-        loader.style.display = "block";
+        document.getElementById('uploading-msg').style.display = "block";
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', UPLOAD_PRESET);
 
         try {
-            // 1. Upload hoto zuwa Storage
-            const storageRef = ref(storage, `profiles/${user.phone}`);
-            await uploadBytes(storageRef, file);
-            const photoUrl = await getDownloadURL(storageRef);
-
-            // 2. Update a Database na Users (Dole suna cikin collection na 'users')
-            // Idan baka da 'users' collection, zamu adana ne kawai a LocalStorage
-            user.photo = photoUrl;
-            localStorage.setItem('amd_user', JSON.stringify(user));
-
-            // 3. Nuna hoton nan take
-            document.getElementById('profile_pic').src = photoUrl;
-            alert("Profile Picture Updated!");
+            const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+                method: 'POST',
+                body: formData
+            });
+            const data = await res.json();
+            
+            if(data.secure_url) {
+                // Update Local Storage
+                authUser.photo = data.secure_url;
+                localStorage.setItem('amd_user', JSON.stringify(authUser));
+                
+                // Update UI
+                document.getElementById('user-avatar').src = data.secure_url;
+                alert("Success! Profile picture updated.");
+            }
         } catch (err) {
             console.error(err);
-            alert("Error uploading image. Check Firebase Rules!");
+            alert("Upload failed. Make sure your Upload Preset is set to 'Unsigned' in Cloudinary.");
         }
-        loader.style.display = "none";
-    };
+        document.getElementById('uploading-msg').style.display = "none";
+    });
 
-    window.doLogout = () => { if(confirm("Logout?")) { localStorage.clear(); location.href="index.html"; }};
+    // 2. Load media
+    async function fetchMedia() {
+        const gallery = document.getElementById('user-gallery');
+        const q = query(collection(db, "posts"), where("userId", "==", authUser.phone), orderBy("createdAt", "desc"));
+        
+        try {
+            const snap = await getDocs(q);
+            document.getElementById('post-total').innerText = snap.size;
+            gallery.innerHTML = "";
+            snap.forEach(doc => {
+                const p = doc.data();
+                let item = p.type === 'video' ? `<video src="${p.fileUrl}#t=0.5"></video>` : `<img src="${p.fileUrl}">`;
+                gallery.innerHTML += `<div class="media-item">${item}</div>`;
+            });
+        } catch (e) { console.log("Media fetch error:", e); }
+    }
+    fetchMedia();
+
+    window.appLogout = () => {
+        if(confirm("Log out of Auwal MD Chat?")) {
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+    }
 </script>
 </body>
 </html>
