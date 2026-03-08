@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { background: #020617; color: white; font-family: 'Poppins', sans-serif; min-height: 100vh; }
-        .post-header { background: #0f172a; padding: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); sticky; top: 0; z-index: 100;}
+        .post-header { background: #0f172a; padding: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 100;}
         .preview-box { width: 100%; aspect-ratio: 16/9; background: #1e293b; margin-top: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 10px; cursor: pointer; border: 2px dashed #0084ff; position: relative; }
         .preview-box img, .preview-box video { width: 100%; height: 100%; object-fit: contain; display: none; }
         textarea { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 12px; color: white !important; font-size: 16px; margin-top: 20px; width: 100%; outline: none; resize: none; padding: 15px; }
@@ -25,18 +25,18 @@
 </div>
 
 <div class="container">
-    <textarea id="caption" rows="5" placeholder="Me kake tunani? (What's on your mind?)..."></textarea>
+    <textarea id="caption" rows="5" placeholder="What's on your mind?..."></textarea>
 
     <div class="preview-box" onclick="document.getElementById('postFile').click()">
         <div id="placeholderText" class="text-center">
             <i class="fas fa-photo-video fs-1 mb-2 text-primary"></i>
-            <p class="m-0 small text-muted">Zabi Hoto ko Bidiyo (Optional)</p>
+            <p class="m-0 small text-muted">Select Photo or Video (Optional)</p>
         </div>
         <img id="postPreview">
         <video id="videoPreview" controls></video>
     </div>
     <input type="file" id="postFile" hidden accept="image/*,video/*" onchange="previewMedia(event)">
-    <p class="text-center text-muted mt-2" style="font-size: 12px;">Zaka iya yin posting rubutu kawai idan baka zabi hoto ba.</p>
+    <p class="text-center text-muted mt-2" style="font-size: 12px;">You can share a text-only post if you don't select media.</p>
 </div>
 
 <script type="module">
@@ -85,9 +85,8 @@
         const shareBtn = document.getElementById('shareBtn');
         const user = JSON.parse(localStorage.getItem('amd_user'));
 
-        // Idan babu rubutu kuma babu hoto, kar a barshi ya yi posting
         if (!caption.trim() && !fileInput.files[0]) { 
-            alert("Don Allah rubuta wani abu ko ka zabi hoto!"); 
+            alert("Please write something or select an image/video!"); 
             return; 
         }
 
@@ -96,7 +95,7 @@
 
         try {
             let fileUrl = "";
-            let postType = "text"; // Default idan babu media
+            let postType = "text"; 
 
             if (fileInput.files[0]) {
                 const file = fileInput.files[0];
@@ -130,7 +129,7 @@
 
         } catch (error) {
             console.error(error);
-            alert("An samu matsala! Duba data dinka.");
+            alert("Upload failed! Please check your internet connection.");
             shareBtn.disabled = false;
             shareBtn.innerHTML = "Share";
         }
