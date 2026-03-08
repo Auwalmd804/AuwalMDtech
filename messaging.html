@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - Auwal MD Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #0084ff; --bg: #020617; --card: #0f172a; --msg-me: #0084ff; --msg-them: #1e293b; }
+        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        
+        /* Header */
+        .chat-header { background: var(--card); padding: 15px; display: flex; align-items: center; border-bottom: 1px solid #1e293b; }
+        .back-btn { font-size: 20px; margin-right: 15px; cursor: pointer; }
+        .target-pfp { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 12px; }
+
+        /* Chat Area */
+        #chat-window { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { max-width: 75%; padding: 10px 15px; border-radius: 18px; font-size: 15px; position: relative; }
+        .msg.me { align-self: flex-end; background: var(--msg-me); border-bottom-right-radius: 4px; }
+        .msg.them { align-self: flex-start; background: var(--msg-them); border-bottom-left-radius: 4px; }
+        .msg-time { font-size: 10px; opacity: 0.6; display: block; margin-top: 5px; text-align: right; }
+
+        /* Input Area */
+        .input-area { background: var(--card); padding: 15px; display: flex; align-items: center; gap: 10px; border-top: 1px solid #1e293b; }
+        .msg-input { flex: 1; background: #1e293b; border: none; border-radius: 25px; padding: 10px 20px; color: white; outline: none; }
+        .send-btn { background: var(--primary); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .send-btn:active { transform: scale(0.9); }
+    </style>
+</head>
+<body>
+
+<div class="chat-header">
+    <i class="fas fa-arrow-left back-btn" onclick="location.href='chats.html'"></i>
+    <img id="header-pfp" src="https://ui-avatars.com/api/?name=User" class="target-pfp">
+    <div>
+        <h6 class="m-0 fw-bold" id="header-name">Chat User</h6>
+        <small class="text-success" style="font-size: 10px;">Active Now</small>
+    </div>
+</div>
+
+<div id="chat-window">
+    </div>
+
+<div class="input-area">
+    <input type="text" id="message-input" class="msg-input" placeholder="Type a message...">
+    <button class="send-btn" id="send-btn"><i class="fas fa-paper-plane"></i></button>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, where, or, and } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
+        authDomain: "auwalmdtech.firebaseapp.com",
+        projectId: "auwalmdtech",
+        storageBucket: "auwalmdtech.firebasestorage.app",
+        messagingSenderId: "202329584080",
+        appId: "1:202329584080:web:e989d7df53d3c3024609d5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const currentUser = JSON.parse(localStorage.getItem('amd_user'));
+    const targetPhone = sessionStorage.getItem('chat_target_phone');
+    const targetName = sessionStorage.getItem('chat_target_name');
+
+    if(!targetPhone || !currentUser) { window.location.href = "chats.html"; }
+
+    document.getElementById('header-name').innerText = targetName;
+    document.getElementById('header-pfp').src = `https://ui-avatars.com/api/?name=${targetName}&background=0084ff&color=fff`;
+
+    const chatWindow = document.getElementById('chat-window');
+    const msgInput = document.getElementById('message-input');
+    const sendBtn = document.getElementById('send-btn');
+
+    // 1. Logic na tura Sako
+    async function sendMessage() {
+        const text = msgInput.value.trim();
+        if(!text) return;
+
+        msgInput.value = "";
+        
+        try {
+            await addDoc(collection(db, "chats"), {
+                sender: currentUser.phone,
+                receiver: targetPhone,
+                message: text,
+                timestamp: serverTimestamp()
+            });
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        } catch (e) { console.error("Error sending:", e); }
+    }
+
+    sendBtn.onclick = sendMessage;
+    msgInput.onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
+
+    // 2. Logic na jiyo sako (Real-time Listening)
+    // Muna hada Chat ID ta hanyar hada phone numbers biyu domin ganin hirar su kadai
+    const q = query(
+        collection(db, "chats"),
+        orderBy("timestamp", "asc")
+    );
+
+    onSnapshot(q, (snapshot) => {
+        chatWindow.innerHTML = "";
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            
+            // Tace sakonnin su biyu kadai
+            const isBetweenUs = (data.sender === currentUser.phone && data.receiver === targetPhone) || 
+                                (data.sender === targetPhone && data.receiver === currentUser.phone);
+            
+            if(isBetweenUs) {
+                const type = data.sender === currentUser.phone ? 'me' : 'them';
+                const msgHtml = `
+                    <div class="msg ${type}">
+                        ${data.message}
+                        <span class="msg-time">Sent</span>
+                    </div>
+                `;
+                chatWindow.innerHTML += msgHtml;
+            }
+        });
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    });
+
+</script>
+</body>
+</html>
