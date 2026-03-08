@@ -8,11 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { background: #020617; color: white; font-family: 'Poppins', sans-serif; min-height: 100vh; }
-        .post-header { background: #0f172a; padding: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .preview-box { width: 100%; aspect-ratio: 1/1; background: #1e293b; margin-top: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 10px; cursor: pointer; border: 2px dashed #0084ff; position: relative; }
-        .preview-box img, .preview-box video { width: 100%; height: 100%; object-fit: cover; display: none; }
-        textarea { background: transparent !important; border: none !important; color: white !important; font-size: 16px; margin-top: 20px; width: 100%; outline: none; resize: none; }
+        .post-header { background: #0f172a; padding: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); sticky; top: 0; z-index: 100;}
+        .preview-box { width: 100%; aspect-ratio: 16/9; background: #1e293b; margin-top: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 10px; cursor: pointer; border: 2px dashed #0084ff; position: relative; }
+        .preview-box img, .preview-box video { width: 100%; height: 100%; object-fit: contain; display: none; }
+        textarea { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 12px; color: white !important; font-size: 16px; margin-top: 20px; width: 100%; outline: none; resize: none; padding: 15px; }
         .btn-share { background: #0084ff; color: white; font-weight: 600; border-radius: 20px; padding: 5px 25px; border: none; }
+        .btn-share:disabled { opacity: 0.5; }
     </style>
 </head>
 <body>
@@ -24,17 +25,18 @@
 </div>
 
 <div class="container">
+    <textarea id="caption" rows="5" placeholder="Me kake tunani? (What's on your mind?)..."></textarea>
+
     <div class="preview-box" onclick="document.getElementById('postFile').click()">
         <div id="placeholderText" class="text-center">
-            <i class="fas fa-camera-retro fs-1 mb-2"></i>
-            <p class="m-0 small">Select Photo or Video</p>
+            <i class="fas fa-photo-video fs-1 mb-2 text-primary"></i>
+            <p class="m-0 small text-muted">Zabi Hoto ko Bidiyo (Optional)</p>
         </div>
         <img id="postPreview">
         <video id="videoPreview" controls></video>
     </div>
     <input type="file" id="postFile" hidden accept="image/*,video/*" onchange="previewMedia(event)">
-
-    <textarea id="caption" rows="4" placeholder="Write a caption..."></textarea>
+    <p class="text-center text-muted mt-2" style="font-size: 12px;">Zaka iya yin posting rubutu kawai idan baka zabi hoto ba.</p>
 </div>
 
 <script type="module">
@@ -83,29 +85,36 @@
         const shareBtn = document.getElementById('shareBtn');
         const user = JSON.parse(localStorage.getItem('amd_user'));
 
-        if (!fileInput.files[0]) { alert("Please select a file!"); return; }
-
-        const file = fileInput.files[0];
-        const isVideo = file.type.startsWith('video');
+        // Idan babu rubutu kuma babu hoto, kar a barshi ya yi posting
+        if (!caption.trim() && !fileInput.files[0]) { 
+            alert("Don Allah rubuta wani abu ko ka zabi hoto!"); 
+            return; 
+        }
 
         shareBtn.disabled = true;
         shareBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
         try {
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('upload_preset', 'ml_default'); 
+            let fileUrl = "";
+            let postType = "text"; // Default idan babu media
 
-            // Cloudinary yana bukatar ya san kalar file din (video ko image)
-            const resourceType = isVideo ? 'video' : 'image';
+            if (fileInput.files[0]) {
+                const file = fileInput.files[0];
+                const isVideo = file.type.startsWith('video');
+                postType = isVideo ? 'video' : 'image';
 
-            const res = await fetch(`https://api.cloudinary.com/v1_1/dpxn8b7ao/${resourceType}/upload`, {
-                method: 'POST',
-                body: formData
-            });
-            
-            const data = await res.json();
-            const fileUrl = data.secure_url;
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', 'ml_default'); 
+                const resourceType = isVideo ? 'video' : 'image';
+
+                const res = await fetch(`https://api.cloudinary.com/v1_1/dpxn8b7ao/${resourceType}/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                fileUrl = data.secure_url;
+            }
 
             await addDoc(collection(db, "posts"), {
                 userId: user.phone,
@@ -113,16 +122,15 @@
                 userPhoto: user.photo || "",
                 fileUrl: fileUrl,
                 caption: caption,
-                type: isVideo ? 'video' : 'image', // Mun adana kalar file din
+                type: postType,
                 createdAt: serverTimestamp()
             });
 
-            alert("Post shared successfully!");
             window.location.href = "dashboard.html";
 
         } catch (error) {
             console.error(error);
-            alert("Upload failed! Check your internet.");
+            alert("An samu matsala! Duba data dinka.");
             shareBtn.disabled = false;
             shareBtn.innerHTML = "Share";
         }
