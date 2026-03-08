@@ -3,40 +3,114 @@
 <head>
   <title>Auwal MD Chat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body{
+      margin:0;
+      font-family:Arial;
+      background:linear-gradient(to bottom,#ffffff,#f2f2f2);
+      text-align:center;
+    }
+
+    .logo{
+      width:90px;
+      margin-top:20px;
+    }
+
+    .card{
+      background:white;
+      width:90%;
+      max-width:400px;
+      margin:20px auto;
+      padding:20px;
+      border-radius:12px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    input{
+      width:90%;
+      padding:10px;
+      margin:8px 0;
+      border-radius:8px;
+      border:1px solid #ccc;
+    }
+
+    button{
+      padding:10px 15px;
+      border:none;
+      border-radius:8px;
+      background:#007bff;
+      color:white;
+      cursor:pointer;
+      margin:5px;
+    }
+
+    button:hover{
+      background:#0056b3;
+    }
+
+    #loading{
+      display:none;
+      margin:10px;
+      animation:spin 1s linear infinite;
+      border:4px solid #ccc;
+      border-top:4px solid #007bff;
+      border-radius:50%;
+      width:30px;
+      height:30px;
+      margin:auto;
+    }
+
+    @keyframes spin{
+      0%{transform:rotate(0deg);}
+      100%{transform:rotate(360deg);}
+    }
+  </style>
 </head>
+
 <body>
 
-  <h2>Welcome to Auwal MD Chat</h2>
+<img src="logo.png" class="logo">
 
-  <div id="auth">
-    <h3>Login / Register</h3>
-    <input type="email" id="email" placeholder="Email"><br><br>
-    <input type="password" id="password" placeholder="Password"><br><br>
-    <button onclick="register()">Register</button>
+<h2>Welcome to Auwal MD Chat</h2>
+
+<div id="loading"></div>
+
+<div class="card" id="authCard">
+  <div id="loginForm">
+    <h3>Login</h3>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
     <button onclick="login()">Login</button>
+    <p onclick="showRegister()" style="color:blue;cursor:pointer;">
+      Switch to Register
+    </p>
   </div>
 
-  <hr>
-
-  <div id="app" style="display:none;">
-    <h3>Post</h3>
-    <input type="text" id="postText" placeholder="Write something">
-    <button onclick="createPost()">Post</button>
-
-    <h3>Feed</h3>
-    <div id="posts"></div>
-
-    <hr>
-
-    <h3>Chat</h3>
-    <input type="text" id="chatText" placeholder="Message">
-    <button onclick="sendMessage()">Send</button>
-
-    <div id="messages"></div>
-
-    <br><br>
-    <button onclick="logout()">Logout</button>
+  <div id="registerForm" style="display:none;">
+    <h3>Register</h3>
+    <input type="email" id="regEmail" placeholder="Email">
+    <input type="password" id="regPassword" placeholder="Password">
+    <button onclick="register()">Register</button>
+    <p onclick="showLogin()" style="color:blue;cursor:pointer;">
+      Switch to Login
+    </p>
   </div>
+</div>
+
+<div id="app" style="display:none;">
+  <h3>Home Feed</h3>
+  <input type="text" id="postText" placeholder="Write post">
+  <button onclick="createPost()">Post</button>
+  <div id="posts"></div>
+
+  <h3>Chat</h3>
+  <input type="text" id="chatText" placeholder="Message">
+  <button onclick="sendMessage()">Send</button>
+  <div id="messages"></div>
+
+  <button onclick="logout()">Logout</button>
+</div>
 
 <script type="module" src="app.js"></script>
 
