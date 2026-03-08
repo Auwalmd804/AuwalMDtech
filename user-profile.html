@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Auwal MD Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #0084ff; --bg: #020617; --card: #0f172a; }
+        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; padding-bottom: 30px; }
+        
+        .profile-header { padding: 25px 20px; text-align: center; background: var(--card); border-bottom: 1px solid #1e293b; }
+        .user-avatar { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; margin-bottom: 15px; }
+        
+        .stats-row { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .stat-box { text-align: center; }
+        .stat-val { display: block; font-weight: bold; font-size: 1.1rem; }
+        .stat-lbl { font-size: 0.7rem; color: #64748b; text-transform: uppercase; }
+
+        .btn-follow { width: 90%; max-width: 300px; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 600; margin-bottom: 20px; }
+        .btn-follow.following { background: #1e293b; color: #64748b; }
+
+        .media-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+        .media-box { aspect-ratio: 1/1; background: var(--card); overflow: hidden; }
+        .media-box img, .media-box video { width: 100%; height: 100%; object-fit: cover; }
+        
+        .back-btn { position: absolute; left: 20px; top: 25px; color: white; font-size: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="profile-header">
+    <i class="fas fa-arrow-left back-btn" onclick="history.back()"></i>
+    <img id="target-avatar" src="https://ui-avatars.com/api/?name=User" class="user-avatar">
+    <h5 class="fw-bold mb-1" id="target-name">Loading...</h5>
+    <p class="text-muted small" id="target-phone">@user</p>
+
+    <div class="stats-row">
+        <div class="stat-box"><span class="stat-val" id="post-count">0</span><span class="stat-lbl">Posts</span></div>
+        <div class="stat-box"><span class="stat-val">0</span><span class="stat-lbl">Followers</span></div>
+        <div class="stat-box"><span class="stat-val">0</span><span class="stat-lbl">Following</span></div>
+    </div>
+
+    <button class="btn-follow" id="followBtn">Follow</button>
+</div>
+
+<div class="media-grid" id="target-gallery">
+    </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
+        authDomain: "auwalmdtech.firebaseapp.com",
+        projectId: "auwalmdtech",
+        storageBucket: "auwalmdtech.firebasestorage.app",
+        messagingSenderId: "202329584080",
+        appId: "1:202329584080:web:e989d7df53d3c3024609d5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Muna dauko Phone number din mutumin da aka danna a Explore
+    const targetPhone = sessionStorage.getItem('target_user_phone');
+
+    if(!targetPhone) {
+        window.location.href = "explore.html";
+    }
+
+    async function loadUserProfile() {
+        // 1. Dauko bayanan mutumin (Sunansa da Hotonsa)
+        const userQuery = query(collection(db, "users"), where("phone", "==", targetPhone));
+        const userSnap = await getDocs(userQuery);
+        
+        if(!userSnap.empty) {
+            const userData = userSnap.docs[0].data();
+            document.getElementById('target-name').innerText = userData.name;
+            document.getElementById('target-phone').innerText = "@" + userData.phone;
+            document.getElementById('target-avatar').src = userData.photo || `https://ui-avatars.com/api/?name=${userData.name}`;
+        }
+
+        // 2. Dauko duk wani Post (Hotuna/Bidiyo) na mutumin
+        const postQuery = query(collection(db, "posts"), where("userId", "==", targetPhone), orderBy("createdAt", "desc"));
+        const postSnap = await getDocs(postQuery);
+        
+        const gallery = document.getElementById('target-gallery');
+        document.getElementById('post-count').innerText = postSnap.size;
+        gallery.innerHTML = "";
+
+        postSnap.forEach(doc => {
+            const p = doc.data();
+            let content = p.type === 'video' ? `<video src="${p.fileUrl}#t=0.5"></video>` : `<img src="${p.fileUrl}">`;
+            gallery.innerHTML += `<div class="media-box">${content}</div>`;
+        });
+    }
+
+    loadUserProfile();
+</script>
+</body>
+</html>
