@@ -103,6 +103,11 @@
             background: #000;
             max-height: 500px;
         }
+
+        /* Sabon Class na Like */
+        .liked { color: #ef4444 !important; }
+        .like-btn { cursor: pointer; transition: 0.2s; }
+        .like-btn:active { transform: scale(1.2); }
     </style>
 </head>
 <body>
@@ -155,7 +160,7 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
@@ -169,13 +174,12 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const user = JSON.parse(localStorage.getItem('amd_user'));
-    if(user) {
-        document.getElementById('dashName').innerText = user.name;
-        document.getElementById('myPfp').src = user.photo || `https://ui-avatars.com/api/?name=${user.name}&background=0084ff&color=fff`;
+    const currentUser = JSON.parse(localStorage.getItem('amd_user'));
+    if(currentUser) {
+        document.getElementById('dashName').innerText = currentUser.name;
+        document.getElementById('myPfp').src = currentUser.photo || `https://ui-avatars.com/api/?name=${currentUser.name}&background=0084ff&color=fff`;
     }
 
-    // Mun dawo da orderBy tunda kace hoto ya bayyana (Index ya riga ya kafu kenan)
     const postsQuery = query(collection(db, "posts"), orderBy("createdAt", "desc"));
     
     onSnapshot(postsQuery, (snapshot) => {
@@ -194,12 +198,16 @@
             return;
         }
 
-        snapshot.forEach((doc) => {
-            const post = doc.data();
+        snapshot.forEach((postDoc) => {
+            const post = postDoc.data();
+            const postId = postDoc.id;
             const name = post.userName || 'Unknown User';
             const pfp = post.userPhoto || `https://ui-avatars.com/api/?name=${name}`;
             
-            // LOGIC DIN VIDEO KO PHOTO
+            // Like Logic
+            const likesCount = post.likes ? post.likes.length : 0;
+            const isLiked = post.likes && post.likes.includes(currentUser.phone);
+
             let mediaElement = "";
             if(post.type === 'video') {
                 mediaElement = `<video src="${post.fileUrl}" class="post-media" controls></video>`;
@@ -220,20 +228,45 @@
                     ${mediaElement}
 
                     <div class="p-3">
-                        <div class="d-flex gap-3 mb-2">
-                            <i class="far fa-heart fs-5"></i>
-                            <i class="far fa-comment fs-5"></i>
+                        <div class="d-flex gap-3 mb-2 align-items-center">
+                            <div class="like-btn ${isLiked ? 'liked' : ''}" id="like-${postId}">
+                                <i class="${isLiked ? 'fas' : 'far'} fa-heart fs-5"></i>
+                                <span class="ms-1 small">${likesCount}</span>
+                            </div>
+                            <i class="far fa-comment fs-5" onclick="alert('Comment section coming soon!')"></i>
                             <i class="far fa-paper-plane fs-5"></i>
                         </div>
                         <p class="small m-0"><b>${name}</b> ${post.caption || ""}</p>
                     </div>
                 </div>
             `;
-            feed.innerHTML += postHtml;
+            
+            // Create element and append
+            const div = document.createElement('div');
+            div.innerHTML = postHtml;
+            feed.appendChild(div);
+
+            // Add Click Event for Like
+            div.querySelector('.like-btn').onclick = () => toggleLike(postId, isLiked);
         });
     }, (error) => {
         console.error("Error:", error);
     });
+
+    // 2. Toggle Like Function
+    window.toggleLike = async (postId, currentlyLiked) => {
+        if(!currentUser) return;
+        const postRef = doc(db, "posts", postId);
+        try {
+            if (currentlyLiked) {
+                await updateDoc(postRef, { likes: arrayRemove(currentUser.phone) });
+            } else {
+                await updateDoc(postRef, { likes: arrayUnion(currentUser.phone) });
+            }
+        } catch (e) {
+            console.error("Error updating like:", e);
+        }
+    };
 </script>
 
 </body>
