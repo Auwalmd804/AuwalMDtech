@@ -42,7 +42,7 @@
 <div class="header-nav">
     <i class="fas fa-chevron-left" onclick="location.href='dashboard.html'"></i>
     <span class="fw-bold" id="top-title">Profile</span>
-    <i class="fas fa-cog text-muted"></i>
+    <i class="fas fa-cog text-muted" onclick="alert('Settings coming soon')"></i>
 </div>
 
 <div class="profile-info">
@@ -75,7 +75,7 @@
 </div>
 
 <div class="action-area">
-    <button class="btn-edit-profile" onclick="alert('Settings feature coming soon')">Edit Profile</button>
+    <button class="btn-edit-profile" onclick="location.href='edit-profile.html'">Edit Profile</button>
     <button class="btn-logout-icon" onclick="appLogout()"><i class="fas fa-sign-out-alt"></i></button>
 </div>
 
@@ -107,7 +107,7 @@
 
     if(!authUser) { window.location.href = "index.html"; }
 
-    // Update Profile UI
+    // Saka sunan mutum a profile
     document.getElementById('display-name').innerText = authUser.name;
     document.getElementById('top-title').innerText = authUser.name;
     document.getElementById('user-avatar').src = authUser.photo || `https://ui-avatars.com/api/?name=${authUser.name}`;
@@ -115,7 +115,7 @@
     const CLOUD_NAME = "dpxn8b7ao"; 
     const UPLOAD_PRESET = "ml_default"; 
 
-    // 1. Photo Upload logic
+    // Logic na canza hoto (Cloudinary)
     document.getElementById('img-upload').addEventListener('change', async (e) => {
         const file = e.target.files[0];
         if(!file) return;
@@ -131,35 +131,40 @@
                 authUser.photo = data.secure_url;
                 localStorage.setItem('amd_user', JSON.stringify(authUser));
                 document.getElementById('user-avatar').src = data.secure_url;
-                alert("Success! Profile picture updated.");
+                alert("Profile picture updated!");
             }
         } catch (err) { alert("Upload failed."); }
         document.getElementById('uploading-msg').style.display = "none";
     });
 
-    // 2. Load Media & Real-time Stats
+    // DAUKO BAYANAI DAGA FIREBASE
     async function fetchUserData() {
         const gallery = document.getElementById('user-gallery');
         
-        // Count and Load Posts
-        const qPosts = query(collection(db, "posts"), where("userId", "==", authUser.phone), orderBy("createdAt", "desc"));
+        // 1. Dauko Posts dinka (Ina amfani da "phone" kamar yadda kake adanawa)
+        const qPosts = query(
+            collection(db, "posts"), 
+            where("phone", "==", authUser.phone), 
+            orderBy("createdAt", "desc")
+        );
+
         onSnapshot(qPosts, (snap) => {
             document.getElementById('post-total').innerText = snap.size;
             gallery.innerHTML = "";
             snap.forEach(doc => {
                 const p = doc.data();
-                let item = p.type === 'video' ? `<video src="${p.fileUrl}#t=0.5"></video>` : `<img src="${p.fileUrl}">`;
+                let item = p.type === 'video' ? `<video src="${p.fileUrl}#t=0.1" muted></video>` : `<img src="${p.fileUrl}">`;
                 gallery.innerHTML += `<div class="media-item">${item}</div>`;
             });
         });
 
-        // Count Followers (Mutane nawa suke bi na?)
+        // 2. Followers (Lambar wadanda suke binka)
         const qFollowers = query(collection(db, "follows"), where("following", "==", authUser.phone));
         onSnapshot(qFollowers, (snap) => {
             document.getElementById('follower-total').innerText = snap.size;
         });
 
-        // Count Following (Mutane nawa nake bi?)
+        // 3. Following (Lambar wadanda kake bi)
         const qFollowing = query(collection(db, "follows"), where("follower", "==", authUser.phone));
         onSnapshot(qFollowing, (snap) => {
             document.getElementById('following-total').innerText = snap.size;
@@ -169,10 +174,7 @@
     fetchUserData();
 
     window.appLogout = () => {
-        if(confirm("Log out of Auwal MD Chat?")) {
-            localStorage.clear();
-            window.location.href = "index.html";
-        }
+        if(confirm("Logout?")) { localStorage.clear(); window.location.href = "index.html"; }
     }
 </script>
 </body>
