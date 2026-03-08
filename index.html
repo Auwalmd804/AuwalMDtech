@@ -3,77 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Auwal MD Chat</title>
+    <title>Auwal MD Chat - Secure Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        body { background: #000; color: white; height: 100vh; display: flex; align-items: center; justify-content: center; font-family: sans-serif; }
-        .setup-card { background: #111; padding: 30px; border-radius: 25px; width: 100%; max-width: 380px; text-align: center; border: 1px solid #333; }
-        .logo-img { width: 180px; margin-bottom: 20px; }
-        .pfp-area { width: 110px; height: 110px; border-radius: 50%; background: #222; margin: 0 auto 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; border: 2px dashed #444; overflow: hidden; }
-        .pfp-area img { width: 100%; height: 100%; object-fit: cover; }
-        .form-control { background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 12px; padding: 12px; margin-bottom: 15px; }
-        .btn-start { background: #0084ff; border: none; color: white; padding: 12px; border-radius: 12px; width: 100%; font-weight: bold; }
+        :root { --primary: #0084ff; --dark-bg: #0a0a0a; --card-bg: #161616; }
+        body { background: var(--dark-bg); color: white; font-family: 'Segoe UI', sans-serif; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .login-card { background: var(--card-bg); padding: 35px; border-radius: 30px; width: 100%; max-width: 400px; border: 1px solid #222; box-shadow: 0 20px 50px rgba(0,0,0,0.5); position: relative; }
+        .logo-box { text-align: center; margin-bottom: 25px; }
+        .logo-box img { width: 140px; border-radius: 15px; margin-bottom: 10px; }
+        .welcome-txt { font-size: 18px; font-weight: 600; color: #eee; margin-bottom: 5px; }
+        .form-control { background: #1f1f1f; border: 1px solid #333; color: white; border-radius: 12px; padding: 12px 15px; margin-bottom: 15px; transition: 0.3s; }
+        .form-control:focus { background: #252525; border-color: var(--primary); box-shadow: none; color: white; }
+        .btn-main { background: linear-gradient(135deg, #0084ff, #00c6ff); border: none; padding: 12px; border-radius: 12px; font-weight: bold; width: 100%; transition: 0.3s; }
+        .btn-main:active { transform: scale(0.95); }
+        
+        /* Loading Animation */
+        .spinner { display: none; width: 25px; height: 25px; border: 3px solid rgba(255,255,255,.3); border-radius: 50%; border-top-color: #fff; animation: spin 0.8s linear infinite; margin-left: 10px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .footer-txt { font-size: 11px; color: #555; text-align: center; margin-top: 20px; }
+        .customer-support { position: fixed; bottom: 20px; right: 20px; background: #25d366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 5px 15px rgba(37,211,102,0.4); text-decoration: none; transition: 0.3s; }
+        .customer-support:hover { transform: translateY(-5px); color: white; }
+        .toggle-link { color: var(--primary); cursor: pointer; font-size: 14px; font-weight: 500; }
     </style>
 </head>
 <body>
 
-<div class="setup-card shadow-lg">
-    <img src="logo.jpg" class="logo-img">
-    <div class="pfp-area" onclick="document.getElementById('pfpInput').click()">
-        <span id="plusIcon" style="font-size: 30px; color: #555;">+</span>
-        <img id="preview" style="display:none;">
+<div class="login-card animate__animated animate__fadeInUp">
+    <div class="logo-box">
+        <img src="logo.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/140x80/161616/white?text=Auwal+MD+Chat'">
+        <div class="welcome-txt">Welcome to Auwal MD Chat</div>
     </div>
-    <input type="file" id="pfpInput" hidden accept="image/*" onchange="previewImg()">
 
-    <input type="text" id="fname" class="form-control" placeholder="First Name">
-    <input type="text" id="lname" class="form-control" placeholder="Last Name">
-    
-    <button onclick="uploadAndStart()" id="startBtn" class="btn-start">CREATE ACCOUNT</button>
+    <div id="authForm">
+        <div id="signupFields">
+            <input type="text" id="fname" class="form-control" placeholder="First Name">
+            <input type="text" id="lname" class="form-control" placeholder="Last Name">
+        </div>
+        <input type="number" id="phone" class="form-control" placeholder="Phone Number">
+        <input type="password" id="pass" class="form-control" placeholder="Password">
+        
+        <button onclick="processAuth()" class="btn-main d-flex align-items-center justify-content-center">
+            <span id="btnTxt">CREATE ACCOUNT</span>
+            <div class="spinner" id="loader"></div>
+        </button>
+    </div>
+
+    <div class="text-center mt-3">
+        <span class="small text-muted" id="toggleTxt">Already have an account? </span>
+        <span class="toggle-link" id="toggleBtn" onclick="toggleAuth()">Login</span>
+    </div>
+
+    <div class="footer-txt">© 2026 Auwal MD Chat • All Rights Reserved</div>
 </div>
 
-<script>
-    const CLOUD_NAME = "dpxn8b7ao"; 
-    const UPLOAD_PRESET = "ml_default"; // Tabbatar ka bude 'Unsigned' preset a Cloudinary Settings
+<a href="https://wa.me/2349137904300" target="_blank" class="customer-support">
+    <i class="fab fa-whatsapp"></i>
+</a>
 
-    function previewImg() {
-        const file = document.getElementById('pfpInput').files[0];
-        if (file) {
-            document.getElementById('preview').src = URL.createObjectURL(file);
-            document.getElementById('preview').style.display = 'block';
-            document.getElementById('plusIcon').style.display = 'none';
-        }
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
+        authDomain: "auwalmdtech.firebaseapp.com",
+        projectId: "auwalmdtech",
+        storageBucket: "auwalmdtech.firebasestorage.app",
+        messagingSenderId: "202329584080",
+        appId: "1:202329584080:web:e989d7df53d3c3024609d5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let isLogin = false;
+
+    window.toggleAuth = function() {
+        isLogin = !isLogin;
+        document.getElementById('signupFields').style.display = isLogin ? 'none' : 'block';
+        document.getElementById('btnTxt').innerText = isLogin ? 'LOGIN' : 'CREATE ACCOUNT';
+        document.getElementById('toggleBtn').innerText = isLogin ? 'Sign Up' : 'Login';
+        document.getElementById('toggleTxt').innerText = isLogin ? "Don't have an account? " : "Already have an account? ";
     }
 
-    async function uploadAndStart() {
-        const fn = document.getElementById('fname').value;
-        const ln = document.getElementById('lname').value;
-        const file = document.getElementById('pfpInput').files[0];
-        const btn = document.getElementById('startBtn');
+    window.processAuth = async function() {
+        const phone = document.getElementById('phone').value;
+        const pass = document.getElementById('pass').value;
+        const loader = document.getElementById('loader');
+        const btnTxt = document.getElementById('btnTxt');
 
-        if(!fn || !ln) return alert("Please enter your names");
+        if(!phone || !pass) return alert("Please fill all fields!");
 
-        btn.disabled = true;
-        btn.innerText = "Setting up...";
+        // Show Animation
+        loader.style.display = 'block';
+        btnTxt.style.opacity = '0.5';
 
-        let finalPhoto = "https://via.placeholder.com/150";
+        try {
+            const userRef = doc(db, "users", phone);
+            const userSnap = await getDoc(userRef);
 
-        if(file) {
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('upload_preset', UPLOAD_PRESET);
-
-            try {
-                const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-                    method: 'POST',
-                    body: formData
-                });
-                const data = await res.json();
-                finalPhoto = data.secure_url;
-            } catch (e) { console.error("Upload failed"); }
+            if(isLogin) {
+                // LOGIN LOGIC
+                if(userSnap.exists() && userSnap.data().password === pass) {
+                    alert("✅ Success Login!");
+                    localStorage.setItem('amd_user', JSON.stringify(userSnap.data()));
+                    window.location.href = "dashboard.html";
+                } else {
+                    alert("❌ Incorrect phone number or password!");
+                }
+            } else {
+                // SIGNUP LOGIC
+                if(userSnap.exists()) {
+                    alert("Phone number already registered!");
+                } else {
+                    const userData = {
+                        name: document.getElementById('fname').value + " " + document.getElementById('lname').value,
+                        phone: phone,
+                        password: pass,
+                        photo: "https://via.placeholder.com/150"
+                    };
+                    await setDoc(userRef, userData);
+                    alert("✅ Account Created Successfully!");
+                    localStorage.setItem('amd_user', JSON.stringify(userData));
+                    window.location.href = "dashboard.html";
+                }
+            }
+        } catch (e) {
+            alert("Error: " + e.message);
+        } finally {
+            loader.style.display = 'none';
+            btnTxt.style.opacity = '1';
         }
-
-        localStorage.setItem('amd_user', JSON.stringify({ name: fn + " " + ln, photo: finalPhoto }));
-        window.location.href = "dashboard.html";
     }
 </script>
 </body>
