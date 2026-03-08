@@ -9,11 +9,10 @@
     <style>
         body { background: #020617; color: white; font-family: 'Poppins', sans-serif; min-height: 100vh; }
         .post-header { background: #0f172a; padding: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .preview-box { width: 100%; aspect-ratio: 1/1; background: #1e293b; margin-top: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 10px; cursor: pointer; border: 2px dashed #0084ff; }
-        .preview-box img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .preview-box { width: 100%; aspect-ratio: 1/1; background: #1e293b; margin-top: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 10px; cursor: pointer; border: 2px dashed #0084ff; position: relative; }
+        .preview-box img, .preview-box video { width: 100%; height: 100%; object-fit: cover; display: none; }
         textarea { background: transparent !important; border: none !important; color: white !important; font-size: 16px; margin-top: 20px; width: 100%; outline: none; resize: none; }
         .btn-share { background: #0084ff; color: white; font-weight: 600; border-radius: 20px; padding: 5px 25px; border: none; }
-        .btn-share:disabled { opacity: 0.5; }
     </style>
 </head>
 <body>
@@ -25,14 +24,15 @@
 </div>
 
 <div class="container">
-    <div class="preview-box" onclick="document.getElementById('postFile').click()" id="pBox">
+    <div class="preview-box" onclick="document.getElementById('postFile').click()">
         <div id="placeholderText" class="text-center">
-            <i class="fas fa-image fs-1 mb-2"></i>
-            <p class="m-0 small">Tap to select photo</p>
+            <i class="fas fa-camera-retro fs-1 mb-2"></i>
+            <p class="m-0 small">Select Photo or Video</p>
         </div>
         <img id="postPreview">
+        <video id="videoPreview" controls></video>
     </div>
-    <input type="file" id="postFile" hidden accept="image/*" onchange="previewImage(event)">
+    <input type="file" id="postFile" hidden accept="image/*,video/*" onchange="previewMedia(event)">
 
     <textarea id="caption" rows="4" placeholder="Write a caption..."></textarea>
 </div>
@@ -53,55 +53,67 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // 1. Preview Function
-    window.previewImage = function(event) {
+    window.previewMedia = function(event) {
         const file = event.target.files[0];
+        const img = document.getElementById('postPreview');
+        const vid = document.getElementById('videoPreview');
+        const placeholder = document.getElementById('placeholderText');
+
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                document.getElementById('postPreview').src = e.target.result;
-                document.getElementById('postPreview').style.display = 'block';
-                document.getElementById('placeholderText').style.display = 'none';
+                if (file.type.startsWith('video')) {
+                    vid.src = e.target.result;
+                    vid.style.display = 'block';
+                    img.style.display = 'none';
+                } else {
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    vid.style.display = 'none';
+                }
+                placeholder.style.display = 'none';
             }
             reader.readAsDataURL(file);
         }
     }
 
-    // 2. Upload Logic
     window.uploadPost = async function() {
         const fileInput = document.getElementById('postFile');
         const caption = document.getElementById('caption').value;
         const shareBtn = document.getElementById('shareBtn');
         const user = JSON.parse(localStorage.getItem('amd_user'));
 
-        if (!fileInput.files[0]) { alert("Please select a photo!"); return; }
+        if (!fileInput.files[0]) { alert("Please select a file!"); return; }
+
+        const file = fileInput.files[0];
+        const isVideo = file.type.startsWith('video');
 
         shareBtn.disabled = true;
         shareBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
         try {
-            // A. Cloudinary Upload
             const formData = new FormData();
-            formData.append('file', fileInput.files[0]);
+            formData.append('file', file);
             formData.append('upload_preset', 'ml_default'); 
 
-            const res = await fetch(`https://api.cloudinary.com/v1_1/dpxn8b7ao/image/upload`, {
+            // Cloudinary yana bukatar ya san kalar file din (video ko image)
+            const resourceType = isVideo ? 'video' : 'image';
+
+            const res = await fetch(`https://api.cloudinary.com/v1_1/dpxn8b7ao/${resourceType}/upload`, {
                 method: 'POST',
                 body: formData
             });
-            const data = await res.json();
             
-            if(!data.secure_url) throw new Error("Cloudinary error");
-            const imageUrl = data.secure_url;
+            const data = await res.json();
+            const fileUrl = data.secure_url;
 
-            // B. SAVE ZUWA FIREBASE (NA MAYAR DA SHI 'posts')
             await addDoc(collection(db, "posts"), {
                 userId: user.phone,
                 userName: user.name,
                 userPhoto: user.photo || "",
-                fileUrl: imageUrl,
+                fileUrl: fileUrl,
                 caption: caption,
-                type: 'image',
+                type: isVideo ? 'video' : 'image', // Mun adana kalar file din
                 createdAt: serverTimestamp()
             });
 
