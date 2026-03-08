@@ -59,9 +59,18 @@
     <p class="text-muted small">Auwal MD Network User</p>
 
     <div class="user-stats">
-        <div class="stat-box"><span class="stat-count" id="post-total">0</span><span class="stat-label">Posts</span></div>
-        <div class="stat-box"><span class="stat-count">0</span><span class="stat-label">Followers</span></div>
-        <div class="stat-box"><span class="stat-count">0</span><span class="stat-label">Following</span></div>
+        <div class="stat-box">
+            <span class="stat-count" id="post-total">0</span>
+            <span class="stat-label">Posts</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-count" id="follower-total">0</span>
+            <span class="stat-label">Followers</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-count" id="following-total">0</span>
+            <span class="stat-label">Following</span>
+        </div>
     </div>
 </div>
 
@@ -81,7 +90,7 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, query, where, getDocs, orderBy, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, query, where, getDocs, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
@@ -98,55 +107,43 @@
 
     if(!authUser) { window.location.href = "index.html"; }
 
+    // Update Profile UI
     document.getElementById('display-name').innerText = authUser.name;
     document.getElementById('top-title').innerText = authUser.name;
     document.getElementById('user-avatar').src = authUser.photo || `https://ui-avatars.com/api/?name=${authUser.name}`;
 
-    // CLOUDINARY SETTINGS
     const CLOUD_NAME = "dpxn8b7ao"; 
-    const UPLOAD_PRESET = "ml_default"; // Change this if you created a custom preset name
+    const UPLOAD_PRESET = "ml_default"; 
 
-    // 1. Upload logic
+    // 1. Photo Upload logic
     document.getElementById('img-upload').addEventListener('change', async (e) => {
         const file = e.target.files[0];
         if(!file) return;
-
         document.getElementById('uploading-msg').style.display = "block";
-
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', UPLOAD_PRESET);
 
         try {
-            const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-                method: 'POST',
-                body: formData
-            });
+            const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: formData });
             const data = await res.json();
-            
             if(data.secure_url) {
-                // Update Local Storage
                 authUser.photo = data.secure_url;
                 localStorage.setItem('amd_user', JSON.stringify(authUser));
-                
-                // Update UI
                 document.getElementById('user-avatar').src = data.secure_url;
                 alert("Success! Profile picture updated.");
             }
-        } catch (err) {
-            console.error(err);
-            alert("Upload failed. Make sure your Upload Preset is set to 'Unsigned' in Cloudinary.");
-        }
+        } catch (err) { alert("Upload failed."); }
         document.getElementById('uploading-msg').style.display = "none";
     });
 
-    // 2. Load media
-    async function fetchMedia() {
+    // 2. Load Media & Real-time Stats
+    async function fetchUserData() {
         const gallery = document.getElementById('user-gallery');
-        const q = query(collection(db, "posts"), where("userId", "==", authUser.phone), orderBy("createdAt", "desc"));
         
-        try {
-            const snap = await getDocs(q);
+        // Count and Load Posts
+        const qPosts = query(collection(db, "posts"), where("userId", "==", authUser.phone), orderBy("createdAt", "desc"));
+        onSnapshot(qPosts, (snap) => {
             document.getElementById('post-total').innerText = snap.size;
             gallery.innerHTML = "";
             snap.forEach(doc => {
@@ -154,9 +151,22 @@
                 let item = p.type === 'video' ? `<video src="${p.fileUrl}#t=0.5"></video>` : `<img src="${p.fileUrl}">`;
                 gallery.innerHTML += `<div class="media-item">${item}</div>`;
             });
-        } catch (e) { console.log("Media fetch error:", e); }
+        });
+
+        // Count Followers (Mutane nawa suke bi na?)
+        const qFollowers = query(collection(db, "follows"), where("following", "==", authUser.phone));
+        onSnapshot(qFollowers, (snap) => {
+            document.getElementById('follower-total').innerText = snap.size;
+        });
+
+        // Count Following (Mutane nawa nake bi?)
+        const qFollowing = query(collection(db, "follows"), where("follower", "==", authUser.phone));
+        onSnapshot(qFollowing, (snap) => {
+            document.getElementById('following-total').innerText = snap.size;
+        });
     }
-    fetchMedia();
+
+    fetchUserData();
 
     window.appLogout = () => {
         if(confirm("Log out of Auwal MD Chat?")) {
