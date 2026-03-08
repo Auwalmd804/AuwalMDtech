@@ -97,6 +97,12 @@
             box-shadow: 0 10px 20px rgba(0, 132, 255, 0.4);
             color: white; font-size: 24px;
         }
+        
+        video.post-media {
+            width: 100%;
+            background: #000;
+            max-height: 500px;
+        }
     </style>
 </head>
 <body>
@@ -149,7 +155,7 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, query, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
@@ -169,8 +175,8 @@
         document.getElementById('myPfp').src = user.photo || `https://ui-avatars.com/api/?name=${user.name}&background=0084ff&color=fff`;
     }
 
-    // Mun cire orderBy a nan don mu tabbatar komai yana fitowa
-    const postsQuery = query(collection(db, "posts"));
+    // Mun dawo da orderBy tunda kace hoto ya bayyana (Index ya riga ya kafu kenan)
+    const postsQuery = query(collection(db, "posts"), orderBy("createdAt", "desc"));
     
     onSnapshot(postsQuery, (snapshot) => {
         const feed = document.getElementById('feedSection');
@@ -190,11 +196,16 @@
 
         snapshot.forEach((doc) => {
             const post = doc.data();
-            
-            // Tabbatar muna da data ko da babu hoto
-            const imageUrl = post.fileUrl || 'https://via.placeholder.com/400?text=No+Image';
             const name = post.userName || 'Unknown User';
-            const pfp = post.userPhoto || 'https://ui-avatars.com/api/?name=User';
+            const pfp = post.userPhoto || `https://ui-avatars.com/api/?name=${name}`;
+            
+            // LOGIC DIN VIDEO KO PHOTO
+            let mediaElement = "";
+            if(post.type === 'video') {
+                mediaElement = `<video src="${post.fileUrl}" class="post-media" controls></video>`;
+            } else {
+                mediaElement = `<img src="${post.fileUrl}" class="w-100" style="max-height: 500px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/400?text=Error+Loading+Image'">`;
+            }
 
             const postHtml = `
                 <div class="post-card">
@@ -202,10 +213,12 @@
                         <img src="${pfp}" style="width: 35px; height: 35px; border-radius: 50%; border: 1px solid #0084ff; object-fit: cover;">
                         <div class="ms-2">
                             <h6 class="m-0 small fw-bold">${name}</h6>
-                            <small class="text-muted" style="font-size: 10px;">New Post</small>
+                            <small class="text-muted" style="font-size: 10px;">${post.type === 'video' ? 'Video' : 'Photo'} shared</small>
                         </div>
                     </div>
-                    <img src="${imageUrl}" class="w-100" style="max-height: 450px; object-fit: cover;">
+                    
+                    ${mediaElement}
+
                     <div class="p-3">
                         <div class="d-flex gap-3 mb-2">
                             <i class="far fa-heart fs-5"></i>
@@ -220,7 +233,6 @@
         });
     }, (error) => {
         console.error("Error:", error);
-        alert("Loading failed: " + error.message);
     });
 </script>
 
