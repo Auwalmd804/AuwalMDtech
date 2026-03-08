@@ -67,7 +67,7 @@
         }
     }
 
-    // 2. Upload Logic (Cloudinary + Firebase)
+    // 2. Upload Logic
     window.uploadPost = async function() {
         const fileInput = document.getElementById('postFile');
         const caption = document.getElementById('caption').value;
@@ -80,20 +80,22 @@
         shareBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
         try {
-            // A. Upload hoto zuwa Cloudinary
+            // A. Cloudinary Upload
             const formData = new FormData();
             formData.append('file', fileInput.files[0]);
-            formData.append('upload_preset', 'ml_default'); // Tabbatar unsigned ne
+            formData.append('upload_preset', 'ml_default'); 
 
             const res = await fetch(`https://api.cloudinary.com/v1_1/dpxn8b7ao/image/upload`, {
                 method: 'POST',
                 body: formData
             });
             const data = await res.json();
+            
+            if(!data.secure_url) throw new Error("Cloudinary error");
             const imageUrl = data.secure_url;
 
-            // B. Save data zuwa Firebase 'all_posts' collection
-            await addDoc(collection(db, "all_posts"), {
+            // B. SAVE ZUWA FIREBASE (NA MAYAR DA SHI 'posts')
+            await addDoc(collection(db, "posts"), {
                 userId: user.phone,
                 userName: user.name,
                 userPhoto: user.photo || "",
