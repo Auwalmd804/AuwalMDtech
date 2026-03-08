@@ -22,6 +22,7 @@
         .pfp-circle { 
             width: 100%; height: 100%; border-radius: 50%; object-fit: cover; 
             border: 4px solid #0084ff; box-shadow: 0 0 25px rgba(0, 132, 255, 0.5);
+            background: #1e293b;
         }
         #profileName { font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 5px; }
         #profilePhone { font-size: 15px; color: #00c6ff; font-weight: 500; margin-bottom: 25px; display: block; }
@@ -38,7 +39,9 @@
         .btn-logout {
             background: transparent; color: #ff4b5c; border: 1px solid #ff4b5c;
             padding: 10px; border-radius: 15px; font-weight: 600; width: 100%; margin-top: 30px;
+            transition: 0.3s;
         }
+        .btn-logout:hover { background: #ff4b5c; color: white; }
         .back-nav { position: absolute; top: 30px; left: 30px; color: white; cursor: pointer; }
     </style>
 </head>
@@ -60,8 +63,8 @@
     </button>
 
     <div class="stats-box">
-        <div class="stat-item"><b>0</b><small>Followers</small></div>
-        <div class="stat-item"><b>0</b><small>Following</small></div>
+        <div class="stat-item"><b id="followerCount">0</b><small>Followers</small></div>
+        <div class="stat-item"><b id="followingCount">0</b><small>Following</small></div>
     </div>
 
     <button class="btn-logout" onclick="logoutUser()">
@@ -70,9 +73,8 @@
 </div>
 
 <script type="module">
-    // 1. Firebase Setup
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
@@ -86,21 +88,17 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // 2. Cloudinary Config
-    const CLOUD_NAME = "dpxn8b7ao";
-    const PRESET = "ml_default";
-
-    // 3. Load User Data
     const user = JSON.parse(localStorage.getItem('amd_user'));
+    
     if(user) {
         document.getElementById('profileName').innerText = user.name;
         document.getElementById('profilePhone').innerText = "+234 " + user.phone;
-        document.getElementById('myBigPfp').src = user.photo || `https://ui-avatars.com/api/?name=${user.name}&background=0084ff&color=fff`;
+        document.getElementById('myBigPfp').src = user.photo || `https://ui-avatars.com/api/?name=${user.name}&background=0084ff&color=fff&size=128&bold=true`;
     } else {
         window.location.href = "index.html";
     }
 
-    // 4. Upload Function
+    // Cloudinary Upload Logic
     window.uploadToCloudinary = async function() {
         const file = document.getElementById('changePfp').files[0];
         const btn = document.getElementById('upBtn');
@@ -112,16 +110,19 @@
         try {
             const formData = new FormData();
             formData.append('file', file);
-            formData.append('upload_preset', PRESET);
+            formData.append('upload_preset', 'ml_default'); 
 
-            const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+            const res = await fetch(`https://api.cloudinary.com/v1_1/dpxn8b7ao/image/upload`, {
                 method: 'POST',
                 body: formData
             });
+
+            if(!res.ok) throw new Error("Upload failed. Check Cloudinary settings.");
+
             const data = await res.json();
             const newUrl = data.secure_url;
 
-            // Update Firebase (Assuming doc ID is user's phone)
+            // Update Firebase
             const userRef = doc(db, "users", user.phone);
             await updateDoc(userRef, { photo: newUrl });
 
@@ -129,22 +130,20 @@
             user.photo = newUrl;
             localStorage.setItem('amd_user', JSON.stringify(user));
 
-            // Show New Photo
             document.getElementById('myBigPfp').src = newUrl;
             alert("Success! Profile photo updated.");
 
         } catch (e) {
-            alert("Upload failed! Please check your internet.");
+            alert("Error: " + e.message);
         } finally {
             btn.innerHTML = '<i class="fas fa-camera me-2"></i> UPDATE PROFILE PHOTO';
             btn.disabled = false;
         }
     }
 
-    // 5. Logout
     window.logoutUser = function() {
         if(confirm("Log out from Auwal MD Chat?")) {
-            localStorage.removeItem('amd_user');
+            localStorage.clear();
             window.location.href = "index.html";
         }
     }
