@@ -8,25 +8,33 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #0084ff; --dark-bg: #020617; --card-bg: #0f172a; }
-        body { background: var(--dark-bg); color: #ffffff; font-family: 'Inter', sans-serif; padding-bottom: 80px; }
+        body { background: var(--dark-bg); color: #ffffff; font-family: 'Inter', sans-serif; padding-bottom: 80px; overflow-x: hidden; }
+        
         .header-nav { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
         .profile-info { text-align: center; padding: 20px; }
+        
         .pfp-container { position: relative; width: 120px; height: 120px; margin: 0 auto; }
         .profile-img { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; }
         .camera-overlay { position: absolute; bottom: 5px; right: 5px; background: var(--primary); width: 35px; height: 35px; border-radius: 50%; border: 3px solid var(--card-bg); display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .user-stats { display: flex; justify-content: center; gap: 35px; margin: 25px 0; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; }
+
+        .user-stats { display: flex; justify-content: center; gap: 35px; margin: 25px 0; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; }
         .stat-box { text-align: center; }
         .stat-count { display: block; font-weight: 800; font-size: 1.2rem; color: #fff; }
         .stat-label { font-size: 0.7rem; color: #64748b; text-transform: uppercase; }
+
         .action-area { display: flex; gap: 10px; padding: 0 20px; margin-bottom: 25px; }
-        .btn-edit-profile { flex: 1; background: var(--primary); border: none; color: white; padding: 12px; border-radius: 10px; font-weight: 600; }
-        .btn-logout { width: 50px; background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #ef4444; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-        .media-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+        .btn-edit-profile { flex: 1; background: var(--primary); border: none; color: white; padding: 12px; border-radius: 10px; font-weight: 600; text-decoration: none; text-align: center; }
+        .btn-logout { width: 50px; background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #ef4444; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
+
+        .media-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; }
         .media-item { aspect-ratio: 1/1; background: var(--card-bg); overflow: hidden; }
         .media-item img, .media-item video { width: 100%; height: 100%; object-fit: cover; }
+
         .bottom-bar { position: fixed; bottom: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #1e293b; z-index: 1000; }
-        .bar-link { color: #64748b; font-size: 20px; text-decoration: none; }
+        .bar-link { color: #64748b; font-size: 22px; text-decoration: none; }
         .bar-link.active { color: var(--primary); }
+        
+        #uploading-status { display: none; text-align: center; font-size: 12px; color: var(--primary); font-weight: bold; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -43,6 +51,8 @@
         <label for="img-upload" class="camera-overlay"><i class="fas fa-camera text-white"></i></label>
         <input type="file" id="img-upload" hidden accept="image/*">
     </div>
+    <div id="uploading-status">Uploading to Cloudinary...</div>
+
     <h5 class="mt-3 fw-bold mb-0" id="display-name">---</h5>
     <p class="text-muted small" id="display-phone">@username</p>
 
@@ -54,11 +64,12 @@
 </div>
 
 <div class="action-area">
-    <button class="btn-edit-profile" onclick="location.href='edit-profile.html'">Edit Profile</button>
+    <a href="edit-profile.html" class="btn-edit-profile">Edit Profile</a>
     <button class="btn-logout" onclick="appLogout()"><i class="fas fa-sign-out-alt"></i></button>
 </div>
 
-<div class="media-grid" id="user-gallery"></div>
+<div class="media-grid" id="user-gallery">
+    </div>
 
 <div class="bottom-bar">
     <a href="dashboard.html" class="bar-link"><i class="fas fa-home"></i></a>
@@ -70,7 +81,7 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, query, where, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, query, where, getDocs, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
@@ -87,27 +98,65 @@
 
     if(!authUser) { window.location.href = "index.html"; }
 
+    // Cloudinary details dinka
+    const CLOUD_NAME = "dpxn8b7ao"; 
+    const UPLOAD_PRESET = "ml_default"; 
+
+    // Saka bayanai a fuskar profile
     document.getElementById('display-name').innerText = authUser.name;
     document.getElementById('display-phone').innerText = "@" + authUser.phone;
     document.getElementById('user-avatar').src = authUser.photo || `https://ui-avatars.com/api/?name=${authUser.name}`;
 
-    async function loadData() {
+    // 1. Upload hoto zuwa Cloudinary
+    document.getElementById('img-upload').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if(!file) return;
+
+        document.getElementById('uploading-status').style.display = "block";
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', UPLOAD_PRESET);
+
+        try {
+            const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+                method: 'POST',
+                body: formData
+            });
+            const data = await res.json();
+            
+            if(data.secure_url) {
+                // Adana sabon hoton a LocalStorage
+                authUser.photo = data.secure_url;
+                localStorage.setItem('amd_user', JSON.stringify(authUser));
+                
+                // Nuna shi a Profile
+                document.getElementById('user-avatar').src = data.secure_url;
+                alert("Profile Picture Updated!");
+            }
+        } catch (err) {
+            alert("Upload failed! Tabbatar ka kunna 'Unsigned' a Cloudinary settings.");
+        }
+        document.getElementById('uploading-status').style.display = "none";
+    });
+
+    // 2. Load Posts da Lambobin Followers
+    function loadUserData() {
         const gallery = document.getElementById('user-gallery');
         
-        // GYARA: Mun cire orderBy don hotunan su fito ko da babu timestamp
+        // A. Dauko hotunan mutum (Muna amfani da phone)
         const qPosts = query(collection(db, "posts"), where("phone", "==", authUser.phone));
-        
         onSnapshot(qPosts, (snap) => {
             document.getElementById('post-total').innerText = snap.size;
             gallery.innerHTML = "";
             snap.forEach(doc => {
                 const p = doc.data();
-                let item = p.type === 'video' ? `<video src="${p.fileUrl}"></video>` : `<img src="${p.fileUrl}">`;
-                gallery.innerHTML += `<div class="media-item">${item}</div>`;
+                let media = p.type === 'video' ? `<video src="${p.fileUrl}"></video>` : `<img src="${p.fileUrl}">`;
+                gallery.innerHTML += `<div class="media-item">${media}</div>`;
             });
         });
 
-        // Count Followers & Following
+        // B. Followers & Following Count
         onSnapshot(query(collection(db, "follows"), where("following", "==", authUser.phone)), s => {
             document.getElementById('follower-total').innerText = s.size;
         });
@@ -117,13 +166,13 @@
     }
 
     window.appLogout = () => {
-        if(confirm("Kuna son fita?")) {
+        if(confirm("Logout from Auwal MD Chat?")) {
             localStorage.clear();
             window.location.href = "index.html";
         }
     }
 
-    loadData();
+    loadUserData();
 </script>
 </body>
 </html>
