@@ -1,0 +1,21 @@
+.video-feed {
+    height: 100vh;
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+}
+.video-card {
+    height: 100vh;
+    scroll-snap-align: start;
+    position: relative;
+    background: #000;
+}
+.video-card video { width: 100%; height: 100%; object-fit: cover; }
+.side-actions {
+    position: absolute;
+    right: 15px;
+    bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+}
