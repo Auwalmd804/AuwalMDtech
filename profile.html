@@ -1,29 +1,129 @@
-<style>
-    body { background: #0a0a0a; color: white; font-family: 'Poppins', sans-serif; }
-    .profile-card { background: #161616; border-radius: 30px; padding: 30px; margin-top: 50px; text-align: center; border: 1px solid #222; }
-    .pfp-circle { width: 130px; height: 130px; border-radius: 50%; object-fit: cover; border: 3px solid #0084ff; background: #222; margin-bottom: 15px; }
-    .btn-edit { background: #0084ff; color: white; border: none; padding: 10px 25px; border-radius: 50px; font-weight: 600; transition: 0.3s; }
-    .btn-edit:hover { transform: scale(1.05); }
-    .info-box { margin-top: 20px; border-top: 1px solid #222; padding-top: 20px; }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Auwal MD Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Background mai dan launi maimakon baki tsul */
+        body { 
+            background: linear-gradient(180deg, #0f0c29 0%, #000000 100%); 
+            color: white; 
+            font-family: 'Poppins', sans-serif; 
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-<div class="container">
-    <div class="profile-card animate__animated animate__fadeInUp">
-        <div class="position-relative d-inline-block">
-            <img id="myBigPfp" src="https://ui-avatars.com/api/?name=User&background=0084ff&color=fff" class="pfp-circle">
-            <input type="file" id="changePfp" hidden accept="image/*" onchange="updateProfilePhoto()">
+        .profile-card { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(10px);
+            border-radius: 30px; 
+            padding: 40px 20px; 
+            width: 90%;
+            max-width: 400px;
+            text-align: center; 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+
+        /* Hoton Profile */
+        .pfp-container {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 20px; /* Ya matso kusa da rubutu */
+        }
+
+        .pfp-circle { 
+            width: 100%; 
+            height: 100%; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            border: 3px solid #0084ff; 
+            background: #222; 
+            box-shadow: 0 0 20px rgba(0, 132, 255, 0.4);
+        }
+
+        /* Bayanan mutum */
+        #profileName { 
+            font-size: 22px; 
+            font-weight: 700; 
+            margin-bottom: 5px; 
+            letter-spacing: 0.5px;
+        }
+
+        #profilePhone { 
+            font-size: 14px; 
+            color: #aaa; 
+            margin-bottom: 20px; 
+        }
+
+        .btn-update { 
+            background: linear-gradient(90deg, #0084ff, #00c6ff); 
+            color: white; 
+            border: none; 
+            padding: 10px 30px; 
+            border-radius: 50px; 
+            font-weight: 600; 
+            font-size: 14px;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 132, 255, 0.3);
+        }
+
+        .btn-update:active { transform: scale(0.95); }
+
+        /* Stats Section */
+        .stats-box { 
+            display: flex; 
+            justify-content: space-around; 
+            margin-top: 30px; 
+            padding-top: 20px; 
+            border-top: 1px solid rgba(255,255,255,0.1); 
+        }
+
+        .stat-item b { font-size: 18px; color: #fff; }
+        .stat-item small { color: #888; font-size: 12px; text-transform: uppercase; }
+
+        /* Back Button */
+        .back-nav {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<i class="fas fa-arrow-left back-nav" onclick="history.back()"></i>
+
+<div class="profile-card">
+    <div class="pfp-container">
+        <img id="myBigPfp" src="" class="pfp-circle">
+        <input type="file" id="changePfp" hidden accept="image/*" onchange="updateProfilePhoto()">
+    </div>
+    
+    <h3 id="profileName">Loading...</h3>
+    <p id="profilePhone"></p>
+    
+    <button class="btn-update" onclick="document.getElementById('changePfp').click()">
+        <i class="fas fa-camera me-2"></i> UPDATE PHOTO
+    </button>
+
+    <div class="stats-box">
+        <div class="stat-item">
+            <b id="followerCount">0</b><br>
+            <small>Followers</small>
         </div>
-        
-        <h3 id="profileName" class="fw-bold m-0">Loading...</h3>
-        <p id="profilePhone" class="text-muted small"></p>
-        
-        <button class="btn-edit" onclick="document.getElementById('changePfp').click()">
-            <i class="fas fa-camera me-2"></i> Update Photo
-        </button>
-
-        <div class="info-box d-flex justify-content-around">
-            <div><b id="followerCount">0</b><br><small class="text-muted">Followers</small></div>
-            <div><b id="followingCount">0</b><br><small class="text-muted">Following</small></div>
+        <div class="stat-item">
+            <b id="followingCount">0</b><br>
+            <small>Following</small>
         </div>
     </div>
 </div>
@@ -36,14 +136,22 @@
         document.getElementById('profileName').innerText = user.name;
         document.getElementById('profilePhone').innerText = "+234 " + user.phone;
         
-        // Idan akwai hoto, saka shi. Idan babu, bar placeholder
+        // Idan akwai hoto, saka shi. Idan babu, bar placeholder na UI-Avatars
         if(user.photo && user.photo !== "https://via.placeholder.com/150") {
             document.getElementById('myBigPfp').src = user.photo;
         } else {
-            // Placeholder mai dauke da harafin sunan mutum
-            document.getElementById('myBigPfp').src = `https://ui-avatars.com/api/?name=${user.name}&background=random&color=fff&size=128`;
+            document.getElementById('myBigPfp').src = `https://ui-avatars.com/api/?name=${user.name}&background=0084ff&color=fff&size=128&bold=true`;
         }
     } else {
-        window.location.href = "index.html"; // Idan bai yi login ba
+        window.location.href = "index.html"; 
+    }
+
+    // Aikin update hoto (Zaka iya tura shi zuwa Cloudinary anan)
+    function updateProfilePhoto() {
+        alert("Preparing upload to Cloudinary...");
+        // Anan zaka saka wancan fetch code din na Cloudinary
     }
 </script>
+
+</body>
+</html>
