@@ -10,68 +10,80 @@
         :root { --primary: #0084ff; --bg: #020617; }
         body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; padding-bottom: 80px; }
         
-        /* Profile Header */
-        .profile-top { padding: 20px; text-align: center; background: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .pfp-main { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); padding: 3px; }
+        /* Header */
+        .profile-header { padding: 20px; background: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .pfp-container { width: 100px; height: 100px; margin: 0 auto; position: relative; }
+        .pfp-main { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); }
         
-        .stats-row { display: flex; justify-content: center; gap: 30px; margin-top: 15px; }
-        .stat-item { text-align: center; }
-        .stat-num { display: block; font-weight: bold; font-size: 18px; }
-        .stat-label { font-size: 12px; color: #64748b; }
+        /* Real Stats */
+        .stats-bar { display: flex; justify-content: center; gap: 40px; margin: 20px 0; }
+        .stat-box { text-align: center; }
+        .stat-num { display: block; font-size: 20px; font-weight: 700; color: white; }
+        .stat-label { font-size: 13px; color: #64748b; }
 
         /* Action Buttons */
-        .profile-actions { display: flex; gap: 10px; padding: 15px; }
-        .btn-edit { flex: 1; background: #1e293b; color: white; border: none; padding: 8px; border-radius: 8px; font-size: 14px; font-weight: 500; }
-        .btn-logout { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; padding: 8px 15px; border-radius: 8px; }
+        .action-area { padding: 0 20px; display: flex; gap: 10px; }
+        .btn-main { flex: 1; background: #1e293b; border: none; color: white; padding: 10px; border-radius: 8px; font-weight: 600; transition: 0.3s; }
+        .btn-main:hover { background: #334155; }
+        .btn-logout { width: 50px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; border-radius: 8px; }
 
-        /* Posts Grid */
-        .grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 10px; }
-        .grid-item { aspect-ratio: 1/1; background: #0f172a; overflow: hidden; position: relative; cursor: pointer; }
-        .grid-item img, .grid-item video { width: 100%; height: 100%; object-fit: cover; }
-        .grid-item .video-icon { position: absolute; top: 5px; right: 5px; color: white; font-size: 12px; text-shadow: 0 0 3px black; }
-        .grid-item .text-preview { font-size: 10px; padding: 5px; color: #64748b; text-align: center; display: flex; align-items: center; height: 100%; background: #1e293b; }
+        /* Media Grid */
+        .content-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 20px; }
+        .grid-square { aspect-ratio: 1/1; background: #0f172a; position: relative; overflow: hidden; }
+        .grid-square img, .grid-square video { width: 100%; height: 100%; object-fit: cover; }
+        .video-tag { position: absolute; top: 8px; right: 8px; font-size: 12px; color: white; }
 
-        .nav-bottom { position: fixed; bottom: 0; width: 100%; background: #0f172a; display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
-        .nav-link { color: #64748b; text-decoration: none; font-size: 20px; }
-        .nav-link.active { color: var(--primary); }
+        /* Bottom Nav */
+        .nav-bottom { position: fixed; bottom: 0; width: 100%; background: #0f172a; display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); z-index: 1000; }
+        .nav-item { color: #64748b; text-decoration: none; font-size: 22px; }
+        .nav-item.active { color: var(--primary); }
     </style>
 </head>
 <body>
 
-<div class="profile-top">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <i class="fas fa-arrow-left fs-5" onclick="window.location.href='dashboard.html'"></i>
-        <h6 class="m-0 fw-bold" id="topName">Profile</h6>
-        <i class="fas fa-cog fs-5 text-muted"></i>
+<div class="profile-header text-center">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <i class="fas fa-chevron-left fs-5" onclick="location.href='dashboard.html'"></i>
+        <span class="fw-bold" id="username_top">Profile</span>
+        <i class="fas fa-ellipsis-v fs-5"></i>
+    </div>
+
+    <div class="pfp-container">
+        <img id="display_pfp" src="https://ui-avatars.com/api/?name=User" class="pfp-main">
     </div>
     
-    <img id="mainPfp" src="https://ui-avatars.com/api/?name=User" class="pfp-main">
-    <h5 class="mt-3 mb-0 fw-bold" id="profileName">Loading...</h5>
-    <p class="text-muted small" id="profileBio">Auwal MD Tech User</p>
+    <h5 class="mt-3 fw-bold mb-0" id="display_name">Loading...</h5>
+    <p class="text-muted small">Auwal MD Network User</p>
 
-    <div class="stats-row">
-        <div class="stat-item"><span class="stat-num" id="postCount">0</span><span class="stat-label">Posts</span></div>
-        <div class="stat-item"><span class="stat-num" id="followerCount">0</span><span class="stat-label">Followers</span></div>
-        <div class="stat-item"><span class="stat-num" id="followingCount">0</span><span class="stat-label">Following</span></div>
+    <div class="stats-bar">
+        <div class="stat-box">
+            <span class="stat-num" id="real_post_count">0</span>
+            <span class="stat-label">Posts</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-num">0</span>
+            <span class="stat-label">Followers</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-num">0</span>
+            <span class="stat-label">Following</span>
+        </div>
     </div>
 </div>
 
-<div class="profile-actions">
-    <button class="btn-edit" onclick="alert('Za a kawo gyaran profile nan ba da dadewa ba!')">Edit Profile</button>
-    <button class="btn-logout" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i></button>
+<div class="action-area">
+    <button class="btn-main" onclick="alert('Edit Profile coming soon')">Edit Profile</button>
+    <button class="btn-logout" onclick="userLogout()"><i class="fas fa-sign-out-alt"></i></button>
 </div>
 
-<div class="grid-container" id="userPostsGrid">
-    <div class="text-center w-100 p-5">
-        <div class="spinner-border spinner-border-sm text-primary"></div>
+<div class="content-grid" id="post_grid">
     </div>
-</div>
 
 <div class="nav-bottom">
-    <a href="dashboard.html" class="nav-link"><i class="fas fa-home"></i></a>
-    <a href="chats.html" class="nav-link"><i class="fas fa-comment"></i></a>
-    <a href="create-post.html" class="nav-link"><i class="fas fa-plus-square"></i></a>
-    <a href="profile.html" class="nav-link active"><i class="fas fa-user"></i></a>
+    <a href="dashboard.html" class="nav-item"><i class="fas fa-home"></i></a>
+    <a href="chats.html" class="nav-item"><i class="fas fa-comment"></i></a>
+    <a href="create-post.html" class="nav-item"><i class="fas fa-plus-square"></i></a>
+    <a href="profile.html" class="nav-item active"><i class="fas fa-user"></i></a>
 </div>
 
 <script type="module">
@@ -90,59 +102,51 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const user = JSON.parse(localStorage.getItem('amd_user'));
-    
-    if(!user) {
+    const currentUser = JSON.parse(localStorage.getItem('amd_user'));
+
+    if(!currentUser) {
         window.location.href = "login.html";
     } else {
-        document.getElementById('profileName').innerText = user.name;
-        document.getElementById('topName').innerText = user.name;
-        document.getElementById('mainPfp').src = user.photo || `https://ui-avatars.com/api/?name=${user.name}&background=0084ff&color=fff`;
-        
-        loadUserPosts();
+        document.getElementById('display_name').innerText = currentUser.name;
+        document.getElementById('username_top').innerText = currentUser.name;
+        document.getElementById('display_pfp').src = currentUser.photo || `https://ui-avatars.com/api/?name=${currentUser.name}&background=0084ff&color=fff`;
+        fetchUserContent();
     }
 
-    async function loadUserPosts() {
-        const grid = document.getElementById('userPostsGrid');
-        // Muna neman posts inda userId yayi daidai da lambar wayar wannan user din
-        const q = query(collection(db, "posts"), where("userId", "==", user.phone), orderBy("createdAt", "desc"));
+    async function fetchUserContent() {
+        const grid = document.getElementById('post_grid');
+        // Fetch posts where userId matches the logged in user's phone number
+        const q = query(collection(db, "posts"), where("userId", "==", currentUser.phone), orderBy("createdAt", "desc"));
         
         try {
-            const querySnapshot = await getDocs(q);
-            document.getElementById('postCount').innerText = querySnapshot.size;
+            const snapshot = await getDocs(q);
+            document.getElementById('real_post_count').innerText = snapshot.size;
             grid.innerHTML = "";
 
-            if (querySnapshot.empty) {
-                grid.innerHTML = `
-                    <div class="text-center w-100 mt-5 text-muted">
-                        <i class="fas fa-camera fs-1 mb-2"></i>
-                        <p>Baka daura komai ba tukunna.</p>
-                    </div>`;
+            if (snapshot.empty) {
+                grid.innerHTML = `<div class="text-center w-100 p-5 text-muted">No posts found</div>`;
                 return;
             }
 
-            querySnapshot.forEach((doc) => {
+            snapshot.forEach((doc) => {
                 const post = doc.data();
-                let itemHtml = "";
-
-                if (post.type === 'image') {
-                    itemHtml = `<div class="grid-item" onclick="window.location.href='dashboard.html'"><img src="${post.fileUrl}"></div>`;
-                } else if (post.type === 'video') {
-                    itemHtml = `<div class="grid-item" onclick="window.location.href='dashboard.html'"><i class="fas fa-play video-icon"></i><video src="${post.fileUrl}#t=0.1"></video></div>`;
+                let html = "";
+                if(post.type === 'video') {
+                    html = `<div class="grid-square"><i class="fas fa-video video-tag"></i><video src="${post.fileUrl}#t=0.1"></video></div>`;
+                } else if(post.type === 'image') {
+                    html = `<div class="grid-square"><img src="${post.fileUrl}"></div>`;
                 } else {
-                    // Idan rubutu ne (Text Post)
-                    itemHtml = `<div class="grid-item" onclick="window.location.href='dashboard.html'"><div class="text-preview text-white small">${post.caption.substring(0, 30)}...</div></div>`;
+                    html = `<div class="grid-square d-flex align-items-center p-2 small" style="background:#1e293b">${post.caption}</div>`;
                 }
-                grid.innerHTML += itemHtml;
+                grid.innerHTML += html;
             });
-        } catch (e) {
-            console.error("Error loading posts: ", e);
-            grid.innerHTML = "<p class='text-danger text-center w-100 p-3'>An samu matsalar dauko bayanai.</p>";
+        } catch (err) {
+            console.error(err);
         }
     }
 
-    window.logoutUser = function() {
-        if(confirm("Shin da gaske kake son fita daga account dinka?")) {
+    window.userLogout = function() {
+        if(confirm("Are you sure you want to log out?")) {
             localStorage.removeItem('amd_user');
             window.location.href = "login.html";
         }
