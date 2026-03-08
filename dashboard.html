@@ -11,6 +11,7 @@
             --primary: #0084ff;
             --secondary: #00c6ff;
             --bg-gradient: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+            --card-bg: rgba(255, 255, 255, 0.05);
         }
 
         body { 
@@ -36,7 +37,22 @@
             border-radius: 50%; 
             object-fit: cover; 
             border: 2px solid var(--primary); 
+            box-shadow: 0 0 10px rgba(0, 132, 255, 0.3);
             cursor: pointer;
+        }
+
+        .search-box { 
+            background: rgba(255, 255, 255, 0.07); 
+            border-radius: 12px; 
+            padding: 8px 15px; 
+            margin-top: 15px; 
+            display: flex; 
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .search-box input { 
+            background: transparent; border: none; color: white; width: 100%; 
+            padding-left: 10px; font-size: 14px; 
         }
 
         .post-card {
@@ -47,15 +63,15 @@
             overflow: hidden;
         }
 
-        /* Tsarin yadda rubutu kawai zai fito */
-        .text-only-post {
-            background: linear-gradient(45deg, #1e293b, #334155);
-            padding: 40px 20px;
-            text-align: center;
-            font-size: 1.2rem;
-            font-weight: 500;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+        .empty-feed {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
         }
+        .empty-feed i { font-size: 50px; margin-bottom: 15px; opacity: 0.5; }
 
         .bottom-nav { 
             position: fixed; bottom: 0; width: 100%; 
@@ -65,9 +81,12 @@
             padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.1); 
             z-index: 1000;
         }
-        .nav-btn { color: #64748b; text-decoration: none; text-align: center; }
+        .nav-btn { color: #64748b; text-decoration: none; text-align: center; transition: 0.3s; }
+        .nav-btn i { font-size: 20px; }
+        .nav-btn span { display: block; font-size: 10px; margin-top: 4px; font-weight: 500; }
         .nav-btn.active { color: var(--primary); }
 
+        .btn-plus-container { position: relative; cursor: pointer; }
         .btn-plus {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             width: 55px; height: 55px;
@@ -75,38 +94,63 @@
             display: flex; align-items: center; justify-content: center;
             margin-top: -35px;
             border: 4px solid #020617;
+            box-shadow: 0 10px 20px rgba(0, 132, 255, 0.4);
             color: white; font-size: 24px;
         }
-
-        video.post-media { width: 100%; background: #000; max-height: 500px; }
+        
+        video.post-media {
+            width: 100%;
+            background: #000;
+            max-height: 500px;
+        }
     </style>
 </head>
 <body>
 
-<div class="header d-flex justify-content-between align-items-center">
-    <div class="d-flex align-items-center">
-        <img id="myPfp" src="" class="user-pfp-small" onclick="window.location.href='profile.html'">
-        <div class="ms-3">
-            <small class="text-muted d-block" style="font-size: 10px;">Welcome back,</small>
-            <h6 class="fw-bold m-0" id="dashName" style="font-size: 14px;">User</h6>
+<div class="header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <img id="myPfp" src="" class="user-pfp-small" onclick="window.location.href='profile.html'">
+            <div class="ms-3">
+                <small class="text-muted d-block" style="font-size: 10px;">Welcome back,</small>
+                <h6 class="fw-bold m-0" id="dashName" style="font-size: 14px;">User</h6>
+            </div>
+        </div>
+        <div class="position-relative">
+            <i class="far fa-bell fs-5"></i>
+            <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
         </div>
     </div>
-    <i class="far fa-bell fs-5 text-muted"></i>
+    
+    <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Search friends or videos...">
+    </div>
 </div>
 
 <div id="feedSection" class="container mt-3">
-    <div class="text-center mt-5" id="loader">
-        <div class="spinner-border text-primary"></div>
-        <p class="text-muted mt-2">Loading feed...</p>
+    <div class="empty-feed" id="loader">
+        <div class="spinner-border text-primary mb-3"></div>
+        <p>Loading your feed...</p>
     </div>
 </div>
 
 <div class="bottom-nav">
-    <a href="dashboard.html" class="nav-btn active"><i class="fas fa-home"></i><br><small>Home</small></a>
-    <a href="chats.html" class="nav-btn"><i class="fas fa-comment-dots"></i><br><small>Chats</small></a>
-    <div onclick="window.location.href='create-post.html'"><div class="btn-plus"><i class="fas fa-plus"></i></div></div>
-    <a href="explore.html" class="nav-btn"><i class="fas fa-compass"></i><br><small>Explore</small></a>
-    <a href="profile.html" class="nav-btn"><i class="fas fa-user"></i><br><small>Profile</small></a>
+    <a href="dashboard.html" class="nav-btn active">
+        <i class="fas fa-home"></i><span>Home</span>
+    </a>
+    <a href="chats.html" class="nav-btn">
+        <i class="fas fa-comment-dots"></i><span>Chats</span>
+    </a>
+    <div class="btn-plus-container" onclick="window.location.href='create-post.html'">
+        <div class="btn-plus"><i class="fas fa-plus"></i></div>
+    </div>
+    <a href="explore.html" class="nav-btn">
+        <i class="fas fa-compass"></i><span>Explore</span>
+    </a>
+    <a href="profile.html" class="nav-btn">
+        <i class="fas fa-user"></i><span>Profile</span>
+    </a>
 </div>
 
 <script type="module">
@@ -131,6 +175,7 @@
         document.getElementById('myPfp').src = user.photo || `https://ui-avatars.com/api/?name=${user.name}&background=0084ff&color=fff`;
     }
 
+    // Mun dawo da orderBy tunda kace hoto ya bayyana (Index ya riga ya kafu kenan)
     const postsQuery = query(collection(db, "posts"), orderBy("createdAt", "desc"));
     
     onSnapshot(postsQuery, (snapshot) => {
@@ -138,22 +183,28 @@
         feed.innerHTML = "";
 
         if (snapshot.empty) {
-            feed.innerHTML = `<div class="text-center mt-5 text-muted"><p>No posts yet. Be the first!</p></div>`;
+            feed.innerHTML = `
+                <div class="empty-feed">
+                    <i class="fas fa-photo-video"></i>
+                    <p>No posts available yet</p>
+                    <button class="btn btn-primary btn-sm rounded-pill px-4" onclick="window.location.href='create-post.html'">
+                        Start Posting
+                    </button>
+                </div>`;
             return;
         }
 
         snapshot.forEach((doc) => {
             const post = doc.data();
-            const name = post.userName || 'User';
+            const name = post.userName || 'Unknown User';
             const pfp = post.userPhoto || `https://ui-avatars.com/api/?name=${name}`;
             
-            let mediaHtml = "";
-            if (post.type === 'image' && post.fileUrl) {
-                mediaHtml = `<img src="${post.fileUrl}" class="w-100" style="max-height: 500px; object-fit: cover;">`;
-            } else if (post.type === 'video' && post.fileUrl) {
-                mediaHtml = `<video src="${post.fileUrl}" class="post-media" controls></video>`;
-            } else if (post.type === 'text') {
-                mediaHtml = `<div class="text-only-post">${post.caption}</div>`;
+            // LOGIC DIN VIDEO KO PHOTO
+            let mediaElement = "";
+            if(post.type === 'video') {
+                mediaElement = `<video src="${post.fileUrl}" class="post-media" controls></video>`;
+            } else {
+                mediaElement = `<img src="${post.fileUrl}" class="w-100" style="max-height: 500px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/400?text=Error+Loading+Image'">`;
             }
 
             const postHtml = `
@@ -162,11 +213,11 @@
                         <img src="${pfp}" style="width: 35px; height: 35px; border-radius: 50%; border: 1px solid #0084ff; object-fit: cover;">
                         <div class="ms-2">
                             <h6 class="m-0 small fw-bold">${name}</h6>
-                            <small class="text-muted" style="font-size: 10px;">Just now</small>
+                            <small class="text-muted" style="font-size: 10px;">${post.type === 'video' ? 'Video' : 'Photo'} shared</small>
                         </div>
                     </div>
                     
-                    ${mediaHtml}
+                    ${mediaElement}
 
                     <div class="p-3">
                         <div class="d-flex gap-3 mb-2">
@@ -174,7 +225,7 @@
                             <i class="far fa-comment fs-5"></i>
                             <i class="far fa-paper-plane fs-5"></i>
                         </div>
-                        ${post.type !== 'text' ? `<p class="small m-0"><b>${name}</b> ${post.caption || ""}</p>` : ''}
+                        <p class="small m-0"><b>${name}</b> ${post.caption || ""}</p>
                     </div>
                 </div>
             `;
