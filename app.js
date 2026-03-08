@@ -3,41 +3,62 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, si
 import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
-  authDomain: "auwalmdtech.firebaseapp.com",
-  projectId: "auwalmdtech",
-  storageBucket: "auwalmdtech.firebasestorage.app",
-  messagingSenderId: "202329584080",
-  appId: "1:202329584080:web:8f4a816bfca6c7834609d5"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-window.register = function() {
-  createUserWithEmailAndPassword(auth, email.value, password.value);
+const loading = document.getElementById("loading");
+
+function showLoading(){
+  loading.style.display="block";
+}
+function hideLoading(){
+  loading.style.display="none";
 }
 
-window.login = function() {
-  signInWithEmailAndPassword(auth, email.value, password.value);
+window.showRegister = ()=>{
+  loginForm.style.display="none";
+  registerForm.style.display="block";
 }
 
-window.logout = function() {
-  signOut(auth);
+window.showLogin = ()=>{
+  registerForm.style.display="none";
+  loginForm.style.display="block";
 }
 
-onAuthStateChanged(auth, (user) => {
+window.register = async ()=>{
+  showLoading();
+  await createUserWithEmailAndPassword(auth, regEmail.value, regPassword.value);
+  hideLoading();
+}
+
+window.login = async ()=>{
+  showLoading();
+  await signInWithEmailAndPassword(auth, email.value, password.value);
+  hideLoading();
+}
+
+window.logout = ()=> signOut(auth);
+
+onAuthStateChanged(auth,(user)=>{
   if(user){
-    document.getElementById("auth").style.display="none";
-    document.getElementById("app").style.display="block";
-  } else {
-    document.getElementById("auth").style.display="block";
-    document.getElementById("app").style.display="none";
+    authCard.style.display="none";
+    app.style.display="block";
+  }else{
+    authCard.style.display="block";
+    app.style.display="none";
   }
 });
 
-window.createPost = async function(){
+window.createPost = async ()=>{
   await addDoc(collection(db,"posts"),{
     text: postText.value,
     time: serverTimestamp()
@@ -52,7 +73,7 @@ onSnapshot(collection(db,"posts"),(snapshot)=>{
   });
 });
 
-window.sendMessage = async function(){
+window.sendMessage = async ()=>{
   await addDoc(collection(db,"messages"),{
     text: chatText.value,
     time: serverTimestamp()
