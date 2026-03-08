@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post - Auwal MD Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background: #020617; color: white; font-family: 'Poppins', sans-serif; min-height: 100vh; }
+        .post-header { background: #0f172a; padding: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .preview-box { width: 100%; aspect-ratio: 1/1; background: #1e293b; margin-top: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 10px; cursor: pointer; border: 2px dashed #0084ff; }
+        .preview-box img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        textarea { background: transparent !important; border: none !important; color: white !important; font-size: 16px; margin-top: 20px; width: 100%; outline: none; resize: none; }
+        .btn-share { background: #0084ff; color: white; font-weight: 600; border-radius: 20px; padding: 5px 25px; border: none; }
+        .btn-share:disabled { opacity: 0.5; }
+    </style>
+</head>
+<body>
+
+<div class="post-header">
+    <i class="fas fa-times fs-4" onclick="history.back()"></i>
+    <h6 class="m-0 fw-bold">New Post</h6>
+    <button class="btn-share" id="shareBtn" onclick="uploadPost()">Share</button>
+</div>
+
+<div class="container">
+    <div class="preview-box" onclick="document.getElementById('postFile').click()" id="pBox">
+        <div id="placeholderText" class="text-center">
+            <i class="fas fa-image fs-1 mb-2"></i>
+            <p class="m-0 small">Tap to select photo</p>
+        </div>
+        <img id="postPreview">
+    </div>
+    <input type="file" id="postFile" hidden accept="image/*" onchange="previewImage(event)">
+
+    <textarea id="caption" rows="4" placeholder="Write a caption..."></textarea>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
+        authDomain: "auwalmdtech.firebaseapp.com",
+        projectId: "auwalmdtech",
+        storageBucket: "auwalmdtech.firebasestorage.app",
+        messagingSenderId: "202329584080",
+        appId: "1:202329584080:web:e989d7df53d3c3024609d5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // 1. Preview Function
+    window.previewImage = function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('postPreview').src = e.target.result;
+                document.getElementById('postPreview').style.display = 'block';
+                document.getElementById('placeholderText').style.display = 'none';
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // 2. Upload Logic (Cloudinary + Firebase)
+    window.uploadPost = async function() {
+        const fileInput = document.getElementById('postFile');
+        const caption = document.getElementById('caption').value;
+        const shareBtn = document.getElementById('shareBtn');
+        const user = JSON.parse(localStorage.getItem('amd_user'));
+
+        if (!fileInput.files[0]) { alert("Please select a photo!"); return; }
+
+        shareBtn.disabled = true;
+        shareBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+        try {
+            // A. Upload hoto zuwa Cloudinary
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            formData.append('upload_preset', 'ml_default'); // Tabbatar unsigned ne
+
+            const res = await fetch(`https://api.cloudinary.com/v1_1/dpxn8b7ao/image/upload`, {
+                method: 'POST',
+                body: formData
+            });
+            const data = await res.json();
+            const imageUrl = data.secure_url;
+
+            // B. Save data zuwa Firebase 'all_posts' collection
+            await addDoc(collection(db, "all_posts"), {
+                userId: user.phone,
+                userName: user.name,
+                userPhoto: user.photo || "",
+                fileUrl: imageUrl,
+                caption: caption,
+                type: 'image',
+                createdAt: serverTimestamp()
+            });
+
+            alert("Post shared successfully!");
+            window.location.href = "dashboard.html";
+
+        } catch (error) {
+            console.error(error);
+            alert("Upload failed! Check your internet.");
+            shareBtn.disabled = false;
+            shareBtn.innerHTML = "Share";
+        }
+    }
+</script>
+</body>
+</html>
