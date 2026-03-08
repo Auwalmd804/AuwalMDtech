@@ -10,7 +10,6 @@
         :root {
             --primary: #0084ff;
             --secondary: #00c6ff;
-            /* Wannan kalar ita ce za ta cire bakin kauyen nan */
             --bg-gradient: linear-gradient(180deg, #0f172a 0%, #020617 100%);
             --card-bg: rgba(255, 255, 255, 0.05);
         }
@@ -23,7 +22,6 @@
             min-height: 100vh;
         }
 
-        /* Header Section */
         .header { 
             background: rgba(15, 23, 42, 0.8); 
             backdrop-filter: blur(15px); 
@@ -43,7 +41,6 @@
             cursor: pointer;
         }
 
-        /* Modern Search Bar */
         .search-box { 
             background: rgba(255, 255, 255, 0.07); 
             border-radius: 12px; 
@@ -57,10 +54,15 @@
             background: transparent; border: none; color: white; width: 100%; 
             padding-left: 10px; font-size: 14px; 
         }
-        .search-box input::placeholder { color: #64748b; }
-        .search-box input:focus { outline: none; }
 
-        /* Empty State (Maimakon baki tsul) */
+        .post-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+        }
+
         .empty-feed {
             height: 60vh;
             display: flex;
@@ -71,26 +73,26 @@
         }
         .empty-feed i { font-size: 50px; margin-bottom: 15px; opacity: 0.5; }
 
-        /* Bottom Navigation */
         .bottom-nav { 
             position: fixed; bottom: 0; width: 100%; 
             background: rgba(15, 23, 42, 0.95); 
             backdrop-filter: blur(15px);
             display: flex; justify-content: space-around; 
             padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.1); 
+            z-index: 1000;
         }
         .nav-btn { color: #64748b; text-decoration: none; text-align: center; transition: 0.3s; }
         .nav-btn i { font-size: 20px; }
         .nav-btn span { display: block; font-size: 10px; margin-top: 4px; font-weight: 500; }
         .nav-btn.active { color: var(--primary); }
 
-        /* Floating Post Button */
+        .btn-plus-container { position: relative; cursor: pointer; }
         .btn-plus {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             width: 55px; height: 55px;
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            margin-top: -30px;
+            margin-top: -35px;
             border: 4px solid #020617;
             box-shadow: 0 10px 20px rgba(0, 132, 255, 0.4);
             color: white; font-size: 24px;
@@ -121,25 +123,22 @@
 </div>
 
 <div id="feedSection" class="container mt-3">
-    <div class="empty-feed">
-        <i class="fas fa-photo-video"></i>
-        <p>No posts available yet</p>
-        <button class="btn btn-primary btn-sm rounded-pill px-4" onclick="window.location.href='upload.html'">
-            Start Posting
-        </button>
+    <div class="empty-feed" id="loader">
+        <div class="spinner-border text-primary mb-3"></div>
+        <p>Loading your feed...</p>
     </div>
 </div>
 
 <div class="bottom-nav">
-    <a href="#" class="nav-btn active">
+    <a href="dashboard.html" class="nav-btn active">
         <i class="fas fa-home"></i><span>Home</span>
     </a>
     <a href="chats.html" class="nav-btn">
         <i class="fas fa-comment-dots"></i><span>Chats</span>
     </a>
-    <a href="upload.html" class="nav-btn">
+    <div class="btn-plus-container" onclick="window.location.href='create-post.html'">
         <div class="btn-plus"><i class="fas fa-plus"></i></div>
-    </a>
+    </div>
     <a href="explore.html" class="nav-btn">
         <i class="fas fa-compass"></i><span>Explore</span>
     </a>
@@ -148,17 +147,73 @@
     </a>
 </div>
 
-<script>
-    // Karanto data
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
+        authDomain: "auwalmdtech.firebaseapp.com",
+        projectId: "auwalmdtech",
+        storageBucket: "auwalmdtech.firebasestorage.app",
+        messagingSenderId: "202329584080",
+        appId: "1:202329584080:web:e989d7df53d3c3024609d5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // 1. Karanto User Data
     const user = JSON.parse(localStorage.getItem('amd_user'));
     if(user) {
         document.getElementById('dashName').innerText = user.name;
-        // Saka hoton profile ko placeholder
-        const pfpImg = user.photo && user.photo !== "https://via.placeholder.com/150" 
-            ? user.photo 
-            : `https://ui-avatars.com/api/?name=${user.name}&background=0084ff&color=fff`;
-        document.getElementById('myPfp').src = pfpImg;
+        document.getElementById('myPfp').src = user.photo || `https://ui-avatars.com/api/?name=${user.name}&background=0084ff&color=fff`;
     }
+
+    // 2. Kwaso Posts daga Firebase
+    const postsQuery = query(collection(db, "all_posts"), orderBy("createdAt", "desc"));
+    
+    onSnapshot(postsQuery, (snapshot) => {
+        const feed = document.getElementById('feedSection');
+        feed.innerHTML = "";
+
+        if (snapshot.empty) {
+            feed.innerHTML = `
+                <div class="empty-feed">
+                    <i class="fas fa-photo-video"></i>
+                    <p>No posts available yet</p>
+                    <button class="btn btn-primary btn-sm rounded-pill px-4" onclick="window.location.href='create-post.html'">
+                        Start Posting
+                    </button>
+                </div>`;
+            return;
+        }
+
+        snapshot.forEach((doc) => {
+            const post = doc.data();
+            const postHtml = `
+                <div class="post-card">
+                    <div class="p-3 d-flex align-items-center">
+                        <img src="${post.userPhoto || 'https://via.placeholder.com/40'}" style="width: 35px; height: 35px; border-radius: 50%; border: 1px solid #0084ff;">
+                        <div class="ms-2">
+                            <h6 class="m-0 small fw-bold">${post.userName}</h6>
+                            <small class="text-muted" style="font-size: 10px;">Post updated</small>
+                        </div>
+                    </div>
+                    <img src="${post.fileUrl}" class="w-100" style="max-height: 450px; object-fit: cover;">
+                    <div class="p-3">
+                        <div class="d-flex gap-3 mb-2">
+                            <i class="far fa-heart fs-5"></i>
+                            <i class="far fa-comment fs-5"></i>
+                            <i class="far fa-paper-plane fs-5"></i>
+                        </div>
+                        <p class="small m-0"><b>${post.userName}</b> ${post.caption || ""}</p>
+                    </div>
+                </div>
+            `;
+            feed.innerHTML += postHtml;
+        });
+    });
 </script>
 
 </body>
