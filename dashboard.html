@@ -149,7 +149,7 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, query, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
@@ -169,8 +169,8 @@
         document.getElementById('myPfp').src = user.photo || `https://ui-avatars.com/api/?name=${user.name}&background=0084ff&color=fff`;
     }
 
-    // ANAN NA CANZA ALL_POSTS ZUWA POSTS DOMIN YA DAICE DA DATABASE DIN KA
-    const postsQuery = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+    // Mun cire orderBy a nan don mu tabbatar komai yana fitowa
+    const postsQuery = query(collection(db, "posts"));
     
     onSnapshot(postsQuery, (snapshot) => {
         const feed = document.getElementById('feedSection');
@@ -190,28 +190,37 @@
 
         snapshot.forEach((doc) => {
             const post = doc.data();
+            
+            // Tabbatar muna da data ko da babu hoto
+            const imageUrl = post.fileUrl || 'https://via.placeholder.com/400?text=No+Image';
+            const name = post.userName || 'Unknown User';
+            const pfp = post.userPhoto || 'https://ui-avatars.com/api/?name=User';
+
             const postHtml = `
                 <div class="post-card">
                     <div class="p-3 d-flex align-items-center">
-                        <img src="${post.userPhoto || 'https://via.placeholder.com/40'}" style="width: 35px; height: 35px; border-radius: 50%; border: 1px solid #0084ff; object-fit: cover;">
+                        <img src="${pfp}" style="width: 35px; height: 35px; border-radius: 50%; border: 1px solid #0084ff; object-fit: cover;">
                         <div class="ms-2">
-                            <h6 class="m-0 small fw-bold">${post.userName}</h6>
-                            <small class="text-muted" style="font-size: 10px;">Post updated</small>
+                            <h6 class="m-0 small fw-bold">${name}</h6>
+                            <small class="text-muted" style="font-size: 10px;">New Post</small>
                         </div>
                     </div>
-                    <img src="${post.fileUrl}" class="w-100" style="max-height: 450px; object-fit: cover;">
+                    <img src="${imageUrl}" class="w-100" style="max-height: 450px; object-fit: cover;">
                     <div class="p-3">
                         <div class="d-flex gap-3 mb-2">
                             <i class="far fa-heart fs-5"></i>
                             <i class="far fa-comment fs-5"></i>
                             <i class="far fa-paper-plane fs-5"></i>
                         </div>
-                        <p class="small m-0"><b>${post.userName}</b> ${post.caption || ""}</p>
+                        <p class="small m-0"><b>${name}</b> ${post.caption || ""}</p>
                     </div>
                 </div>
             `;
             feed.innerHTML += postHtml;
         });
+    }, (error) => {
+        console.error("Error:", error);
+        alert("Loading failed: " + error.message);
     });
 </script>
 
