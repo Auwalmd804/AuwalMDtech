@@ -3,78 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile - Auwal MD Chat</title>
+    <title>Profile - Auwal MD Chat</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { 
-            background: linear-gradient(180deg, #0f172a 0%, #000000 100%); 
-            color: white; font-family: 'Poppins', sans-serif; 
-            min-height: 100vh; display: flex; align-items: center; justify-content: center;
-        }
-        .profile-card { 
-            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px);
-            border-radius: 35px; padding: 40px 25px; width: 90%; max-width: 380px;
-            text-align: center; border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.7);
-        }
-        .pfp-container { position: relative; width: 140px; height: 140px; margin: 0 auto 20px; }
-        .pfp-circle { 
-            width: 100%; height: 100%; border-radius: 50%; object-fit: cover; 
-            border: 4px solid #0084ff; box-shadow: 0 0 25px rgba(0, 132, 255, 0.5);
-            background: #1e293b;
-        }
-        #profileName { font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 5px; }
-        #profilePhone { font-size: 15px; color: #00c6ff; font-weight: 500; margin-bottom: 25px; display: block; }
-        .btn-update { 
-            background: linear-gradient(90deg, #0084ff, #00c6ff); color: white; border: none; 
-            padding: 12px; border-radius: 15px; font-weight: 600; width: 100%; transition: 0.3s;
-        }
-        .stats-box { 
-            display: flex; justify-content: space-around; margin-top: 30px; padding: 20px 0; 
-            border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .stat-item b { font-size: 20px; display: block; color: #fff; }
-        .stat-item small { color: #94a3b8; font-size: 11px; text-transform: uppercase; }
-        .btn-logout {
-            background: transparent; color: #ff4b5c; border: 1px solid #ff4b5c;
-            padding: 10px; border-radius: 15px; font-weight: 600; width: 100%; margin-top: 30px;
-            transition: 0.3s;
-        }
-        .btn-logout:hover { background: #ff4b5c; color: white; }
-        .back-nav { position: absolute; top: 30px; left: 30px; color: white; cursor: pointer; }
+        :root { --primary: #0084ff; --bg: #020617; }
+        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; padding-bottom: 80px; }
+        
+        /* Profile Header */
+        .profile-top { padding: 20px; text-align: center; background: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .pfp-main { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); padding: 3px; }
+        
+        .stats-row { display: flex; justify-content: center; gap: 30px; margin-top: 15px; }
+        .stat-item { text-align: center; }
+        .stat-num { display: block; font-weight: bold; font-size: 18px; }
+        .stat-label { font-size: 12px; color: #64748b; }
+
+        /* Action Buttons */
+        .profile-actions { display: flex; gap: 10px; padding: 15px; }
+        .btn-edit { flex: 1; background: #1e293b; color: white; border: none; padding: 8px; border-radius: 8px; font-size: 14px; font-weight: 500; }
+        .btn-logout { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; padding: 8px 15px; border-radius: 8px; }
+
+        /* Posts Grid */
+        .grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 10px; }
+        .grid-item { aspect-ratio: 1/1; background: #0f172a; overflow: hidden; position: relative; cursor: pointer; }
+        .grid-item img, .grid-item video { width: 100%; height: 100%; object-fit: cover; }
+        .grid-item .video-icon { position: absolute; top: 5px; right: 5px; color: white; font-size: 12px; text-shadow: 0 0 3px black; }
+        .grid-item .text-preview { font-size: 10px; padding: 5px; color: #64748b; text-align: center; display: flex; align-items: center; height: 100%; }
+
+        .nav-bottom { position: fixed; bottom: 0; width: 100%; background: #0f172a; display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .nav-link { color: #64748b; text-decoration: none; font-size: 20px; }
+        .nav-link.active { color: var(--primary); }
     </style>
 </head>
 <body>
 
-<i class="fas fa-arrow-left back-nav fs-3" onclick="history.back()"></i>
-
-<div class="profile-card">
-    <div class="pfp-container">
-        <img id="myBigPfp" src="" class="pfp-circle">
-        <input type="file" id="changePfp" hidden accept="image/*" onchange="uploadToCloudinary()">
+<div class="profile-top">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <i class="fas fa-arrow-left fs-5" onclick="history.back()"></i>
+        <h6 class="m-0 fw-bold" id="topName">Profile</h6>
+        <i class="fas fa-cog fs-5"></i>
     </div>
     
-    <h3 id="profileName">Loading...</h3>
-    <span id="profilePhone"></span>
-    
-    <button id="upBtn" class="btn-update mb-2" onclick="document.getElementById('changePfp').click()">
-        <i class="fas fa-camera me-2"></i> UPDATE PROFILE PHOTO
-    </button>
+    <img id="mainPfp" src="https://ui-avatars.com/api/?name=User" class="pfp-main">
+    <h5 class="mt-3 mb-0 fw-bold" id="profileName">Loading...</h5>
+    <p class="text-muted small" id="profileBio">Auwal MD Tech User</p>
 
-    <div class="stats-box">
-        <div class="stat-item"><b id="followerCount">0</b><small>Followers</small></div>
-        <div class="stat-item"><b id="followingCount">0</b><small>Following</small></div>
+    <div class="stats-row">
+        <div class="stat-item"><span class="stat-num" id="postCount">0</span><span class="stat-label">Posts</span></div>
+        <div class="stat-item"><span class="stat-num">1.2k</span><span class="stat-label">Followers</span></div>
+        <div class="stat-item"><span class="stat-num">450</span><span class="stat-label">Following</span></div>
+    </div>
+</div>
+
+<div class="profile-actions">
+    <button class="btn-edit" onclick="alert('Edit Profile feature coming soon!')">Edit Profile</button>
+    <button class="btn-logout" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i></button>
+</div>
+
+<div class="grid-container" id="userPostsGrid">
     </div>
 
-    <button class="btn-logout" onclick="logoutUser()">
-        <i class="fas fa-power-off me-2"></i> LOGOUT ACCOUNT
-    </button>
+<div class="nav-bottom">
+    <a href="dashboard.html" class="nav-link"><i class="fas fa-home"></i></a>
+    <a href="chats.html" class="nav-link"><i class="fas fa-comment"></i></a>
+    <a href="create-post.html" class="nav-link"><i class="fas fa-plus-square"></i></a>
+    <a href="profile.html" class="nav-link active"><i class="fas fa-user"></i></a>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
@@ -89,62 +88,51 @@
     const db = getFirestore(app);
 
     const user = JSON.parse(localStorage.getItem('amd_user'));
-    
-    if(user) {
-        document.getElementById('profileName').innerText = user.name;
-        document.getElementById('profilePhone').innerText = "+234 " + user.phone;
-        document.getElementById('myBigPfp').src = user.photo || `https://ui-avatars.com/api/?name=${user.name}&background=0084ff&color=fff&size=128&bold=true`;
+    if(!user) {
+        window.location.href = "login.html";
     } else {
-        window.location.href = "index.html";
+        document.getElementById('profileName').innerText = user.name;
+        document.getElementById('topName').innerText = user.name;
+        document.getElementById('mainPfp').src = user.photo || `https://ui-avatars.com/api/?name=${user.name}&background=0084ff&color=fff`;
+        loadUserPosts();
     }
 
-    // Cloudinary Upload Logic
-    window.uploadToCloudinary = async function() {
-        const file = document.getElementById('changePfp').files[0];
-        const btn = document.getElementById('upBtn');
-        if(!file) return;
-
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
-        btn.disabled = true;
-
+    async function loadUserPosts() {
+        const grid = document.getElementById('userPostsGrid');
+        const q = query(collection(db, "posts"), where("userId", "==", user.phone), orderBy("createdAt", "desc"));
+        
         try {
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('upload_preset', 'ml_default'); 
+            const querySnapshot = await getDocs(q);
+            document.getElementById('postCount').innerText = querySnapshot.size;
+            grid.innerHTML = "";
 
-            const res = await fetch(`https://api.cloudinary.com/v1_1/dpxn8b7ao/image/upload`, {
-                method: 'POST',
-                body: formData
+            if (querySnapshot.empty) {
+                grid.innerHTML = "<p class='text-muted text-center w-100 mt-4'>No posts yet.</p>";
+                return;
+            }
+
+            querySnapshot.forEach((doc) => {
+                const post = doc.data();
+                let itemHtml = "";
+
+                if (post.type === 'image') {
+                    itemHtml = `<div class="grid-item"><img src="${post.fileUrl}"></div>`;
+                } else if (post.type === 'video') {
+                    itemHtml = `<div class="grid-item"><i class="fas fa-play video-icon"></i><video src="${post.fileUrl}"></video></div>`;
+                } else {
+                    itemHtml = `<div class="grid-item"><div class="text-preview">${post.caption.substring(0, 30)}...</div></div>`;
+                }
+                grid.innerHTML += itemHtml;
             });
-
-            if(!res.ok) throw new Error("Upload failed. Check Cloudinary settings.");
-
-            const data = await res.json();
-            const newUrl = data.secure_url;
-
-            // Update Firebase
-            const userRef = doc(db, "users", user.phone);
-            await updateDoc(userRef, { photo: newUrl });
-
-            // Update LocalStorage
-            user.photo = newUrl;
-            localStorage.setItem('amd_user', JSON.stringify(user));
-
-            document.getElementById('myBigPfp').src = newUrl;
-            alert("Success! Profile photo updated.");
-
         } catch (e) {
-            alert("Error: " + e.message);
-        } finally {
-            btn.innerHTML = '<i class="fas fa-camera me-2"></i> UPDATE PROFILE PHOTO';
-            btn.disabled = false;
+            console.error("Error loading posts: ", e);
         }
     }
 
     window.logoutUser = function() {
-        if(confirm("Log out from Auwal MD Chat?")) {
-            localStorage.clear();
-            window.location.href = "index.html";
+        if(confirm("Kana son fita daga wannan account din?")) {
+            localStorage.removeItem('amd_user');
+            window.location.href = "login.html";
         }
     }
 </script>
