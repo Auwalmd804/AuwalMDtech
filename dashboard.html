@@ -163,15 +163,14 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // 1. Karanto User Data
     const user = JSON.parse(localStorage.getItem('amd_user'));
     if(user) {
         document.getElementById('dashName').innerText = user.name;
         document.getElementById('myPfp').src = user.photo || `https://ui-avatars.com/api/?name=${user.name}&background=0084ff&color=fff`;
     }
 
-    // 2. Kwaso Posts daga Firebase
-    const postsQuery = query(collection(db, "all_posts"), orderBy("createdAt", "desc"));
+    // ANAN NA CANZA ALL_POSTS ZUWA POSTS DOMIN YA DAICE DA DATABASE DIN KA
+    const postsQuery = query(collection(db, "posts"), orderBy("createdAt", "desc"));
     
     onSnapshot(postsQuery, (snapshot) => {
         const feed = document.getElementById('feedSection');
@@ -194,7 +193,7 @@
             const postHtml = `
                 <div class="post-card">
                     <div class="p-3 d-flex align-items-center">
-                        <img src="${post.userPhoto || 'https://via.placeholder.com/40'}" style="width: 35px; height: 35px; border-radius: 50%; border: 1px solid #0084ff;">
+                        <img src="${post.userPhoto || 'https://via.placeholder.com/40'}" style="width: 35px; height: 35px; border-radius: 50%; border: 1px solid #0084ff; object-fit: cover;">
                         <div class="ms-2">
                             <h6 class="m-0 small fw-bold">${post.userName}</h6>
                             <small class="text-muted" style="font-size: 10px;">Post updated</small>
