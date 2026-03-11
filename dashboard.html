@@ -110,6 +110,15 @@
 
         .modal-content { background: #0f172a; color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; }
         .comment-item { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 10px 0; }
+        
+        /* New Simple Delete Style */
+        .del-icon {
+            color: #64748b;
+            padding: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .del-icon:hover { color: #ef4444; }
     </style>
 </head>
 <body>
@@ -207,8 +216,8 @@
             const isLiked = post.likes && post.likes.includes(currentUser?.phone);
             const likesCount = post.likes ? post.likes.length : 0;
             
-            // Checking if the post belongs to the logged-in user
-            const isMyPost = currentUser && post.phone === currentUser.phone;
+            // Checking if the post belongs to you
+            const isMyPost = currentUser && String(post.phone) === String(currentUser.phone);
 
             let mediaElement = post.type === 'video' 
                 ? `<video src="${post.fileUrl}" class="post-media" controls></video>`
@@ -223,14 +232,14 @@
                         </div>
                         
                         ${isMyPost ? `
-                        <div class="dropdown">
-                            <i class="fas fa-ellipsis-v text-muted" data-bs-toggle="dropdown" style="cursor:pointer"></i>
-                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
-                                <li><a class="dropdown-item text-danger small" href="javascript:void(0)" onclick="deletePost('${postId}')"><i class="fas fa-trash-alt me-2"></i>Delete</a></li>
-                            </ul>
-                        </div>` : ''}
+                            <div class="del-icon" onclick="deletePost('${postId}')">
+                                <i class="fas fa-trash-alt"></i>
+                            </div>
+                        ` : ''}
                     </div>
+
                     ${mediaElement}
+
                     <div class="p-3">
                         <div class="d-flex gap-3 mb-2 align-items-center">
                             <div class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${postId}', ${isLiked})">
@@ -246,14 +255,13 @@
         });
     });
 
-    // Wannan ita ce function din gogewa
     window.deletePost = async (postId) => {
-        if(confirm("Are you sure you want to delete this post?")) {
+        if(confirm("Kana da tabbas kana son goge wannan post din?")) {
             try {
-                await deleteDoc(doc(db, "posts", postId));
-                // Babu bukatar refresh, onSnapshot zai cire shi da kansa
+                const postRef = doc(db, "posts", postId);
+                await deleteDoc(postRef);
             } catch (error) {
-                alert("Error deleting post: " + error.message);
+                alert("An samu matsala: " + error.message);
             }
         }
     };
