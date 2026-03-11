@@ -3,51 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile - Auwal MD</title>
+    <title>User Profile - Auwal MD Chat</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #0084ff; --dark-bg: #020617; --card-bg: #0f172a; }
-        body { background: var(--dark-bg); color: white; font-family: 'Poppins', sans-serif; padding-bottom: 30px; }
+        :root { --primary: #0084ff; --dark-bg: #020617; }
+        body { background: var(--dark-bg); color: white; font-family: 'Poppins', sans-serif; }
         .header-nav { padding: 20px; display: flex; align-items: center; gap: 15px; background: rgba(15,23,42,0.8); position: sticky; top: 0; z-index: 100; }
-        .profile-card { text-align: center; padding: 20px; }
-        .user-pfp { width: 110px; height: 110px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; }
-        .stats-bar { display: flex; justify-content: center; gap: 30px; margin: 20px 0; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; }
-        .stat-item { text-align: center; }
-        .stat-val { display: block; font-weight: bold; font-size: 1.2rem; }
-        .stat-lbl { font-size: 0.7rem; color: #64748b; text-transform: uppercase; }
-        .btn-follow { width: 100%; padding: 10px; border-radius: 10px; border: none; font-weight: 600; transition: 0.3s; }
+        .profile-header { text-align: center; padding: 30px 20px; }
+        .user-pfp { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; }
+        .stats-container { display: flex; justify-content: center; gap: 30px; margin: 20px 0; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; }
+        .stat-box { text-align: center; }
+        .stat-val { display: block; font-weight: bold; font-size: 1.1rem; }
+        .stat-label { font-size: 0.7rem; color: #64748b; text-transform: uppercase; }
+        .btn-follow { width: 100%; max-width: 300px; padding: 10px; border-radius: 10px; border: none; font-weight: 600; margin-top: 10px; }
         .follow-active { background: var(--primary); color: white; }
-        .unfollow-active { background: #1e293b; color: #ef4444; border: 1px solid #ef4444; }
-        .media-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 20px; }
-        .media-box { aspect-ratio: 1/1; background: #0f172a; overflow: hidden; }
-        .media-box img { width: 100%; height: 100%; object-fit: cover; }
+        .unfollow-active { background: transparent; color: #ef4444; border: 1px solid #ef4444; }
+        .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 20px; }
+        .gallery-item { aspect-ratio: 1/1; background: #0f172a; overflow: hidden; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
     </style>
 </head>
 <body>
 
 <div class="header-nav">
     <i class="fas fa-arrow-left" onclick="history.back()"></i>
-    <span id="nav-name" class="fw-bold">Profile</span>
+    <span id="navName" class="fw-bold">Profile</span>
 </div>
 
-<div class="container">
-    <div class="profile-card">
-        <img id="u-pfp" src="https://ui-avatars.com/api/?name=User" class="user-pfp">
-        <h5 id="u-name" class="mt-3 fw-bold mb-0">---</h5>
-        <p id="u-phone" class="text-muted small">@0000</p>
+<div class="profile-header">
+    <img id="uPfp" src="" class="user-pfp">
+    <h5 id="uName" class="mt-3 fw-bold mb-0">---</h5>
+    <p id="uPhone" class="text-muted small">@user</p>
 
-        <div class="stats-bar">
-            <div class="stat-item"><span class="stat-val" id="count-posts">0</span><span class="stat-lbl">Posts</span></div>
-            <div class="stat-item"><span class="stat-val" id="count-followers">0</span><span class="stat-lbl">Followers</span></div>
-            <div class="stat-item"><span class="stat-val" id="count-following">0</span><span class="stat-lbl">Following</span></div>
-        </div>
-
-        <button id="main-follow-btn" class="btn-follow follow-active">Follow</button>
+    <div class="stats-container">
+        <div class="stat-box"><span class="stat-val" id="postCount">0</span><span class="stat-label">Posts</span></div>
+        <div class="stat-box"><span class="stat-val" id="followerCount">0</span><span class="stat-label">Followers</span></div>
+        <div class="stat-box"><span class="stat-val" id="followingCount">0</span><span class="stat-label">Following</span></div>
     </div>
 
-    <div class="media-grid" id="u-gallery"></div>
+    <button id="followBtn" class="btn-follow follow-active">Follow</button>
 </div>
+
+<div class="gallery" id="userGallery"></div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -71,34 +69,31 @@
 
     if(!targetPhone || targetPhone === me.phone) { window.location.href = "profile.html"; }
 
-    async function initProfile() {
-        // 1. Dauko bayanan User
-        const userQ = query(collection(db, "users"), where("phone", "==", targetPhone));
-        const userSnap = await getDocs(userQ);
+    async function loadProfile() {
+        // 1. Fetch User Data
+        const userSnap = await getDocs(query(collection(db, "users"), where("phone", "==", targetPhone)));
         if(!userSnap.empty) {
             const data = userSnap.docs[0].data();
-            document.getElementById('u-name').innerText = data.name;
-            document.getElementById('nav-name').innerText = data.name;
-            document.getElementById('u-phone').innerText = "@" + data.phone;
-            document.getElementById('u-pfp').src = data.photo || `https://ui-avatars.com/api/?name=${data.name}`;
+            document.getElementById('uName').innerText = data.name;
+            document.getElementById('navName').innerText = data.name;
+            document.getElementById('uPhone').innerText = "@" + data.phone;
+            document.getElementById('uPfp').src = data.photo || `https://ui-avatars.com/api/?name=${data.name}`;
         }
 
-        // 2. Dauko Posts
-        onSnapshot(query(collection(db, "posts"), where("phone", "==", targetPhone)), (snap) => {
-            document.getElementById('count-posts').innerText = snap.size;
-            const gal = document.getElementById('u-gallery');
+        // 2. Load Gallery
+        onSnapshot(query(collection(db, "posts"), where("phone", "==", targetPhone)), snap => {
+            document.getElementById('postCount').innerText = snap.size;
+            const gal = document.getElementById('userGallery');
             gal.innerHTML = "";
-            snap.forEach(d => {
-                gal.innerHTML += `<div class="media-box"><img src="${d.data().fileUrl}"></div>`;
-            });
+            snap.forEach(d => { gal.innerHTML += `<div class="gallery-item"><img src="${d.data().fileUrl}"></div>`; });
         });
 
-        // 3. Follow Logic (Real-time)
-        const followID = `${me.phone}_${targetPhone}`; // Unique ID don sauki
+        // 3. Follow Logic
+        const followID = `${me.phone}_${targetPhone}`;
         const followRef = doc(db, "follows", followID);
 
         onSnapshot(followRef, (docSnap) => {
-            const btn = document.getElementById('main-follow-btn');
+            const btn = document.getElementById('followBtn');
             if(docSnap.exists()) {
                 btn.innerText = "Unfollow";
                 btn.className = "btn-follow unfollow-active";
@@ -106,24 +101,16 @@
             } else {
                 btn.innerText = "Follow";
                 btn.className = "btn-follow follow-active";
-                btn.onclick = async () => await setDoc(followRef, {
-                    follower: me.phone,
-                    following: targetPhone,
-                    timestamp: new Date()
-                });
+                btn.onclick = async () => await setDoc(followRef, { follower: me.phone, following: targetPhone });
             }
         });
 
-        // 4. Kirga Followers/Following
-        onSnapshot(query(collection(db, "follows"), where("following", "==", targetPhone)), s => {
-            document.getElementById('count-followers').innerText = s.size;
-        });
-        onSnapshot(query(collection(db, "follows"), where("follower", "==", targetPhone)), s => {
-            document.getElementById('count-following').innerText = s.size;
-        });
+        // 4. Update Stats
+        onSnapshot(query(collection(db, "follows"), where("following", "==", targetPhone)), s => document.getElementById('followerCount').innerText = s.size);
+        onSnapshot(query(collection(db, "follows"), where("follower", "==", targetPhone)), s => document.getElementById('followingCount').innerText = s.size);
     }
 
-    initProfile();
+    loadProfile();
 </script>
 </body>
 </html>
