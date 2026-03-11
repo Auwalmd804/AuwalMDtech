@@ -7,22 +7,109 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #0084ff; --secondary: #00c6ff; --bg-gradient: linear-gradient(180deg, #0f172a 0%, #020617 100%); }
-        body { background: var(--bg-gradient); color: white; font-family: 'Poppins', sans-serif; margin-bottom: 80px; min-height: 100vh; }
-        .header { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(15px); padding: 15px 20px; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .user-pfp-small { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); cursor: pointer; }
-        .search-box { background: rgba(255, 255, 255, 0.07); border-radius: 12px; padding: 8px 15px; margin-top: 15px; display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.1); }
-        .search-box input { background: transparent; border: none; color: white; width: 100%; padding-left: 10px; font-size: 14px; outline: none; }
-        .post-card { background: rgba(255, 255, 255, 0.03); border-radius: 15px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; }
-        .post-header { cursor: pointer; }
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(15px); display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.1); z-index: 1000; }
-        .nav-btn { color: #64748b; text-decoration: none; text-align: center; }
+        :root {
+            --primary: #0084ff;
+            --secondary: #00c6ff;
+            --bg-gradient: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+            --card-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        body { 
+            background: var(--bg-gradient); 
+            color: white; 
+            font-family: 'Poppins', sans-serif; 
+            margin-bottom: 80px;
+            min-height: 100vh;
+        }
+
+        .header { 
+            background: rgba(15, 23, 42, 0.8); 
+            backdrop-filter: blur(15px); 
+            padding: 15px 20px; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .user-pfp-small { 
+            width: 42px; height: 42px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            border: 2px solid var(--primary); 
+            box-shadow: 0 0 10px rgba(0, 132, 255, 0.3);
+            cursor: pointer;
+        }
+
+        .search-box { 
+            background: rgba(255, 255, 255, 0.07); 
+            border-radius: 12px; 
+            padding: 8px 15px; 
+            margin-top: 15px; 
+            display: flex; 
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .search-box input { 
+            background: transparent; border: none; color: white; width: 100%; 
+            padding-left: 10px; font-size: 14px; 
+        }
+
+        .post-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+        }
+
+        .empty-feed {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+        }
+        .empty-feed i { font-size: 50px; margin-bottom: 15px; opacity: 0.5; }
+
+        .bottom-nav { 
+            position: fixed; bottom: 0; width: 100%; 
+            background: rgba(15, 23, 42, 0.95); 
+            backdrop-filter: blur(15px);
+            display: flex; justify-content: space-around; 
+            padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.1); 
+            z-index: 1000;
+        }
+        .nav-btn { color: #64748b; text-decoration: none; text-align: center; transition: 0.3s; }
+        .nav-btn i { font-size: 20px; }
+        .nav-btn span { display: block; font-size: 10px; margin-top: 4px; font-weight: 500; }
         .nav-btn.active { color: var(--primary); }
-        .btn-plus { background: linear-gradient(135deg, var(--primary), var(--secondary)); width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: -35px; border: 4px solid #020617; color: white; font-size: 24px; }
-        video.post-media { width: 100%; background: #000; max-height: 500px; }
+
+        .btn-plus-container { position: relative; cursor: pointer; }
+        .btn-plus {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin-top: -35px;
+            border: 4px solid #020617;
+            box-shadow: 0 10px 20px rgba(0, 132, 255, 0.4);
+            color: white; font-size: 24px;
+        }
+        
+        video.post-media {
+            width: 100%;
+            background: #000;
+            max-height: 500px;
+        }
+
         .liked { color: #ef4444 !important; }
-        .like-btn, .comment-btn { cursor: pointer; }
-        .modal-content { background: #0f172a; color: white; border-radius: 20px; }
+        .like-btn, .comment-btn { cursor: pointer; transition: 0.2s; }
+        .like-btn:active { transform: scale(1.2); }
+
+        .modal-content { background: #0f172a; color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; }
+        .comment-item { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 10px 0; }
     </style>
 </head>
 <body>
@@ -36,23 +123,35 @@
                 <h6 class="fw-bold m-0" id="dashName" style="font-size: 14px;">User</h6>
             </div>
         </div>
-        <div class="position-relative"><i class="far fa-bell fs-5"></i></div>
+        <div class="position-relative">
+            <i class="far fa-bell fs-5"></i>
+            <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+        </div>
     </div>
-    <div class="search-box"><i class="fas fa-search"></i><input type="text" placeholder="Search friends or videos..."></div>
+    <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Search friends or videos...">
+    </div>
 </div>
 
 <div id="feedSection" class="container mt-3">
-    <div class="text-center py-5" id="loader"><div class="spinner-border text-primary"></div><p class="mt-2">Loading Feed...</p></div>
+    <div class="empty-feed" id="loader">
+        <div class="spinner-border text-primary mb-3"></div>
+        <p>Loading your feed...</p>
+    </div>
 </div>
 
-<div class="modal fade" id="commentModal" tabindex="-1">
+<div class="modal fade" id="commentModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
-            <div class="modal-header"><h6 class="modal-title">Comments</h6><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-header">
+                <h6 class="modal-title">Comments</h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
             <div class="modal-body" id="commentList"></div>
             <div class="modal-footer p-2">
                 <div class="input-group">
-                    <input type="text" id="commentInput" class="form-control bg-dark text-white border-0" placeholder="Type a comment...">
+                    <input type="text" id="commentInput" class="form-control bg-dark text-white border-0" placeholder="Say something...">
                     <button class="btn btn-primary" id="sendCommentBtn"><i class="fas fa-paper-plane"></i></button>
                 </div>
             </div>
@@ -63,12 +162,13 @@
 <div class="bottom-nav">
     <a href="dashboard.html" class="nav-btn active"><i class="fas fa-home"></i><span>Home</span></a>
     <a href="chats.html" class="nav-btn"><i class="fas fa-comment-dots"></i><span>Chats</span></a>
-    <div onclick="window.location.href='create-post.html'"><div class="btn-plus"><i class="fas fa-plus"></i></div></div>
+    <div class="btn-plus-container" onclick="window.location.href='create-post.html'"><div class="btn-plus"><i class="fas fa-plus"></i></div></div>
     <a href="explore.html" class="nav-btn"><i class="fas fa-compass"></i><span>Explore</span></a>
     <a href="profile.html" class="nav-btn"><i class="fas fa-user"></i><span>Profile</span></a>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, arrayUnion, arrayRemove, addDoc, serverTimestamp, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -88,57 +188,88 @@
 
     if(currentUser) {
         document.getElementById('dashName').innerText = currentUser.name;
-        document.getElementById('myPfp').src = currentUser.photo || `https://ui-avatars.com/api/?name=${currentUser.name}`;
+        document.getElementById('myPfp').src = currentUser.photo || `https://ui-avatars.com/api/?name=${currentUser.name}&background=0084ff&color=fff`;
     }
 
     const postsQuery = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+    
     onSnapshot(postsQuery, (snapshot) => {
         const feed = document.getElementById('feedSection');
         feed.innerHTML = "";
+        if (snapshot.empty) {
+            feed.innerHTML = `<div class="empty-feed"><i class="fas fa-photo-video"></i><p>No posts available yet</p></div>`;
+            return;
+        }
+
         snapshot.forEach((postDoc) => {
             const post = postDoc.data();
             const postId = postDoc.id;
             const isLiked = post.likes && post.likes.includes(currentUser?.phone);
-            const media = post.type === 'video' ? `<video src="${post.fileUrl}" class="post-media" controls></video>` : `<img src="${post.fileUrl}" class="w-100" style="max-height: 500px; object-fit: cover;">`;
+            const likesCount = post.likes ? post.likes.length : 0;
 
-            feed.innerHTML += `
+            let mediaElement = post.type === 'video' 
+                ? `<video src="${post.fileUrl}" class="post-media" controls></video>`
+                : `<img src="${post.fileUrl}" class="w-100" style="max-height: 500px; object-fit: cover;">`;
+
+            // GYARA: Na sa onclick a wajen hoton mutum da sunansa
+            const postHtml = `
                 <div class="post-card">
-                    <div class="p-3 d-flex align-items-center post-header" onclick="window.location.href='user-profile.html?phone=${post.phone}'">
-                        <img src="${post.userPhoto || 'https://ui-avatars.com/api/?name='+post.userName}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover;">
-                        <div class="ms-2"><h6 class="m-0 small fw-bold">${post.userName}</h6><small class="text-muted" style="font-size: 9px;">View Profile</small></div>
+                    <div class="p-3 d-flex align-items-center" style="cursor:pointer" onclick="window.location.href='user-profile.html?phone=${post.phone}'">
+                        <img src="${post.userPhoto || 'https://ui-avatars.com/api/?name='+post.userName}" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
+                        <div class="ms-2"><h6 class="m-0 small fw-bold">${post.userName}</h6></div>
                     </div>
-                    ${media}
+                    ${mediaElement}
                     <div class="p-3">
-                        <div class="d-flex gap-3 mb-2">
-                            <div class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${postId}', ${isLiked})"><i class="${isLiked ? 'fas' : 'far'} fa-heart"></i> <span>${post.likes ? post.likes.length : 0}</span></div>
-                            <i class="far fa-comment comment-btn" onclick="openComments('${postId}')"></i>
+                        <div class="d-flex gap-3 mb-2 align-items-center">
+                            <div class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${postId}', ${isLiked})">
+                                <i class="${isLiked ? 'fas' : 'far'} fa-heart fs-5"></i> <span class="small">${likesCount}</span>
+                            </div>
+                            <i class="far fa-comment fs-5 comment-btn" onclick="openComments('${postId}')"></i>
+                            <i class="far fa-paper-plane fs-5"></i>
                         </div>
                         <p class="small m-0"><b>${post.userName}</b> ${post.caption || ""}</p>
                     </div>
                 </div>`;
+            feed.innerHTML += postHtml;
         });
     });
 
-    window.toggleLike = async (id, liked) => {
-        const ref = doc(db, "posts", id);
-        liked ? await updateDoc(ref, { likes: arrayRemove(currentUser.phone) }) : await updateDoc(ref, { likes: arrayUnion(currentUser.phone) });
+    window.toggleLike = async (postId, currentlyLiked) => {
+        const postRef = doc(db, "posts", postId);
+        currentlyLiked ? await updateDoc(postRef, { likes: arrayRemove(currentUser.phone) }) : await updateDoc(postRef, { likes: arrayUnion(currentUser.phone) });
     };
 
-    let activeId = "";
-    window.openComments = (id) => { activeId = id; new bootstrap.Modal(document.getElementById('commentModal')).show(); loadComments(id); };
+    let activePostId = "";
+    window.openComments = async (postId) => {
+        activePostId = postId;
+        const modal = new bootstrap.Modal(document.getElementById('commentModal'));
+        modal.show();
+        loadComments(postId);
+    };
 
-    async function loadComments(id) {
+    async function loadComments(postId) {
         const list = document.getElementById('commentList');
-        const snap = await getDocs(query(collection(db, "comments"), where("postId", "==", id), orderBy("createdAt", "asc")));
-        list.innerHTML = snap.empty ? "No comments yet." : "";
-        snap.forEach(d => { list.innerHTML += `<div class="mb-2 small"><b>${d.data().userName}:</b> ${d.data().comment}</div>`; });
+        list.innerHTML = "<small>Loading...</small>";
+        const q = query(collection(db, "comments"), where("postId", "==", postId), orderBy("createdAt", "asc"));
+        const snap = await getDocs(q);
+        list.innerHTML = snap.empty ? "<small class='text-muted'>No comments yet.</small>" : "";
+        snap.forEach(d => {
+            const c = d.data();
+            list.innerHTML += `<div class="comment-item small"><b>${c.userName}:</b> ${c.comment}</div>`;
+        });
     }
 
     document.getElementById('sendCommentBtn').onclick = async () => {
-        const val = document.getElementById('commentInput').value;
+        const val = document.getElementById('commentInput').value.trim();
         if(!val) return;
-        await addDoc(collection(db, "comments"), { postId: activeId, userName: currentUser.name, comment: val, createdAt: serverTimestamp() });
-        document.getElementById('commentInput').value = ""; loadComments(activeId);
+        await addDoc(collection(db, "comments"), {
+            postId: activePostId,
+            userName: currentUser.name,
+            comment: val,
+            createdAt: serverTimestamp()
+        });
+        document.getElementById('commentInput').value = "";
+        loadComments(activePostId);
     };
 </script>
 </body>
