@@ -2,76 +2,104 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AMD Chat - Final TikTok Build</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AMD Chat - Final Build</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; background: #000; color: white; overflow: hidden; font-family: sans-serif; }
+        :root { --tiktok-red: #fe2c55; --tiktok-blue: #25f4ee; }
+        body, html { margin: 0; padding: 0; height: 100%; background: #000; color: white; overflow: hidden; font-family: 'Proxima Nova', sans-serif; }
         
-        #feedSection { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
+        /* Full Screen Feed */
+        #feedSection { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; -ms-overflow-style: none; }
         #feedSection::-webkit-scrollbar { display: none; }
         
         .post-card { height: 100vh; width: 100%; scroll-snap-align: start; position: relative; display: flex; align-items: center; justify-content: center; background: #000; }
+        .post-media { width: 100%; height: 100%; object-fit: contain; z-index: 1; }
+
+        /* Top Navigation */
+        .top-header { position: absolute; top: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 40px 20px 20px; z-index: 100; background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent); }
+        .top-tabs { display: flex; gap: 15px; font-weight: 700; font-size: 17px; }
+        .top-tabs span { opacity: 0.6; }
+        .top-tabs span.active { opacity: 1; border-bottom: 3px solid white; padding-bottom: 5px; }
+
+        /* Side Interaction Buttons */
+        .side-bar { position: absolute; right: 10px; bottom: 120px; display: flex; flex-direction: column; align-items: center; gap: 18px; z-index: 100; }
+        .profile-box { position: relative; margin-bottom: 10px; }
+        .profile-pic { width: 50px; height: 50px; border-radius: 50%; border: 2px solid white; object-fit: cover; }
+        .follow-tag { position: absolute; bottom: -8px; background: var(--tiktok-red); border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border: 2px solid white; font-size: 12px; }
+
+        .btn-action { text-align: center; cursor: pointer; }
+        .btn-action i { font-size: 32px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
+        .btn-action small { display: block; font-size: 12px; font-weight: 600; margin-top: 2px; }
+
+        /* Video Controls Layer */
+        .video-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; display: flex; }
+        .tap-zone { width: 50%; height: 100%; }
+        .play-status { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 70px; opacity: 0; transition: 0.2s; color: rgba(255,255,255,0.4); z-index: 6; pointer-events: none; }
+
+        /* Bottom Details */
+        .post-details { position: absolute; bottom: 100px; left: 15px; right: 80px; z-index: 10; }
+        .username { font-weight: 800; font-size: 17px; margin-bottom: 8px; display: block; }
+        .caption { font-size: 15px; line-height: 1.3; }
+
+        /* Bottom Nav - The Blue/Red Plus */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: #000; border-top: 0.5px solid #333; display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
+        .nav-link { color: #8a8a8e; text-decoration: none; text-align: center; font-size: 10px; }
+        .nav-link.active { color: white; }
+        .nav-link i { font-size: 24px; margin-bottom: 3px; }
         
-        .post-media { max-width: 100%; max-height: 100vh; object-fit: contain; z-index: 1; }
+        .plus-container { position: relative; width: 45px; height: 30px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: black; font-weight: bold; }
+        .plus-container::before { content: ''; position: absolute; left: -4px; width: 10px; height: 100%; background: var(--tiktok-blue); border-radius: 8px; z-index: -1; }
+        .plus-container::after { content: ''; position: absolute; right: -4px; width: 10px; height: 100%; background: var(--tiktok-red); border-radius: 8px; z-index: -1; }
 
-        /* Video Controls Overlay */
-        .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; display: flex; }
-        .side-touch { width: 50%; height: 100%; } /* For double tap detection */
-        
-        .play-pause-icon { 
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 60px; opacity: 0; transition: 0.3s; color: rgba(255,255,255,0.5); z-index: 3;
-        }
-
-        /* Side UI */
-        .side-actions { position: absolute; right: 12px; bottom: 120px; display: flex; flex-direction: column; gap: 18px; align-items: center; z-index: 10; }
-        .profile-container { position: relative; margin-bottom: 8px; }
-        .profile-img { width: 48px; height: 48px; border-radius: 50%; border: 2px solid white; }
-        .follow-plus { 
-            position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
-            background: #fe2c55; color: white; width: 20px; height: 20px; 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;
-        }
-
-        .action-btn { text-align: center; cursor: pointer; text-shadow: 1px 1px 3px #000; }
-        .action-btn i { font-size: 30px; }
-        .action-btn small { display: block; font-size: 12px; font-weight: bold; margin-top: 2px; }
-
-        /* Bottom Info */
-        .post-content { position: absolute; bottom: 100px; left: 15px; right: 80px; z-index: 10; text-shadow: 1px 1px 4px #000; }
-        
-        /* Bottom Nav */
-        .bottom-nav { 
-            position: fixed; bottom: 0; width: 100%; background: #000; 
-            display: flex; justify-content: space-around; padding: 12px 0; 
-            border-top: 0.5px solid #333; z-index: 100;
-        }
-        .nav-item { color: #8a8a8e; text-decoration: none; text-align: center; }
-        .nav-item.active { color: white; }
-        .nav-item i { font-size: 22px; }
-        .nav-item span { display: block; font-size: 10px; }
-        .upload-icon { background: linear-gradient(to right, #2af598, #009efd); color: black !important; padding: 4px 12px; border-radius: 8px; }
+        /* Comment Modal */
+        .comment-drawer { position: fixed; bottom: -100%; left: 0; width: 100%; height: 70%; background: #121212; border-radius: 15px 15px 0 0; z-index: 2000; transition: 0.4s cubic-bezier(0,0,0,1); padding: 20px; }
+        .comment-drawer.active { bottom: 0; }
     </style>
 </head>
 <body>
 
-<div id="feedSection"></div>
+<div class="top-header">
+    <i class="fas fa-live text-white fs-4"></i>
+    <div class="top-tabs">
+        <span>Following</span>
+        <span class="active">For You</span>
+    </div>
+    <div class="position-relative" onclick="window.location.href='notifications.html'">
+        <i class="fas fa-bell fs-4"></i>
+        <div id="notifCount" class="bg-danger rounded-circle position-absolute top-0 end-0" style="width:10px; height:10px; display:none;"></div>
+    </div>
+</div>
+
+<div id="feedSection">
+    </div>
 
 <div class="bottom-nav">
-    <a href="dashboard.html" class="nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
-    <a href="friends.html" class="nav-item"><i class="fas fa-users"></i><span>Friends</span></a>
-    <div class="nav-item" onclick="window.location.href='create-post.html'"><i class="fas fa-plus upload-icon"></i></div>
-    <a href="chats.html" class="nav-item"><i class="fas fa-comment-dots"></i><span>Inbox</span></a>
-    <a href="profile.html" class="nav-item"><i class="fas fa-user"></i><span>Profile</span></a>
+    <a href="dashboard.html" class="nav-link active"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="friends.html" class="nav-link"><i class="fas fa-users"></i><span>Friends</span></a>
+    <div class="plus-container" onclick="window.location.href='create-post.html'"><i class="fas fa-plus"></i></div>
+    <a href="chats.html" class="nav-link"><i class="fas fa-comment-dots"></i><span>Inbox</span></a>
+    <a href="profile.html" class="nav-link"><i class="fas fa-user"></i><span>Profile</span></a>
+</div>
+
+<div id="commentBox" class="comment-drawer">
+    <div class="d-flex justify-content-between align-items-center border-bottom border-secondary pb-3 mb-3">
+        <h6 class="m-0" id="commentCountHeader">0 Comments</h6>
+        <i class="fas fa-times fs-5" onclick="closeComments()"></i>
+    </div>
+    <div id="commentsList" style="height: 350px; overflow-y: auto;" class="mb-3"></div>
+    <div class="d-flex gap-2">
+        <input type="text" id="commentText" class="form-control bg-dark border-0 text-white" placeholder="Add comment...">
+        <button class="btn btn-primary" onclick="postComment()"><i class="fas fa-paper-plane"></i></button>
+    </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, arrayUnion, arrayRemove, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    const firebaseConfig = {
+    const firebaseConfig = { 
         apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
         authDomain: "auwalmdtech.firebaseapp.com",
         projectId: "auwalmdtech",
@@ -82,23 +110,26 @@
 
     const db = getFirestore(initializeApp(firebaseConfig));
     const currentUser = JSON.parse(localStorage.getItem('amd_user'));
+    let activePostId = null;
 
-    // Intersection Observer to handle Auto-play/Pause
-    const observerOptions = { threshold: 0.7 };
+    // Intersection Observer for AutoPlay/Pause
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             const video = entry.target.querySelector('video');
             if (video) {
                 if (entry.isIntersecting) {
-                    video.play().catch(() => {}); // Play when visible
+                    video.play().catch(() => {
+                        console.log("Autoplay blocked, waiting for user interaction");
+                    });
                 } else {
-                    video.pause(); // Stop when hidden
-                    video.currentTime = 0; // Reset
+                    video.pause();
+                    video.currentTime = 0;
                 }
             }
         });
-    }, observerOptions);
+    }, { threshold: 0.8 });
 
+    // Load TikTok Feed
     onSnapshot(query(collection(db, "posts"), orderBy("createdAt", "desc")), (snapshot) => {
         const feed = document.getElementById('feedSection');
         feed.innerHTML = "";
@@ -112,63 +143,87 @@
             card.innerHTML = `
                 ${post.type === 'video' ? 
                     `<video src="${post.fileUrl}" class="post-media" loop playsinline></video>
-                     <div class="play-pause-icon"><i class="fas fa-play"></i></div>
-                     <div class="video-overlay">
-                        <div class="side-touch" onclick="handleTap(event, '${pid}', 'left')"></div>
-                        <div class="side-touch" onclick="handleTap(event, '${pid}', 'right')"></div>
+                     <div class="play-status"><i class="fas fa-play"></i></div>
+                     <div class="video-layer">
+                        <div class="tap-zone" onclick="handleInteraction(event, '${pid}', 'left')"></div>
+                        <div class="tap-zone" onclick="handleInteraction(event, '${pid}', 'right')"></div>
                      </div>` : 
                     `<img src="${post.fileUrl}" class="post-media">`
                 }
-                <div class="side-actions">
-                    <div class="profile-container" onclick="window.location.href='profile.html?id=${post.phone}'">
-                        <img src="${post.userPhoto || 'logo.jpg'}" class="profile-img">
-                        <div class="follow-plus"><i class="fas fa-plus"></i></div>
+                <div class="side-bar">
+                    <div class="profile-box" onclick="window.location.href='profile.html?user=${post.phone}'">
+                        <img src="${post.userPhoto || 'logo.jpg'}" class="profile-pic">
+                        <div class="follow-tag"><i class="fas fa-plus"></i></div>
                     </div>
-                    <div class="action-btn" onclick="likePost('${pid}', ${isLiked}, '${post.phone}')">
+                    <div class="btn-action" onclick="toggleLike('${pid}', ${isLiked}, '${post.phone}')">
                         <i class="fas fa-heart" style="color: ${isLiked ? '#fe2c55' : 'white'}"></i>
                         <small>${post.likes ? post.likes.length : 0}</small>
                     </div>
-                    <div class="action-btn" onclick="openComments('${pid}')">
-                        <i class="fas fa-comment-dots text-white"></i><small>Comment</small>
+                    <div class="btn-action" onclick="openComments('${pid}')">
+                        <i class="fas fa-comment-dots"></i>
+                        <small>627</small>
                     </div>
-                    <div class="action-btn"><i class="fas fa-share text-white"></i><small>Share</small></div>
+                    <div class="btn-action" onclick="shareVideo('${post.fileUrl}')">
+                        <i class="fas fa-share"></i>
+                        <small>Share</small>
+                    </div>
                 </div>
-                <div class="post-content">
-                    <h6 class="fw-bold">@${post.userName}</h6>
-                    <p class="small">${post.caption || ""}</p>
-                </div>
-            `;
+                <div class="post-details">
+                    <span class="username">@${post.userName}</span>
+                    <p class="caption">${post.caption || ""}</p>
+                </div>`;
             feed.appendChild(card);
             observer.observe(card);
         });
     });
 
-    // Double Tap Logic for Forward/Rewind
-    let lastTap = 0;
-    window.handleTap = (e, pid, side) => {
+    // Double Tap & Play/Pause Logic
+    let lastTapTime = 0;
+    window.handleInteraction = (e, pid, side) => {
         const now = Date.now();
         const video = e.target.closest('.post-card').querySelector('video');
-        const icon = e.target.closest('.post-card').querySelector('.play-pause-icon');
+        const playIcon = e.target.closest('.post-card').querySelector('.play-status');
 
-        if (now - lastTap < 300) { // Double tap detected
-            if (side === 'right') video.currentTime += 10;
-            else video.currentTime -= 10;
-        } else { // Single tap: Play/Pause
+        if (now - lastTapTime < 300) {
+            // Double Tap: Seek
+            video.currentTime += (side === 'right' ? 10 : -10);
+        } else {
+            // Single Tap: Play/Pause
             if (video.paused) {
                 video.play();
-                icon.style.opacity = 0;
+                playIcon.style.opacity = 0;
             } else {
                 video.pause();
-                icon.style.opacity = 1;
+                playIcon.style.opacity = 1;
             }
         }
-        lastTap = now;
+        lastTapTime = now;
     };
 
-    window.likePost = async (id, liked, owner) => {
+    window.openComments = (id) => {
+        activePostId = id;
+        document.getElementById('commentBox').classList.add('active');
+        loadCommentsFromDB(id);
+    };
+
+    window.closeComments = () => {
+        document.getElementById('commentBox').classList.remove('active');
+    };
+
+    window.shareVideo = (url) => {
+        if (navigator.share) {
+            navigator.share({ title: 'Check this on AMD Chat', url: url });
+        } else {
+            alert("Video Link: " + url);
+        }
+    };
+
+    window.toggleLike = async (id, liked, owner) => {
         const ref = doc(db, "posts", id);
         await updateDoc(ref, { likes: liked ? arrayRemove(currentUser.phone) : arrayUnion(currentUser.phone) });
     };
+
+    // Firebase functions for real-time comments and notifications here...
 </script>
 </body>
 </html>
