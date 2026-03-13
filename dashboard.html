@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AMD Chat - TikTok Feed</title>
+    <title>AMD Chat - TikTok Experience</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body, html { 
             margin: 0; padding: 0; height: 100%; 
             background: #000; font-family: 'Inter', sans-serif;
-            overflow: hidden;
+            overflow: hidden; color: white;
         }
 
-        /* TikTok Vertical Scroll Container */
+        /* Vertical Feed */
         #feedSection {
             height: 100vh;
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
-            scrollbar-width: none; /* Hide scrollbar for Firefox */
+            scrollbar-width: none;
         }
-        #feedSection::-webkit-scrollbar { display: none; } /* Hide scrollbar for Chrome */
+        #feedSection::-webkit-scrollbar { display: none; }
 
         .post-card {
             height: 100vh;
@@ -34,15 +34,15 @@
         }
 
         .post-media {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            max-width: 100%;
+            max-height: 100vh;
+            object-fit: contain; /* Fix for the zoom issue */
         }
 
-        /* Header Overlays */
+        /* Overlay UI */
         .top-nav {
             position: absolute;
-            top: 20px;
+            top: 25px;
             width: 100%;
             padding: 0 20px;
             display: flex;
@@ -51,90 +51,112 @@
             z-index: 100;
         }
 
-        .bell-container {
-            position: relative;
-            cursor: pointer;
-        }
-
         #notifBadge {
             position: absolute;
-            top: -5px;
-            right: -5px;
+            top: -5px; right: -5px;
             background: #ff0050;
-            color: white;
-            font-size: 10px;
-            padding: 2px 5px;
-            border-radius: 50%;
-            display: none;
+            font-size: 10px; padding: 2px 5px;
+            border-radius: 50%; display: none;
         }
 
-        /* TikTok Side Actions */
         .side-actions {
             position: absolute;
-            right: 15px;
-            bottom: 120px;
+            right: 12px;
+            bottom: 140px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 18px;
             align-items: center;
             z-index: 100;
         }
 
         .action-btn {
             text-align: center;
-            color: white;
             cursor: pointer;
         }
 
         .action-btn i {
-            font-size: 30px;
-            margin-bottom: 5px;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            font-size: 26px;
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.8));
         }
 
-        .action-btn.liked i { color: #ff0050; }
+        .action-btn small {
+            font-size: 11px;
+            font-weight: bold;
+            display: block;
+            margin-top: 2px;
+        }
 
-        /* Bottom Info */
         .post-content {
             position: absolute;
             bottom: 100px;
             left: 15px;
             right: 80px;
-            color: white;
             z-index: 100;
-            text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
         }
 
-        /* Bottom Navbar */
+        /* Comment Modal (Bottom Sheet) */
+        .comment-modal {
+            position: fixed;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            background: #1e1e1e;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            z-index: 1000;
+            transition: 0.3s;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .comment-modal.active { bottom: 0; }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        #commentList {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .comment-input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Navigation */
         .bottom-bar {
             position: absolute;
             bottom: 0;
             width: 100%;
-            background: rgba(0,0,0,0.9);
+            background: #000;
             display: flex;
             justify-content: space-around;
-            padding: 15px 0;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 12px 0;
+            border-top: 0.5px solid rgba(255,255,255,0.1);
             z-index: 100;
         }
-        .nav-item { color: #888; text-decoration: none; font-size: 20px; text-align: center; }
+        .nav-item { color: #888; text-decoration: none; text-align: center; }
         .nav-item.active { color: white; }
+        .nav-item i { font-size: 20px; }
         .nav-item span { display: block; font-size: 10px; }
-
-        .add-btn {
-            background: linear-gradient(to right, #2af598 0%, #009efd 100%);
-            width: 45px; height: 30px; border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            color: black; font-weight: bold;
-        }
     </style>
 </head>
 <body>
 
 <div class="top-nav">
-    <h5 class="fw-bold text-white">Following | <span class="border-bottom border-3">For You</span></h5>
-    <div class="bell-container" onclick="window.location.href='notifications.html'">
-        <i class="far fa-bell fs-4 text-white"></i>
+    <h6 class="text-white">Following | <span class="border-bottom border-2">For You</span></h6>
+    <div class="position-relative" onclick="window.location.href='notifications.html'">
+        <i class="far fa-bell fs-4"></i>
         <span id="notifBadge">0</span>
     </div>
 </div>
@@ -142,10 +164,23 @@
 <div id="feedSection">
     </div>
 
+<div id="commentModal" class="comment-modal">
+    <div class="comment-header">
+        <h6 class="mb-0">Comments</h6>
+        <i class="fas fa-times fs-5" onclick="closeComments()"></i>
+    </div>
+    <div id="commentList">
+        </div>
+    <div class="comment-input-area">
+        <input type="text" id="commentInput" class="form-control bg-dark text-white border-0" placeholder="Add a comment...">
+        <button class="btn btn-primary btn-sm" onclick="submitComment()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+</div>
+
 <div class="bottom-bar">
     <a href="dashboard.html" class="nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
     <a href="explore.html" class="nav-item"><i class="fas fa-compass"></i><span>Explore</span></a>
-    <div class="add-btn" onclick="window.location.href='create-post.html'"><i class="fas fa-plus"></i></div>
+    <div style="background: white; color: black; padding: 2px 12px; border-radius: 8px; font-weight: bold;" onclick="window.location.href='create-post.html'"><i class="fas fa-plus"></i></div>
     <a href="chats.html" class="nav-item"><i class="fas fa-comment-dots"></i><span>Inbox</span></a>
     <a href="profile.html" class="nav-item"><i class="fas fa-user"></i><span>Profile</span></a>
 </div>
@@ -167,80 +202,99 @@
     const db = getFirestore(app);
     const currentUser = JSON.parse(localStorage.getItem('amd_user'));
 
-    // 1. Notification Listener (Bell System)
-    if (currentUser) {
-        const qNotif = query(collection(db, "notifications"), where("toPhone", "==", currentUser.phone), where("status", "==", "unread"));
-        onSnapshot(qNotif, (snap) => {
-            const badge = document.getElementById('notifBadge');
-            if (snap.size > 0) {
-                badge.innerText = snap.size;
-                badge.style.display = "block";
-            } else {
-                badge.style.display = "none";
-            }
-        });
-    }
+    let currentPostId = null;
 
-    // 2. Load TikTok Feed
-    const qPosts = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-    onSnapshot(qPosts, (snapshot) => {
+    // Load Feed
+    onSnapshot(query(collection(db, "posts"), orderBy("createdAt", "desc")), (snapshot) => {
         const feed = document.getElementById('feedSection');
         feed.innerHTML = "";
         snapshot.forEach((postDoc) => {
             const post = postDoc.data();
-            const postId = postDoc.id;
-            const isLiked = post.likes && post.likes.includes(currentUser?.phone);
+            const pid = postDoc.id;
+            const isLiked = post.likes?.includes(currentUser?.phone);
 
             const media = post.type === 'video' 
-                ? `<video src="${post.fileUrl}" class="post-media" loop autoplay muted onclick="this.paused?this.play():this.pause()"></video>`
+                ? `<video src="${post.fileUrl}" class="post-media" loop playsinline autoplay onclick="this.paused?this.play():this.pause()"></video>`
                 : `<img src="${post.fileUrl}" class="post-media">`;
 
             feed.innerHTML += `
                 <div class="post-card">
                     ${media}
                     <div class="side-actions">
-                        <div class="action-btn ${isLiked ? 'liked' : ''}" onclick="handleLike('${postId}', ${isLiked}, '${post.phone}')">
-                            <i class="fas fa-heart"></i>
+                        <div class="action-btn" onclick="handleLike('${pid}', ${isLiked}, '${post.phone}')">
+                            <i class="fas fa-heart" style="color: ${isLiked ? '#ff0050' : 'white'}"></i>
                             <small>${post.likes ? post.likes.length : 0}</small>
                         </div>
-                        <div class="action-btn">
+                        <div class="action-btn" onclick="openComments('${pid}')">
                             <i class="fas fa-comment-dots"></i>
                             <small>Comment</small>
                         </div>
-                        <div class="action-btn">
-                            <i class="fas fa-share"></i>
+                        <div class="action-btn" onclick="sharePost('${post.fileUrl}')">
+                            <i class="fas fa-share text-white"></i>
                             <small>Share</small>
                         </div>
                     </div>
                     <div class="post-content">
-                        <h6 class="fw-bold">@${post.userName}</h6>
-                        <p class="small">${post.caption || ""}</p>
+                        <h6 class="fw-bold mb-1">@${post.userName}</h6>
+                        <p class="small mb-0">${post.caption || ""}</p>
                     </div>
                 </div>`;
         });
     });
 
-    // 3. Like & Notification Logic
-    window.handleLike = async (postId, currentlyLiked, ownerPhone) => {
-        if(!currentUser) return alert("Please Login");
-        const postRef = doc(db, "posts", postId);
-        
-        if (!currentlyLiked) {
-            await updateDoc(postRef, { likes: arrayUnion(currentUser.phone) });
-            // Send real notification
-            if (ownerPhone !== currentUser.phone) {
-                await addDoc(collection(db, "notifications"), {
-                    toPhone: ownerPhone,
-                    fromName: currentUser.name,
-                    type: "liked your post",
-                    status: "unread",
-                    createdAt: serverTimestamp()
-                });
-            }
-        } else {
-            await updateDoc(postRef, { likes: arrayRemove(currentUser.phone) });
+    // Like System
+    window.handleLike = async (id, liked, owner) => {
+        const ref = doc(db, "posts", id);
+        await updateDoc(ref, { likes: liked ? arrayRemove(currentUser.phone) : arrayUnion(currentUser.phone) });
+        if(!liked && owner !== currentUser.phone) {
+            await addDoc(collection(db, "notifications"), { toPhone: owner, fromName: currentUser.name, type: "liked your post", status: "unread", createdAt: serverTimestamp() });
         }
     };
+
+    // Comment Box Functions
+    window.openComments = (id) => {
+        currentPostId = id;
+        document.getElementById('commentModal').classList.add('active');
+        loadComments(id);
+    };
+
+    window.closeComments = () => {
+        document.getElementById('commentModal').classList.remove('active');
+    };
+
+    function loadComments(id) {
+        const q = query(collection(db, "posts", id, "comments"), orderBy("createdAt", "asc"));
+        onSnapshot(q, (snap) => {
+            const list = document.getElementById('commentList');
+            list.innerHTML = "";
+            snap.forEach(d => {
+                const c = d.data();
+                list.innerHTML += `<div class="mb-2"><span class="fw-bold small">@${c.userName}:</span> <span class="small">${c.text}</span></div>`;
+            });
+        });
+    }
+
+    window.submitComment = async () => {
+        const input = document.getElementById('commentInput');
+        if(!input.value || !currentPostId) return;
+        await addDoc(collection(db, "posts", currentPostId, "comments"), {
+            text: input.value,
+            userName: currentUser.name,
+            createdAt: serverTimestamp()
+        });
+        input.value = "";
+    };
+
+    window.sharePost = (url) => {
+        navigator.share ? navigator.share({ url: url }) : alert("Link: " + url);
+    };
+
+    // Notification Badge
+    onSnapshot(query(collection(db, "notifications"), where("toPhone", "==", currentUser.phone), where("status", "==", "unread")), (snap) => {
+        const badge = document.getElementById('notifBadge');
+        badge.innerText = snap.size;
+        badge.style.display = snap.size > 0 ? "block" : "none";
+    });
 </script>
 </body>
 </html>
