@@ -3,102 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AMD Chat - Final Master Build</title>
+    <title>AMD Chat - Final Master</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --tiktok-red: #fe2c55; --tiktok-blue: #00a2ff; --bg-dark: #050a12; }
         body, html { margin: 0; padding: 0; height: 100%; background: #000; color: white; overflow: hidden; font-family: sans-serif; }
         
-        #pull-indicator { position: absolute; top: 70px; left: 50%; transform: translateX(-50%); z-index: 1000; display: none; color: var(--tiktok-blue); }
-
         /* Feed System */
-        #feedSection { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; -ms-overflow-style: none; }
+        #feedSection { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
         #feedSection::-webkit-scrollbar { display: none; }
         
         .post-card { height: 100vh; width: 100%; scroll-snap-align: start; position: relative; display: flex; align-items: center; justify-content: center; background: #000; }
         .post-media { width: 100%; height: 100%; object-fit: contain; }
 
         /* Top Navigation */
-        .top-nav { position: absolute; top: 0; width: 100%; padding: 45px 20px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 100; background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent); }
+        .top-nav { position: absolute; top: 0; width: 100%; padding: 45px 20px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); }
         .tabs { display: flex; gap: 15px; font-weight: bold; font-size: 18px; }
-        .tabs span { opacity: 0.6; cursor: pointer; }
+        .tabs span { opacity: 0.6; cursor: pointer; color: white; text-decoration: none; }
         .tabs span.active { opacity: 1; border-bottom: 3px solid white; }
-        .top-icons { display: flex; gap: 20px; font-size: 22px; cursor: pointer; }
 
-        /* Sidebar Actions */
-        .sidebar { position: absolute; right: 12px; bottom: 120px; display: flex; flex-direction: column; align-items: center; gap: 22px; z-index: 100; }
-        .profile-btn { position: relative; width: 50px; height: 50px; cursor: pointer; }
+        /* Sidebar Actions - Gyaran Fitowa Filis */
+        .sidebar { position: absolute; right: 12px; bottom: 120px; display: flex; flex-direction: column; align-items: center; gap: 20px; z-index: 1000; }
+        .action-item { text-align: center; cursor: pointer; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)); }
+        .action-item i { font-size: 32px; color: white; }
+        .action-item span { display: block; font-size: 12px; font-weight: bold; margin-top: 4px; color: white; }
+
+        /* Profile & Follow Button */
+        .profile-btn { position: relative; width: 48px; height: 48px; margin-bottom: 10px; }
         .profile-img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid white; object-fit: cover; }
-        .follow-plus { position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); background: var(--tiktok-red); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; font-size: 12px; }
+        .follow-plus { position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); background: var(--tiktok-red); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; font-size: 10px; color: white; }
 
-        .action-item { text-align: center; cursor: pointer; text-shadow: 0 2px 5px rgba(0,0,0,1); }
-        .action-item i { font-size: 34px; }
-        .action-item span { display: block; font-size: 13px; font-weight: bold; margin-top: 4px; }
+        /* Post Info - Gyaran Username ya fito fili */
+        .post-info { position: absolute; bottom: 95px; left: 15px; right: 80px; z-index: 1000; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.9)); }
+        .post-info h6 { font-weight: 800; margin-bottom: 5px; font-size: 17px; color: white; text-shadow: 1px 1px 5px #000; }
+        .post-info p { font-size: 14px; line-height: 1.3; color: white; text-shadow: 1px 1px 5px #000; }
 
-        /* Video Layer & Controls */
-        .touch-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 50; display: flex; }
-        .touch-side { width: 50%; height: 100%; }
-        .play-pause-ui { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 70px; opacity: 0; transition: 0.2s; color: rgba(255,255,255,0.4); pointer-events: none; z-index: 51; }
+        /* Video Controls Overlay */
+        .video-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 500; }
 
-        /* Post Info */
-        .post-info { position: absolute; bottom: 100px; left: 15px; right: 80px; z-index: 60; }
-        .post-info h6 { font-weight: 800; margin-bottom: 5px; font-size: 18px; }
-        .post-info p { font-size: 15px; line-height: 1.3; }
-
-        /* Bottom Nav - Original Blue Style */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 75px; background: var(--bg-dark); border-top: 1px solid #1a222d; display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
-        .nav-btn { color: #505d6b; text-decoration: none; text-align: center; font-size: 11px; }
+        /* Bottom Nav - Blue and Black Style */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: #050a12; border-top: 1px solid #1a222d; display: flex; justify-content: space-around; align-items: center; z-index: 2000; }
+        .nav-btn { color: #505d6b; text-decoration: none; text-align: center; font-size: 11px; flex: 1; }
         .nav-btn.active { color: var(--tiktok-blue); }
-        .nav-btn i { font-size: 26px; display: block; margin-bottom: 2px; }
-        .add-btn { width: 55px; height: 42px; background: var(--tiktok-blue); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; border: 3px solid var(--bg-dark); margin-top: -5px; }
+        .nav-btn i { font-size: 24px; display: block; margin-bottom: 3px; }
+        .add-btn-container { flex: 1; display: flex; justify-content: center; }
+        .add-btn { width: 50px; height: 38px; background: var(--tiktok-blue); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; border: 2px solid #050a12; box-shadow: 0 0 10px rgba(0,162,255,0.3); }
 
-        /* Comment Modal */
-        .comment-modal { position: fixed; bottom: -100%; left: 0; width: 100%; height: 70%; background: #121212; border-radius: 15px 15px 0 0; z-index: 2000; transition: 0.4s; padding: 20px; border-top: 1px solid #333; }
+        /* Comments Modal */
+        .comment-modal { position: fixed; bottom: -100%; left: 0; width: 100%; height: 75%; background: #121212; border-radius: 20px 20px 0 0; z-index: 3000; transition: 0.4s; padding: 20px; }
         .comment-modal.active { bottom: 0; }
     </style>
 </head>
 <body>
 
-<div id="pull-indicator"><i class="fas fa-spinner fa-spin"></i> Refreshing...</div>
-
 <div class="top-nav">
     <i class="fas fa-tv text-white fs-4"></i>
     <div class="tabs">
-        <span>Following</span>
+        <span onclick="location.reload()">Following</span>
         <span class="active">For You</span>
     </div>
-    <div class="top-icons">
-        <i class="fas fa-search" onclick="startSearch()"></i>
-        <i class="fas fa-bell" onclick="window.location.href='notifications.html'"></i>
-    </div>
+    <i class="fas fa-search text-white fs-4"></i>
 </div>
 
-<div id="feedSection"></div>
+<div id="feedSection">
+    </div>
 
 <div class="bottom-nav">
     <a href="dashboard.html" class="nav-btn active"><i class="fas fa-home"></i><span>Home</span></a>
     <a href="friends.html" class="nav-btn"><i class="fas fa-users"></i><span>Friends</span></a>
-    <div class="add-btn" onclick="window.location.href='create-post.html'"><i class="fas fa-plus"></i></div>
+    <div class="add-btn-container">
+        <div class="add-btn" onclick="window.location.href='create-post.html'"><i class="fas fa-plus"></i></div>
+    </div>
     <a href="chats.html" class="nav-btn"><i class="fas fa-comment-dots"></i><span>Inbox</span></a>
     <a href="profile.html" class="nav-btn"><i class="fas fa-user"></i><span>Profile</span></a>
 </div>
 
 <div id="commentBox" class="comment-modal">
-    <div class="d-flex justify-content-between border-bottom border-secondary pb-3 mb-3">
-        <h6 id="cmCountText">0 Comments</h6>
+    <div class="d-flex justify-content-between mb-3">
+        <h6 id="cmCountText">Comments</h6>
         <i class="fas fa-times fs-4" onclick="closeComments()"></i>
     </div>
-    <div id="commentList" style="height: 350px; overflow-y: auto;" class="mb-3"></div>
-    <div class="input-group">
-        <input type="text" id="cmInput" class="form-control bg-dark border-0 text-white" placeholder="Say something...">
-        <button class="btn btn-primary" onclick="pushComment()">Post</button>
+    <div id="commentList" style="height: 80%; overflow-y: auto;"></div>
+    <div class="input-group mt-2">
+        <input type="text" id="cmInput" class="form-control bg-dark text-white border-0" placeholder="Add comment...">
+        <button class="btn btn-primary" onclick="pushComment()">Send</button>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, arrayUnion, arrayRemove, addDoc, serverTimestamp, getCountFromServer, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, arrayUnion, arrayRemove, addDoc, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = { 
         apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
@@ -109,59 +104,52 @@
         appId: "1:202329584080:web:e989d7df53d3c3024609d5"
     };
 
-    const db = getFirestore(initializeApp(firebaseConfig));
-    const currentUser = JSON.parse(localStorage.getItem('amd_user'));
-    let activePostId = null;
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const currentUser = JSON.parse(localStorage.getItem('amd_user')) || { phone: '000', name: 'Guest' };
 
+    // Intersection Observer for Auto-play
     const videoObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             const vid = entry.target.querySelector('video');
             if (vid) {
-                if (entry.isIntersecting) vid.play().catch(() => {});
-                else { vid.pause(); vid.currentTime = 0; }
+                if (entry.isIntersecting) {
+                    vid.play().catch(() => {
+                        // Idan an samu matsalar autoplay, mute shi tukunna
+                        vid.muted = true;
+                        vid.play();
+                    });
+                } else {
+                    vid.pause();
+                }
             }
         });
-    }, { threshold: 0.7 });
+    }, { threshold: 0.8 });
 
+    // Load Posts
     onSnapshot(query(collection(db, "posts"), orderBy("createdAt", "desc")), (snapshot) => {
         const feed = document.getElementById('feedSection');
         feed.innerHTML = "";
         
-        if (snapshot.empty) {
-            feed.innerHTML = "<div class='h-100 d-flex align-items-center justify-content-center'><h3>Babu bidiyo tukunna...</h3></div>";
-            return;
-        }
-
         snapshot.forEach(async (pDoc) => {
             const p = pDoc.data();
             const pid = pDoc.id;
-            const isLiked = p.likes?.includes(currentUser?.phone);
-            
-            let isFollowing = false;
-            try {
-                const userRef = doc(db, "users", p.phone);
-                const userSnap = await getDoc(userRef);
-                if (userSnap.exists()) isFollowing = userSnap.data()?.followers?.includes(currentUser?.phone);
-            } catch (e) {}
+            const isLiked = p.likes?.includes(currentUser.phone);
 
             const card = document.createElement('div');
             card.className = 'post-card';
             card.innerHTML = `
                 ${p.type === 'video' ? 
-                    `<video src="${p.fileUrl}" class="post-media" loop playsinline autoplay muted onclick="this.muted=!this.muted"></video>
-                     <div class="play-pause-ui"><i class="fas fa-play"></i></div>
-                     <div class="touch-overlay">
-                        <div class="touch-side" onclick="handleTap(event, '${pid}', 'left')"></div>
-                        <div class="touch-side" onclick="handleTap(event, '${pid}', 'right')"></div>
-                     </div>` : 
+                    `<video src="${p.fileUrl}" class="post-media" loop playsinline onclick="toggleAudio(this)"></video>` : 
                     `<img src="${p.fileUrl}" class="post-media">`
                 }
+                
+                <div class="video-layer" onclick="handleVideoTap(this)"></div>
+
                 <div class="sidebar">
-                    <div class="profile-btn" onclick="window.location.href='profile.html?id=${p.phone}'">
+                    <div class="profile-btn" onclick="location.href='profile.html?id=${p.phone}'">
                         <img src="${p.userPhoto || 'logo.jpg'}" class="profile-img">
-                        <div class="follow-plus" id="plus-${pid}" style="display: ${isFollowing ? 'none' : 'flex'}" onclick="doFollow(event, '${p.phone}', '${pid}')">
-                            <i class="fas fa-plus"></i>
-                        </div>
+                        <div class="follow-plus" onclick="followUser(event, '${p.phone}', '${pid}')"><i class="fas fa-plus"></i></div>
                     </div>
                     <div class="action-item" onclick="toggleLike('${pid}', ${isLiked})">
                         <i class="fas fa-heart" style="color: ${isLiked ? '#fe2c55' : 'white'}"></i>
@@ -169,13 +157,14 @@
                     </div>
                     <div class="action-item" onclick="openComments('${pid}')">
                         <i class="fas fa-comment-dots"></i>
-                        <span id="cCount-${pid}">0</span>
+                        <span>${p.commentCount || 0}</span>
                     </div>
-                    <div class="action-item" onclick="realShare('${p.fileUrl}')">
+                    <div class="action-item" onclick="sharePost('${p.fileUrl}')">
                         <i class="fas fa-share"></i>
                         <span>Share</span>
                     </div>
                 </div>
+
                 <div class="post-info">
                     <h6>@${p.userName || 'User'}</h6>
                     <p>${p.caption || ""}</p>
@@ -183,21 +172,24 @@
             `;
             feed.appendChild(card);
             videoObserver.observe(card);
-            updateCommentCount(pid);
         });
     });
 
-    let lastTap = 0;
-    window.handleTap = (e, pid, side) => {
-        const now = Date.now();
-        const video = e.target.closest('.post-card').querySelector('video');
-        const icon = e.target.closest('.post-card').querySelector('.play-pause-ui');
-        if (now - lastTap < 300) video.currentTime += (side === 'right' ? 10 : -10);
-        else {
-            if (video.paused) { video.play(); icon.style.opacity = 0; }
-            else { video.pause(); icon.style.opacity = 1; }
+    // Audio & Tap Logic
+    window.toggleAudio = (vid) => {
+        vid.muted = !vid.muted;
+    };
+
+    window.handleVideoTap = (overlay) => {
+        const vid = overlay.parentElement.querySelector('video');
+        if(vid) {
+            if(vid.paused) {
+                vid.play();
+                vid.muted = false; // Bude murya idan an taba
+            } else {
+                vid.pause();
+            }
         }
-        lastTap = now;
     };
 
     window.toggleLike = async (pid, liked) => {
@@ -205,57 +197,25 @@
         await updateDoc(ref, { likes: liked ? arrayRemove(currentUser.phone) : arrayUnion(currentUser.phone) });
     };
 
-    window.doFollow = async (e, phone, pid) => {
-        e.stopPropagation();
-        const ref = doc(db, "users", phone);
-        await updateDoc(ref, { followers: arrayUnion(currentUser.phone) });
-        document.getElementById(`plus-${pid}`).style.display = 'none';
-    };
-
-    window.realShare = (url) => navigator.share ? navigator.share({title:'AMD Chat', url}) : alert("Link: "+url);
-
-    async function updateCommentCount(pid) {
-        const snap = await getCountFromServer(collection(db, "posts", pid, "comments"));
-        const el = document.getElementById(`cCount-${pid}`);
-        if(el) el.innerText = snap.data().count;
-    }
-
-    window.openComments = (id) => {
-        activePostId = id;
-        document.getElementById('commentBox').classList.add('active');
-        onSnapshot(query(collection(db, "posts", id, "comments"), orderBy("createdAt", "asc")), (snap) => {
-            const list = document.getElementById('commentList');
-            list.innerHTML = "";
-            snap.forEach(d => {
-                const c = d.data();
-                list.innerHTML += `<div class="mb-2"><strong>@${c.userName}</strong>: ${c.text}</div>`;
-            });
-            document.getElementById('cmCountText').innerText = `${snap.size} Comments`;
-        });
-    };
-
-    window.pushComment = async () => {
-        const input = document.getElementById('cmInput');
-        if(!input.value) return;
-        await addDoc(collection(db, "posts", activePostId, "comments"), {
-            text: input.value,
-            userName: currentUser.name,
-            createdAt: serverTimestamp()
-        });
-        input.value = "";
-    };
-
-    window.closeComments = () => document.getElementById('commentBox').classList.remove('active');
-    window.startSearch = () => { let q = prompt("Who are you looking for?"); if(q) alert("Searching for "+q); };
-
-    let startY = 0;
-    document.addEventListener('touchstart', e => startY = e.touches[0].pageY);
-    document.addEventListener('touchmove', e => {
-        if(e.touches[0].pageY - startY > 150 && document.getElementById('feedSection').scrollTop === 0) {
-            document.getElementById('pull-indicator').style.display='block';
-            setTimeout(()=>location.reload(), 1000);
+    window.sharePost = (url) => {
+        if (navigator.share) {
+            navigator.share({ title: 'AMD Chat', url: url });
+        } else {
+            alert("Link copied: " + url);
         }
-    });
+    };
+
+    // Comments Logic
+    let activePid = null;
+    window.openComments = (pid) => {
+        activePid = pid;
+        document.getElementById('commentBox').classList.add('active');
+        // Load comments logic here if needed
+    };
+
+    window.closeComments = () => {
+        document.getElementById('commentBox').classList.remove('active');
+    };
 </script>
 </body>
 </html>
