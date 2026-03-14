@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AMD Chat - Final Master</title>
+    <title>AMD Chat - Full Design</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --tiktok-red: #fe2c55; --tiktok-blue: #00a2ff; --bg-dark: #050a12; }
         body, html { margin: 0; padding: 0; height: 100%; background: #000; color: white; overflow: hidden; font-family: sans-serif; }
         
-        /* Feed Section */
+        /* Feed System */
         #feedSection { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
         #feedSection::-webkit-scrollbar { display: none; }
         
         .post-card { height: 100vh; width: 100%; scroll-snap-align: start; position: relative; display: flex; align-items: center; justify-content: center; background: #000; }
         .post-media { width: 100%; height: 100%; object-fit: contain; }
+
+        /* Play/Pause Center Icon */
+        .play-overlay { position: absolute; font-size: 80px; color: rgba(255,255,255,0.5); display: none; z-index: 1500; pointer-events: none; }
 
         /* Top Navigation */
         .top-nav { position: absolute; top: 0; width: 100%; padding: 45px 20px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 3000; background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent); }
@@ -24,29 +27,30 @@
         .tabs span.active { opacity: 1; border-bottom: 3px solid white; }
         .top-icons { display: flex; gap: 20px; font-size: 22px; }
 
-        /* Sidebar Actions - Kyautata Fitowa */
+        /* Sidebar Actions */
         .sidebar { position: absolute; right: 12px; bottom: 130px; display: flex; flex-direction: column; align-items: center; gap: 22px; z-index: 4000; }
         .action-item { text-align: center; cursor: pointer; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.9)); }
         .action-item i { font-size: 34px; color: white; }
         .action-item span { display: block; font-size: 13px; font-weight: bold; margin-top: 4px; color: white; text-shadow: 2px 2px 4px #000; }
 
+        /* Profile & Follow */
         .profile-btn { position: relative; width: 50px; height: 50px; margin-bottom: 5px; }
         .profile-img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid white; object-fit: cover; }
         .follow-plus { position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); background: var(--tiktok-red); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; font-size: 12px; color: white; }
 
-        /* Post Info - Username Always Visible */
-        .post-info { position: absolute; bottom: 105px; left: 15px; right: 80px; z-index: 4000; }
-        .post-info h6 { font-weight: 800; margin-bottom: 8px; font-size: 18px; color: white; text-shadow: 2px 2px 10px #000, -2px -2px 10px #000; }
-        .post-info p { font-size: 15px; line-height: 1.3; color: white; text-shadow: 2px 2px 10px #000; }
+        /* Username & Caption - Enhanced Visibility */
+        .post-info { position: absolute; bottom: 105px; left: 15px; right: 80px; z-index: 4000; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; }
+        .post-info h6 { font-weight: 800; margin-bottom: 5px; font-size: 18px; color: white; text-shadow: 1px 1px 5px #000; }
+        .post-info p { font-size: 15px; margin: 0; color: white; text-shadow: 1px 1px 5px #000; }
 
-        /* Bottom Nav - Match Original Style */
+        /* Bottom Nav - Final Color Match */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 75px; background: #050a12; border-top: 1px solid #1a222d; display: flex; justify-content: space-around; align-items: center; z-index: 5000; }
-        .nav-btn { color: #8a96a3; text-decoration: none; text-align: center; font-size: 11px; flex: 1; }
-        .nav-btn.active { color: var(--tiktok-blue); }
+        .nav-btn { color: #00a2ff; text-decoration: none; text-align: center; font-size: 11px; flex: 1; opacity: 0.7; }
+        .nav-btn.active { opacity: 1; }
         .nav-btn i { font-size: 26px; display: block; margin-bottom: 3px; }
         
         .add-btn-container { flex: 1; display: flex; justify-content: center; }
-        .add-btn { width: 55px; height: 42px; background: var(--tiktok-blue); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; border: 3px solid #050a12; box-shadow: 0 0 15px rgba(0,162,255,0.4); }
+        .add-btn { width: 55px; height: 42px; background: var(--tiktok-blue); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; border: 3px solid #050a12; }
 
         .touch-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; }
     </style>
@@ -97,12 +101,10 @@
     const videoObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             const vid = entry.target.querySelector('video');
-            if (vid) {
-                if (entry.isIntersecting) {
-                    vid.play().catch(() => { vid.muted = true; vid.play(); });
-                } else {
-                    vid.pause();
-                }
+            if (vid && entry.isIntersecting) {
+                vid.play().catch(() => { vid.muted = true; vid.play(); });
+            } else if (vid) {
+                vid.pause();
             }
         });
     }, { threshold: 0.8 });
@@ -124,7 +126,8 @@
                     `<img src="${p.fileUrl}" class="post-media">`
                 }
                 
-                <div class="touch-layer" onclick="togglePlay(this)"></div>
+                <div class="play-overlay"><i class="fas fa-play"></i></div>
+                <div class="touch-layer" onclick="handleVideoToggle(this)"></div>
 
                 <div class="sidebar">
                     <div class="profile-btn" onclick="window.location.href='profile.html?id=${p.phone}'">
@@ -135,7 +138,7 @@
                         <i class="fas fa-heart" style="color: ${isLiked ? '#fe2c55' : 'white'}"></i>
                         <span>${p.likes?.length || 0}</span>
                     </div>
-                    <div class="action-item">
+                    <div class="action-item" onclick="alert('Opening Comments...')">
                         <i class="fas fa-comment-dots"></i>
                         <span>${p.commentCount || 0}</span>
                     </div>
@@ -155,11 +158,18 @@
         });
     });
 
-    window.togglePlay = (el) => {
+    window.handleVideoToggle = (el) => {
         const vid = el.parentElement.querySelector('video');
+        const playIcon = el.parentElement.querySelector('.play-overlay');
         if(vid) {
-            if(vid.paused) { vid.play(); vid.muted = false; }
-            else { vid.pause(); }
+            if(vid.paused) {
+                vid.play();
+                vid.muted = false;
+                playIcon.style.display = 'none';
+            } else {
+                vid.pause();
+                playIcon.style.display = 'block';
+            }
         }
     };
 
@@ -172,7 +182,7 @@
         if (navigator.share) {
             navigator.share({ title: 'AMD Chat', url: url });
         } else {
-            alert("Link: " + url);
+            alert("Link copied: " + url);
         }
     };
 </script>
