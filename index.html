@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ha">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auwal MD Data - Login</title>
+    <title>Auwal MD Data - Professional Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
@@ -12,103 +12,132 @@
             margin: 0; padding: 0; width: 100%; height: 100vh;
             display: flex; align-items: center; justify-content: center;
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #0084ff);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            /* Light professional blue gradient to make dark logo pop */
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             overflow: hidden;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
         .login-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 25px;
             width: 90%;
-            max-width: 400px;
+            max-width: 420px;
             text-align: center;
-            box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
         }
 
         .logo-box img {
-            width: 120px;
-            filter: drop-shadow(0 0 10px rgba(0,132,255,0.5));
-            margin-bottom: 10px;
+            width: 130px;
+            height: 130px;
             border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #00d2ff;
+            margin-bottom: 15px;
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
         }
 
         .welcome-txt {
-            color: #fff;
-            font-size: 18px;
-            font-weight: 500;
-            margin-bottom: 20px;
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            letter-spacing: 0.5px;
         }
 
         .form-control {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            color: #333;
             border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 15px;
+            padding: 14px;
+            margin-bottom: 18px;
+            font-size: 15px;
         }
 
-        .form-control::placeholder { color: rgba(255,255,255,0.5); }
+        .form-control:focus {
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+        }
 
         .btn-main {
-            background: linear-gradient(90deg, #0084ff, #00c6ff);
+            background: #00d2ff;
+            background: linear-gradient(to right, #00d2ff, #3a7bd5);
             border: none;
-            padding: 12px;
+            padding: 14px;
             border-radius: 12px;
             font-weight: 600;
             width: 100%;
             color: #fff;
-            box-shadow: 0 10px 20px rgba(0,132,255,0.3);
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+            font-size: 16px;
+            transition: 0.3s;
+            text-transform: uppercase;
         }
 
-        .toggle-link { color: #00c6ff; cursor: pointer; font-weight: 500; }
-        .footer-txt { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 20px; }
-        
-        .spinner { display: none; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid #fff; border-radius: 50%; animation: spin 1s linear infinite; }
+        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4); }
+
+        .toggle-link { color: #00d2ff; cursor: pointer; font-weight: 600; text-decoration: none; }
+        .footer-txt { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 30px; }
+
+        /* WhatsApp Float */
+        .wa-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25d366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: 0.3s;
+        }
+        .wa-float:hover { transform: scale(1.1); color: white; }
+
+        .spinner { display: none; width: 22px; height: 22px; border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid #fff; border-radius: 50%; animation: spin 1s linear infinite; margin-left: 10px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-<div class="login-card animate__animated animate__zoomIn">
+<div class="login-card animate__animated animate__fadeInDown">
     <div class="logo-box">
-        <img src="Image_1.png" alt="Auwal MD Logo">
-        <div class="welcome-txt">Sannu da zuwa Auwal MD Data & Services</div>
+        <img src="Image_1.png" alt="Auwal MD Technology">
+        <div class="welcome-txt">Welcome to Auwal MD Data</div>
     </div>
 
     <div id="authContent">
         <div id="signupOnly">
-            <input type="text" id="fullname" class="form-control" placeholder="Cikakken Suna (Full Name)">
+            <input type="text" id="fullname" class="form-control" placeholder="Full Name">
         </div>
-        <input type="number" id="phone" class="form-control" placeholder="Lambar Waya (Phone)">
-        <input type="password" id="pass" class="form-control" placeholder="Kalmar Sirri (Password)">
+        <input type="number" id="phone" class="form-control" placeholder="Phone Number">
+        <input type="password" id="pass" class="form-control" placeholder="Password">
         
-        <button onclick="handleAuth()" class="btn-main mt-2">
-            <span id="btnText">BUƊE ASUSU (SIGNUP)</span>
+        <button onclick="handleAuth()" class="btn-main">
+            <span id="btnText">Login</span>
             <div class="spinner" id="btnLoader"></div>
         </button>
     </div>
 
-    <div class="mt-4 small text-white-50">
-        <span id="switchText">Kuna da asusu riga?</span> 
-        <span class="toggle-link" id="switchBtn" onclick="toggleMode()">Login</span>
+    <div class="mt-4 small text-white">
+        <span id="switchText">Don't have an account?</span> 
+        <span class="toggle-link" id="switchBtn" onclick="toggleMode()">Sign Up</span>
     </div>
 
-    <div class="footer-txt">© 2026 Auwal MD Data • Amintaccen Shafin VTU</div>
+    <div class="footer-txt">© 2026 Auwal MD Data • All Rights Reserved</div>
 </div>
+
+<a href="https://wa.me/2349137904300" target="_blank" class="wa-float">
+    <i class="fab fa-whatsapp"></i>
+</a>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -126,15 +155,18 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    let isLoginMode = false;
+    let isLoginMode = true; // Start with Login mode
 
     window.toggleMode = function() {
         isLoginMode = !isLoginMode;
         document.getElementById('signupOnly').style.display = isLoginMode ? 'none' : 'block';
-        document.getElementById('btnText').innerText = isLoginMode ? 'SHIGA (LOGIN)' : 'BUƊE ASUSU (SIGNUP)';
+        document.getElementById('btnText').innerText = isLoginMode ? 'Login' : 'Create Account';
         document.getElementById('switchBtn').innerText = isLoginMode ? 'Sign Up' : 'Login';
-        document.getElementById('switchText').innerText = isLoginMode ? "Ba ku da asusu?" : "Kuna da asusu?";
+        document.getElementById('switchText').innerText = isLoginMode ? "Don't have an account?" : "Already have an account?";
     }
+
+    // Initialize the view correctly
+    toggleMode(); toggleMode();
 
     window.handleAuth = async function() {
         const phone = document.getElementById('phone').value;
@@ -142,10 +174,10 @@
         const loader = document.getElementById('btnLoader');
         const btnTxt = document.getElementById('btnText');
 
-        if(!phone || !pass) return alert("Don Allah cika dukkan gurbi!");
+        if(!phone || !pass) return alert("Please fill all fields!");
 
-        loader.style.display = 'block';
-        btnTxt.style.opacity = '0.5';
+        loader.style.display = 'inline-block';
+        btnTxt.style.opacity = '0.7';
 
         try {
             const userRef = doc(db, "users", phone);
@@ -156,17 +188,17 @@
                     localStorage.setItem('amd_user', JSON.stringify(userSnap.data()));
                     window.location.href = "dashboard.html";
                 } else {
-                    alert("❌ Lambar waya ko password ba su yi daidai ba!");
+                    alert("❌ Invalid Phone Number or Password!");
                 }
             } else {
                 if(userSnap.exists()) {
-                    alert("Wannan lambar wayar tana da asusu riga!");
+                    alert("User already exists!");
                 } else {
                     const userData = {
                         name: document.getElementById('fullname').value,
                         phone: phone,
                         password: pass,
-                        balance: 0, // Wallet balance na farko
+                        balance: 0,
                         role: "user"
                     };
                     await setDoc(userRef, userData);
