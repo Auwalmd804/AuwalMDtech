@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Airtime - Auwal MD Data</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Poppins', sans-serif; padding-bottom: 80px; }
+        .header { background: #1e3c72; color: white; padding: 20px; text-align: center; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; }
+        
+        /* Network Selection Styling */
+        .network-card {
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            background: white;
+            text-align: center;
+        }
+        .network-card img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-bottom: 5px; }
+        .network-card.active { border-color: #00d2ff; background: #e3f2fd; }
+        
+        .form-section { background: white; border-radius: 20px; padding: 20px; margin-top: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .btn-buy { background: linear-gradient(to right, #00d2ff, #3a7bd5); border: none; color: white; font-weight: 600; width: 100%; padding: 12px; border-radius: 12px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <a href="dashboard.html" style="color: white; float: left;"><i class="fas fa-arrow-left"></i></a>
+    <h5 class="mb-0">Purchase Airtime</h5>
+</div>
+
+<div class="container mt-4">
+    <h6>1. Select Network</h6>
+    <div class="row g-3 mt-1">
+        <div class="col-3">
+            <div class="network-card" onclick="setNetwork('MTN', this)">
+                <img src="mtn.png" alt="MTN">
+                <p class="small mb-0">MTN</p>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="network-card" onclick="setNetwork('Airtel', this)">
+                <img src="airtel.png" alt="Airtel">
+                <p class="small mb-0">Airtel</p>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="network-card" onclick="setNetwork('Glo', this)">
+                <img src="glo.png" alt="Glo">
+                <p class="small mb-0">Glo</p>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="network-card" onclick="setNetwork('9mobile', this)">
+                <img src="9mobile.png" alt="9mobile">
+                <p class="small mb-0">9mobile</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h6>2. Transaction Details</h6>
+        <div class="mb-3">
+            <label class="small text-muted">Phone Number</label>
+            <input type="number" id="phoneNum" class="form-control" placeholder="Enter recipient number">
+        </div>
+        <div class="mb-3">
+            <label class="small text-muted">Amount (₦)</label>
+            <input type="number" id="amount" class="form-control" placeholder="Minimum ₦50">
+        </div>
+        
+        <div class="p-3 rounded-3 bg-light mt-3">
+            <div class="d-flex justify-content-between">
+                <span>Selected:</span>
+                <span id="displayNet" class="fw-bold text-primary">None</span>
+            </div>
+            <div class="d-flex justify-content-between mt-1">
+                <span>To Pay:</span>
+                <span id="displayPay" class="fw-bold">₦0.00</span>
+            </div>
+        </div>
+
+        <button class="btn-buy" onclick="processAirtime()">BUY NOW</button>
+    </div>
+</div>
+
+<script type="module">
+    let selectedNet = "";
+    
+    window.setNetwork = function(net, element) {
+        selectedNet = net;
+        document.getElementById('displayNet').innerText = net;
+        
+        // Remove active class from all and add to clicked one
+        document.querySelectorAll('.network-card').forEach(card => card.classList.remove('active'));
+        element.classList.add('active');
+    }
+
+    document.getElementById('amount').addEventListener('input', function() {
+        let val = this.value || 0;
+        document.getElementById('displayPay').innerText = "₦" + parseFloat(val).toLocaleString();
+    });
+
+    window.processAirtime = function() {
+        const phone = document.getElementById('phoneNum').value;
+        const amt = document.getElementById('amount').value;
+
+        if(!selectedNet) return alert("Please select a network!");
+        if(phone.length < 10) return alert("Enter a valid phone number!");
+        if(amt < 50) return alert("Minimum amount is ₦50!");
+
+        alert(`Processing ₦${amt} ${selectedNet} Airtime for ${phone}. This will be connected to your API soon!`);
+    }
+</script>
+
+</body>
+</html>
