@@ -8,65 +8,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { background-color: #f4f7f6; font-family: 'Poppins', sans-serif; padding-bottom: 80px; }
-        .header-bg {
-            background: #1e3c72;
-            height: 160px;
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
-            padding: 20px;
-            color: white;
-        }
-
-        /* Wallet Card */
-        .wallet-card {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            border-radius: 20px;
-            padding: 25px;
-            margin-top: -60px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-
-        /* Monnify Box */
-        .monnify-box {
-            background: white;
-            border-radius: 15px;
-            padding: 15px;
-            margin-top: 20px;
-            border-left: 5px solid #25d366;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-
-        /* Service Icons */
-        .service-box {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            transition: 0.3s;
-            cursor: pointer;
-            border: 1px solid #eee;
-            height: 100%;
-        }
+        .header-bg { background: #1e3c72; height: 160px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; padding: 20px; color: white; }
+        .wallet-card { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; border-radius: 20px; padding: 25px; margin-top: -60px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+        .monnify-box { background: white; border-radius: 15px; padding: 15px; margin-top: 20px; border-left: 5px solid #25d366; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .service-box { background: white; border-radius: 15px; padding: 20px; text-align: center; transition: 0.3s; cursor: pointer; border: 1px solid #eee; height: 100%; }
         .service-box:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .service-box i { font-size: 30px; margin-bottom: 10px; }
-        
         .icon-data { color: #0084ff; }
         .icon-airtime { color: #28a745; }
         .icon-nin { color: #ffc107; }
         .icon-bvn { color: #dc3545; }
-
-        .footer-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
-            z-index: 1000;
-        }
+        .footer-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; box-shadow: 0 -2px 15px rgba(0,0,0,0.1); z-index: 1000; }
         .footer-nav a { color: #888; text-decoration: none; font-size: 12px; text-align: center; }
         .footer-nav a.active { color: #1e3c72; font-weight: bold; }
         .loader-sm { width: 15px; height: 15px; border: 2px solid #f3f3f3; border-top: 2px solid #1e3c72; border-radius: 50%; animation: spin 1s linear infinite; display: inline-block; }
@@ -98,7 +50,7 @@
     <div id="monnifyArea" class="monnify-box" style="display: none;">
         <h6 class="fw-bold text-dark mb-2 small"><i class="fas fa-university text-success"></i> Instant Funding Account</h6>
         <div id="monnifyLoading" class="text-center py-2" style="display:none;">
-            <div class="loader-sm"></div> <span class="small">Generating Account...</span>
+            <div class="loader-sm"></div> <span class="small">Connecting to Bank...</span>
         </div>
         <div id="accountDisplay">
             <div class="d-flex justify-content-between small border-bottom py-1">
@@ -118,30 +70,10 @@
     </div>
 
     <div class="row mt-4 g-3">
-        <div class="col-6">
-            <div class="service-box shadow-sm" onclick="location.href='buy-data.html'">
-                <i class="fas fa-wifi icon-data"></i>
-                <div class="fw-bold small">Buy Data</div>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="service-box shadow-sm" onclick="location.href='buy-airtime.html'">
-                <i class="fas fa-mobile-alt icon-airtime"></i>
-                <div class="fw-bold small">Airtime</div>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="service-box shadow-sm" onclick="location.href='nin-slip.html'">
-                <i class="fas fa-id-card icon-nin"></i>
-                <div class="fw-bold small">NIN Slip</div>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="service-box shadow-sm" onclick="location.href='bvn-slip.html'">
-                <i class="fas fa-university icon-bvn"></i>
-                <div class="fw-bold small">BVN Slip</div>
-            </div>
-        </div>
+        <div class="col-6"><div class="service-box shadow-sm" onclick="location.href='buy-data.html'"><i class="fas fa-wifi icon-data"></i><div class="fw-bold small">Buy Data</div></div></div>
+        <div class="col-6"><div class="service-box shadow-sm" onclick="location.href='buy-airtime.html'"><i class="fas fa-mobile-alt icon-airtime"></i><div class="fw-bold small">Airtime</div></div></div>
+        <div class="col-6"><div class="service-box shadow-sm" onclick="location.href='nin-slip.html'"><i class="fas fa-id-card icon-nin"></i><div class="fw-bold small">NIN Slip</div></div></div>
+        <div class="col-6"><div class="service-box shadow-sm" onclick="location.href='bvn-slip.html'"><i class="fas fa-university icon-bvn"></i><div class="fw-bold small">BVN Slip</div></div></div>
     </div>
 </div>
 
@@ -169,7 +101,6 @@
     const db = getFirestore(app);
     const userData = JSON.parse(localStorage.getItem('amd_user'));
 
-    // --- MONNIFY SETTINGS ---
     const API_KEY = "MK_TEST_MPZR1JRFP0";
     const SECRET_KEY = "8SCYPRY5LM7E3KSB5C95YJ01TP53CPL0";
     const CONTRACT = "7031639441";
@@ -178,13 +109,10 @@
         window.location.href = "index.html";
     } else {
         document.getElementById('welcomeName').innerText = "Welcome, " + userData.name;
-        
-        const userRef = doc(db, "users", userData.phone);
-        onSnapshot(userRef, (docSnap) => {
+        onSnapshot(doc(db, "users", userData.phone), (docSnap) => {
             if (docSnap.exists()) {
-                const data = docSnap.data();
-                const bal = parseFloat(data.balance) || 0;
-                document.getElementById('userBalance').innerText = "₦" + bal.toLocaleString(undefined, {minimumFractionDigits: 2});
+                const bal = parseFloat(docSnap.data().balance) || 0;
+                document.getElementById('userBalance').innerText = "₦" + bal.toLocaleString();
             }
         });
     }
@@ -211,16 +139,13 @@
             const token = await getMonnifyToken();
             const response = await fetch("https://sandbox.monnify.com/api/v1/bank-transfer/reserved-accounts", {
                 method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    "accountReference": userData.phone + "_ref",
+                    "accountReference": userData.phone + "_" + Math.floor(Date.now() / 1000),
                     "accountName": "AMD-" + userData.name,
                     "currencyCode": "NGN",
                     "contractCode": CONTRACT,
-                    "customerEmail": userData.phone + "@auwaldata.com",
+                    "customerEmail": "auwalmdtest@gmail.com",
                     "customerName": userData.name,
                     "getAllAvailableBanks": true
                 })
@@ -231,19 +156,18 @@
                 document.getElementById('bankName').innerText = acc.bankName;
                 document.getElementById('userAccNo').innerText = acc.accountNumber;
                 document.getElementById('userAccName').innerText = acc.accountName;
+            } else {
+                document.getElementById('userAccNo').innerText = "API Limit/Error";
             }
         } catch (e) {
-            document.getElementById('userAccNo').innerText = "Error Loading";
+            document.getElementById('userAccNo').innerText = "Network Error";
         } finally {
             document.getElementById('monnifyLoading').style.display = 'none';
             document.getElementById('accountDisplay').style.display = 'block';
         }
     }
 
-    window.logout = function() {
-        localStorage.clear();
-        window.location.href = "index.html";
-    }
+    window.logout = () => { localStorage.clear(); window.location.href = "index.html"; }
 </script>
 </body>
 </html>
