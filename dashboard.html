@@ -7,26 +7,34 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background-color: #f4f7f6; font-family: 'Poppins', sans-serif; }
-        .navbar { background: #1e3c72; color: white; }
-        
+        body { background-color: #f4f7f6; font-family: 'Poppins', sans-serif; padding-bottom: 80px; }
+        .header-bg {
+            background: #1e3c72;
+            height: 160px;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            padding: 20px;
+            color: white;
+        }
+
         /* Wallet Card */
         .wallet-card {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
             border-radius: 20px;
             padding: 25px;
-            margin-top: -50px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            margin-top: -60px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         }
 
-        .header-bg {
-            background: #1e3c72;
-            height: 150px;
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
-            padding: 20px;
-            color: white;
+        /* Monnify Box */
+        .monnify-box {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 20px;
+            border-left: 5px solid #25d366;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
         /* Service Icons */
@@ -38,6 +46,7 @@
             transition: 0.3s;
             cursor: pointer;
             border: 1px solid #eee;
+            height: 100%;
         }
         .service-box:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .service-box i { font-size: 30px; margin-bottom: 10px; }
@@ -54,11 +63,12 @@
             background: white;
             display: flex;
             justify-content: space-around;
-            padding: 10px 0;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            padding: 12px 0;
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
+            z-index: 1000;
         }
         .footer-nav a { color: #888; text-decoration: none; font-size: 12px; text-align: center; }
-        .footer-nav a.active { color: #1e3c72; }
+        .footer-nav a.active { color: #1e3c72; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -66,59 +76,73 @@
 <div class="header-bg">
     <div class="d-flex justify-content-between align-items-center">
         <div>
-            <h5 id="welcomeName">Welcome, User</h5>
-            <small>What would you like to do today?</small>
+            <h5 id="welcomeName" class="mb-0">Loading...</h5>
+            <small class="opacity-75">Professional Data Services</small>
         </div>
-        <img src="Image_1.png" style="width: 40px; border-radius: 50%; border: 2px solid white;">
+        <img src="Image_1.png" style="width: 45px; height: 45px; border-radius: 50%; border: 2px solid white; object-fit: cover;">
     </div>
 </div>
 
 <div class="container">
-    <div class="wallet-card">
-        <small>Available Balance</small>
-        <h2 class="fw-bold" id="userBalance">₦0.00</h2>
+    <div class="wallet-card text-center">
+        <small class="opacity-75">Available Balance</small>
+        <h2 class="fw-bold my-1" id="userBalance">₦0.00</h2>
         <div class="d-flex gap-2 mt-3">
-            <button class="btn btn-light btn-sm w-100 fw-bold" onclick="location.href='https://wa.me/2349137904300'">+ Fund Wallet</button>
-            <button class="btn btn-outline-light btn-sm w-100" onclick="location.href='notifications.html'">History</button>
+            <button class="btn btn-light btn-sm w-100 fw-bold" onclick="toggleMonnify()"><i class="fas fa-plus-circle"></i> Fund Wallet</button>
+            <button class="btn btn-outline-light btn-sm w-100" onclick="location.href='notifications.html'"><i class="fas fa-history"></i> History</button>
         </div>
+    </div>
+
+    <div id="monnifyArea" class="monnify-box animate__animated animate__fadeIn" style="display: none;">
+        <h6 class="fw-bold text-dark mb-2 small"><i class="fas fa-university text-success"></i> Instant Funding Account</h6>
+        <div class="d-flex justify-content-between small border-bottom py-1">
+            <span class="text-muted">Bank:</span>
+            <span class="fw-bold">WEMA BANK</span>
+        </div>
+        <div class="d-flex justify-content-between small border-bottom py-1">
+            <span class="text-muted">Acc No:</span>
+            <span class="fw-bold text-primary" id="userAccNo">9137904300</span>
+        </div>
+        <div class="d-flex justify-content-between small py-1">
+            <span class="text-muted">Name:</span>
+            <span class="fw-bold" id="userAccName">AUWAL MD - USER</span>
+        </div>
+        <p class="text-danger mb-0 mt-2" style="font-size: 10px;">* Note: ₦50 charges applied per transfer.</p>
     </div>
 
     <div class="row mt-4 g-3">
         <div class="col-6">
-            <div class="service-box" onclick="alert('Data Service Coming Soon')">
+            <div class="service-box shadow-sm" onclick="location.href='buy-data.html'">
                 <i class="fas fa-wifi icon-data"></i>
-                <div class="fw-bold">Buy Data</div>
+                <div class="fw-bold small">Buy Data</div>
             </div>
         </div>
         <div class="col-6">
-            <div class="service-box" onclick="alert('Airtime Service Coming Soon')">
+            <div class="service-box shadow-sm" onclick="location.href='buy-airtime.html'">
                 <i class="fas fa-mobile-alt icon-airtime"></i>
-                <div class="fw-bold">Airtime</div>
+                <div class="fw-bold small">Airtime</div>
             </div>
         </div>
         <div class="col-6">
-            <div class="service-box" onclick="alert('NIN Service Coming Soon')">
+            <div class="service-box shadow-sm" onclick="location.href='nin-slip.html'">
                 <i class="fas fa-id-card icon-nin"></i>
-                <div class="fw-bold">NIN Slip</div>
+                <div class="fw-bold small">NIN Slip</div>
             </div>
         </div>
         <div class="col-6">
-    <div class="service-box" onclick="location.href='buy-airtime.html'">
-        <i class="fas fa-mobile-alt icon-airtime"></i>
-        <div class="fw-bold">Airtime</div>
-    </div>
-        </div>
+            <div class="service-box shadow-sm" onclick="location.href='bvn-slip.html'">
+                <i class="fas fa-university icon-bvn"></i>
+                <div class="fw-bold small">BVN Slip</div>
+            </div>
         </div>
     </div>
 </div>
 
-<br><br><br>
-
 <div class="footer-nav">
-    <a href="dashboard.html" class="active"><i class="fas fa-home d-block"></i>Home</a>
-    <a href="profile.html"><i class="fas fa-user d-block"></i>Profile</a>
-    <a href="notifications.html"><i class="fas fa-bell d-block"></i>Alerts</a>
-    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt d-block"></i>Logout</a>
+    <a href="dashboard.html" class="active"><i class="fas fa-home d-block fa-lg mb-1"></i>Home</a>
+    <a href="profile.html"><i class="fas fa-user d-block fa-lg mb-1"></i>Profile</a>
+    <a href="notifications.html"><i class="fas fa-bell d-block fa-lg mb-1"></i>Alerts</a>
+    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt d-block fa-lg mb-1"></i>Logout</a>
 </div>
 
 <script type="module">
@@ -137,26 +161,31 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Get Logged in User Data
     const userData = JSON.parse(localStorage.getItem('amd_user'));
 
     if(!userData) {
         window.location.href = "index.html";
     } else {
         document.getElementById('welcomeName').innerText = "Welcome, " + userData.name;
+        document.getElementById('userAccName').innerText = "AMD - " + userData.name.toUpperCase();
         
-        // Listen to Live Balance Updates from Firebase
         const userRef = doc(db, "users", userData.phone);
         onSnapshot(userRef, (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
-                document.getElementById('userBalance').innerText = "₦" + parseFloat(data.balance).toLocaleString();
+                const bal = parseFloat(data.balance) || 0;
+                document.getElementById('userBalance').innerText = "₦" + bal.toLocaleString(undefined, {minimumFractionDigits: 2});
             }
         });
     }
 
+    window.toggleMonnify = function() {
+        const area = document.getElementById('monnifyArea');
+        area.style.display = area.style.display === 'none' ? 'block' : 'none';
+    }
+
     window.logout = function() {
-        localStorage.removeItem('amd_user');
+        localStorage.clear();
         window.location.href = "index.html";
     }
 </script>
