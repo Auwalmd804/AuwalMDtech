@@ -3,100 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AMD Chat - Central Admin Console</title>
+    <title>Admin Office - Auwal MD Data</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --admin-dark: #020617;
-            --admin-card: #0f172a;
-            --accent: #0084ff;
-        }
-        body { 
-            background: var(--admin-dark); 
-            color: white; 
-            font-family: 'Inter', sans-serif; 
-        }
-        .sidebar {
-            background: var(--admin-card);
-            min-height: 100vh;
-            border-right: 1px solid rgba(255,255,255,0.1);
-        }
-        .stat-card {
-            background: var(--admin-card);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .data-table {
-            background: var(--admin-card);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        .user-row img {
-            width: 35px; height: 35px; border-radius: 50%; object-fit: cover;
-        }
-        .post-thumb {
-            width: 60px; height: 60px; border-radius: 8px; object-fit: cover;
-        }
-        .btn-danger-custom {
-            background: #dc2626; border: none; font-size: 12px; padding: 5px 10px;
-        }
-        .btn-danger-custom:hover { background: #991b1b; }
+        body { background-color: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .admin-header { background: #1a237e; color: white; padding: 20px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
+        .user-card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 15px; border-left: 5px solid #1a237e; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .stats-box { background: white; border-radius: 10px; padding: 15px; text-align: center; margin-bottom: 20px; }
+        .btn-fund { background: #28a745; color: white; border: none; border-radius: 8px; padding: 5px 15px; font-weight: 600; }
+        #auth-lock { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #1a237e; z-index: 9999; display: flex; align-items: center; justify-content: center; color: white; flex-direction: column; }
     </style>
 </head>
 <body>
 
-<div class="container-fluid">
+<div id="auth-lock">
+    <img src="Image_1.png" style="width: 80px; border-radius: 50%; margin-bottom: 20px;">
+    <h4>Admin Access Only</h4>
+    <input type="password" id="adminPass" class="form-control w-75 mt-3" placeholder="Enter Admin Password">
+    <button class="btn btn-light mt-3" onclick="checkAdmin()">Access Office</button>
+</div>
+
+<div class="admin-header">
+    <div class="container">
+        <h3><i class="fas fa-user-shield"></i> Admin Control Center</h3>
+        <p>Manage Users & Financials</p>
+    </div>
+</div>
+
+<div class="container mt-4">
     <div class="row">
-        <main class="col-md-12 p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="fw-bold text-primary"><i class="fas fa-shield-alt"></i> Central Admin Panel</h3>
-                <div class="text-end">
-                    <small class="text-muted d-block">Admin Logged:</small>
-                    <span class="badge bg-primary">08164712102</span>
-                </div>
+        <div class="col-6">
+            <div class="stats-box shadow-sm">
+                <h6 class="text-muted">Total Users</h6>
+                <h4 id="totalUsers">0</h4>
             </div>
-
-            <div class="row g-4 mb-4">
-                <div class="col-md-3">
-                    <div class="stat-card">
-                        <small class="text-muted text-uppercase">Total Users</small>
-                        <h2 id="totalUsers">0</h2>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-card">
-                        <small class="text-muted text-uppercase">Total Posts</small>
-                        <h2 id="totalPosts">0</h2>
-                    </div>
-                </div>
+        </div>
+        <div class="col-6">
+            <div class="stats-box shadow-sm">
+                <h6 class="text-muted">Revenue</h6>
+                <h4 id="totalRevenue">₦0</h4>
             </div>
+        </div>
+    </div>
 
-            <div class="row">
-                <div class="col-md-6 mb-4">
-                    <div class="data-table p-3">
-                        <h5 class="mb-3">User Management</h5>
-                        <div id="userContainer" style="max-height: 500px; overflow-y: auto;">
-                            </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 mb-4">
-                    <div class="data-table p-3">
-                        <h5 class="mb-3">Content Feed (Post Control)</h5>
-                        <div id="postContainer" style="max-height: 500px; overflow-y: auto;">
-                            </div>
-                    </div>
-                </div>
-            </div>
-        </main>
+    <h5 class="mb-3">Registered Users</h5>
+    <div id="userList">
+        <p class="text-center mt-5">Loading users...</p>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, doc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
@@ -110,70 +69,62 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // SECURITY CHECK: Only your phone number 08164712102 can stay here
-    const currentUser = JSON.parse(localStorage.getItem('amd_user'));
-    const ADMIN_PHONE = "08164712102";
-
-    if (!currentUser || currentUser.phone !== ADMIN_PHONE) {
-        alert("ACCESS DENIED: You are not authorized to view this page.");
-        window.location.href = "dashboard.html";
+    // 1. Password Protection
+    window.checkAdmin = function() {
+        const pass = document.getElementById('adminPass').value;
+        if(pass === "081647") { // Wannan shine password dinka
+            document.getElementById('auth-lock').style.display = 'none';
+            loadUsers();
+        } else {
+            alert("Wrong Admin Password!");
+        }
     }
 
-    // Load Users
-    onSnapshot(collection(db, "users"), (snapshot) => {
-        const container = document.getElementById('userContainer');
-        document.getElementById('totalUsers').innerText = snapshot.size;
-        container.innerHTML = "";
-        snapshot.forEach(d => {
-            const u = d.data();
-            container.innerHTML += `
-                <div class="d-flex align-items-center justify-content-between p-2 border-bottom border-secondary user-row">
-                    <div class="d-flex align-items-center">
-                        <img src="${u.photo || 'https://ui-avatars.com/api/?name='+u.name}">
-                        <div class="ms-2">
-                            <div class="small fw-bold">${u.name}</div>
-                            <div class="text-muted" style="font-size: 10px;">${u.phone}</div>
+    // 2. Load All Users from Firebase
+    function loadUsers() {
+        onSnapshot(collection(db, "users"), (snapshot) => {
+            const userList = document.getElementById('userList');
+            userList.innerHTML = "";
+            let total = 0;
+            
+            snapshot.forEach((userDoc) => {
+                const data = userDoc.data();
+                total++;
+                const card = `
+                    <div class="user-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-0 fw-bold">${data.name}</h6>
+                                <small class="text-muted">${data.phone}</small><br>
+                                <span class="badge bg-primary">Balance: ₦${parseFloat(data.balance).toLocaleString()}</span>
+                            </div>
+                            <button class="btn-fund" onclick="fundUser('${data.phone}')">
+                                <i class="fas fa-plus"></i> Fund
+                            </button>
                         </div>
                     </div>
-                    <button class="btn btn-danger-custom" onclick="deleteUser('${d.id}')">Suspend</button>
-                </div>`;
+                `;
+                userList.innerHTML += card;
+            });
+            document.getElementById('totalUsers').innerText = total;
         });
-    });
+    }
 
-    // Load Posts
-    onSnapshot(query(collection(db, "posts"), orderBy("createdAt", "desc")), (snapshot) => {
-        const container = document.getElementById('postContainer');
-        document.getElementById('totalPosts').innerText = snapshot.size;
-        container.innerHTML = "";
-        snapshot.forEach(d => {
-            const p = d.data();
-            const media = p.type === 'video' ? '<div class="post-thumb bg-dark d-flex align-items-center justify-content-center"><i class="fas fa-video"></i></div>' : `<img src="${p.fileUrl}" class="post-thumb">`;
-            container.innerHTML += `
-                <div class="d-flex align-items-center justify-content-between p-2 border-bottom border-secondary">
-                    <div class="d-flex align-items-center">
-                        ${media}
-                        <div class="ms-2">
-                            <div class="small fw-bold">By: ${p.userName}</div>
-                            <div class="text-muted text-truncate" style="font-size: 10px; width: 150px;">${p.caption || "No caption"}</div>
-                        </div>
-                    </div>
-                    <button class="btn btn-danger-custom" onclick="deletePost('${d.id}')">Delete Post</button>
-                </div>`;
-        });
-    });
-
-    // Admin Actions
-    window.deleteUser = async (id) => {
-        if(confirm("Suspend this user permanently?")) {
-            await deleteDoc(doc(db, "users", id));
+    // 3. Fund User Wallet Function
+    window.fundUser = async function(phone) {
+        const amount = prompt("Enter amount to add (e.g 500):");
+        if(amount && !isNaN(amount)) {
+            const userRef = doc(db, "users", phone);
+            try {
+                await updateDoc(userRef, {
+                    balance: increment(parseFloat(amount))
+                });
+                alert("₦" + amount + " has been added successfully!");
+            } catch (e) {
+                alert("Error funding user!");
+            }
         }
-    };
-
-    window.deletePost = async (id) => {
-        if(confirm("Remove this content for safety violations?")) {
-            await deleteDoc(doc(db, "posts", id));
-        }
-    };
+    }
 </script>
 
 </body>
