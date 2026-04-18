@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auwal MD Data - Professional Login</title>
+    <title>RetayaX - Smart Data Solutions</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
@@ -12,116 +12,65 @@
             margin: 0; padding: 0; width: 100%; height: 100vh;
             display: flex; align-items: center; justify-content: center;
             font-family: 'Poppins', sans-serif;
-            /* Light professional blue gradient to make dark logo pop */
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
             overflow: hidden;
         }
-
         .login-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 40px;
-            border-radius: 25px;
+            border-radius: 30px;
             width: 90%;
-            max-width: 420px;
+            max-width: 400px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
-
         .logo-box img {
-            width: 130px;
-            height: 130px;
+            width: 120px; height: 120px;
             border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #00d2ff;
-            margin-bottom: 15px;
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
+            border: 3px solid #25d366;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(37, 211, 102, 0.4);
         }
-
-        .welcome-txt {
-            color: #ffffff;
-            font-size: 22px;
-            font-weight: 600;
-            margin-bottom: 25px;
-            letter-spacing: 0.5px;
-        }
-
+        .welcome-txt { color: #fff; font-size: 20px; font-weight: 600; margin-bottom: 25px; }
         .form-control {
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
-            color: #333;
-            border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 18px;
-            font-size: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff; border-radius: 12px; padding: 14px; margin-bottom: 15px;
         }
-
-        .form-control:focus {
-            background: #fff;
-            box-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
-        }
-
+        .form-control::placeholder { color: rgba(255,255,255,0.5); }
         .btn-main {
-            background: #00d2ff;
-            background: linear-gradient(to right, #00d2ff, #3a7bd5);
-            border: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: 600;
-            width: 100%;
-            color: #fff;
-            font-size: 16px;
-            transition: 0.3s;
-            text-transform: uppercase;
+            background: #25d366; border: none; padding: 14px;
+            border-radius: 12px; font-weight: 700; width: 100%;
+            color: #000; transition: 0.3s;
         }
-
-        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4); }
-
-        .toggle-link { color: #00d2ff; cursor: pointer; font-weight: 600; text-decoration: none; }
-        .footer-txt { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 30px; }
-
-        /* WhatsApp Float */
-        .wa-float {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #25d366;
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            z-index: 1000;
-            transition: 0.3s;
+        .btn-main:hover { background: #20b85a; transform: translateY(-2px); }
+        .toggle-link { color: #25d366; cursor: pointer; font-weight: 600; }
+        .spinner { 
+            display: none; width: 20px; height: 20px; 
+            border: 3px solid rgba(0,0,0,0.2); border-top: 3px solid #000; 
+            border-radius: 50%; animation: spin 0.8s linear infinite; margin-left: 10px; 
         }
-        .wa-float:hover { transform: scale(1.1); color: white; }
-
-        .spinner { display: none; width: 22px; height: 22px; border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid #fff; border-radius: 50%; animation: spin 1s linear infinite; margin-left: 10px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-<div class="login-card animate__animated animate__fadeInDown">
+<div class="login-card animate__animated animate__fadeInUp">
     <div class="logo-box">
-        <img src="Image_1.png" alt="Auwal MD Technology">
-        <div class="welcome-txt">Welcome to Auwal MD Data</div>
+        <img src="logo.png" alt="RetayaX Logo">
+        <div class="welcome-txt">Welcome to RetayaX</div>
     </div>
 
     <div id="authContent">
-        <div id="signupOnly">
+        <div id="signupOnly" style="display:none;">
             <input type="text" id="fullname" class="form-control" placeholder="Full Name">
         </div>
         <input type="number" id="phone" class="form-control" placeholder="Phone Number">
         <input type="password" id="pass" class="form-control" placeholder="Password">
         
-        <button onclick="handleAuth()" class="btn-main">
+        <button onclick="handleAuth()" class="btn-main d-flex align-items-center justify-content-center">
             <span id="btnText">Login</span>
             <div class="spinner" id="btnLoader"></div>
         </button>
@@ -132,12 +81,8 @@
         <span class="toggle-link" id="switchBtn" onclick="toggleMode()">Sign Up</span>
     </div>
 
-    <div class="footer-txt">© 2026 Auwal MD Data • All Rights Reserved</div>
+    <div class="mt-4" style="font-size: 11px; color: rgba(255,255,255,0.4);">© 2026 RetayaX • All Rights Reserved</div>
 </div>
-
-<a href="https://wa.me/2349137904300" target="_blank" class="wa-float">
-    <i class="fab fa-whatsapp"></i>
-</a>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -155,7 +100,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    let isLoginMode = true; // Start with Login mode
+    let isLoginMode = true;
 
     window.toggleMode = function() {
         isLoginMode = !isLoginMode;
@@ -164,9 +109,6 @@
         document.getElementById('switchBtn').innerText = isLoginMode ? 'Sign Up' : 'Login';
         document.getElementById('switchText').innerText = isLoginMode ? "Don't have an account?" : "Already have an account?";
     }
-
-    // Initialize the view correctly
-    toggleMode(); toggleMode();
 
     window.handleAuth = async function() {
         const phone = document.getElementById('phone').value;
@@ -188,19 +130,13 @@
                     localStorage.setItem('amd_user', JSON.stringify(userSnap.data()));
                     window.location.href = "dashboard.html";
                 } else {
-                    alert("❌ Invalid Phone Number or Password!");
+                    alert("❌ Invalid Details!");
                 }
             } else {
                 if(userSnap.exists()) {
                     alert("User already exists!");
                 } else {
-                    const userData = {
-                        name: document.getElementById('fullname').value,
-                        phone: phone,
-                        password: pass,
-                        balance: 0,
-                        role: "user"
-                    };
+                    const userData = { name: document.getElementById('fullname').value, phone, password: pass, balance: 0, role: "user" };
                     await setDoc(userRef, userData);
                     localStorage.setItem('amd_user', JSON.stringify(userData));
                     window.location.href = "dashboard.html";
