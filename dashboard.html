@@ -6,9 +6,10 @@
     <title>RetayaX Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background: #f8f9fa; font-family: 'Poppins', sans-serif; }
-        .sidebar { background: #2c5364; color: white; height: 100vh; padding: 20px; }
-        .card { border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        body { background: #f0f2f5; font-family: 'Poppins', sans-serif; }
+        .sidebar { background: #0f2027; color: white; height: 100vh; padding: 20px; border-top-right-radius: 30px; }
+        .logo-small { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #25d366; margin-bottom: 15px; }
+        .welcome-box { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -16,37 +17,43 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3 sidebar">
-            <h3>RetayaX</h3>
+            <div class="text-center">
+                <img src="logo.png" alt="RetayaX Logo" class="logo-small">
+                <h5>RetayaX</h5>
+            </div>
             <hr>
-            <p id="userName">Loading...</p>
+            <p id="userName">Welcome, User!</p>
             <div id="adminArea" style="display:none;">
                 <button class="btn btn-warning w-100 mb-2">Admin Panel</button>
             </div>
-            <button class="btn btn-danger w-100" onclick="logout()">Logout</button>
+            <button class="btn btn-outline-light w-100" onclick="logout()">Logout</button>
         </div>
 
         <div class="col-md-9 p-4">
-            <h2>Kasuwar Kayan Zamani</h2>
+            <div class="welcome-box">
+                <h2>Welcome to RetayaX Dashboard</h2>
+                <p>Explore the best modern gadgets and tech solutions at your fingertips.</p>
+            </div>
+            
             <div id="productFeed" class="row">
-                <p>Ana ɗauko kayayyaki...</p>
+                <p>Trending products will appear here soon...</p>
             </div>
         </div>
     </div>
 </div>
 
 <script type="module">
-    // 1. Duba login
     const userData = JSON.parse(localStorage.getItem('amd_user'));
     if(!userData) window.location.href = "index.html";
 
-    document.getElementById('userName').innerText = "Sannu, " + userData.name;
+    // Nuna Suna
+    document.getElementById('userName').innerText = "Welcome, " + userData.name;
 
-    // 2. Nuna Admin Panel idan role ɗinsa admin ne
+    // Nuna Admin button
     if(userData.role === 'admin') {
         document.getElementById('adminArea').style.display = 'block';
     }
 
-    // 3. Logout function
     window.logout = () => {
         localStorage.removeItem('amd_user');
         window.location.href = "index.html";
