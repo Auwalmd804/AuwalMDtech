@@ -2,62 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RetayaX Dashboard</title>
+    <title>RetayaX Digital Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background: #f0f2f5; font-family: 'Poppins', sans-serif; }
-        .sidebar { background: #0f2027; color: white; height: 100vh; padding: 20px; border-top-right-radius: 30px; }
-        .logo-small { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #25d366; margin-bottom: 15px; }
-        .welcome-box { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        body { background: #0f2027; color: white; }
+        .nav-logo { height: 50px; }
+        .marquee-container { background: #25d366; color: #000; padding: 5px; font-weight: bold; }
+        .card { background: #1a2a34; border: 1px solid #2c5364; color: white; transition: 0.3s; }
+        .card:hover { transform: scale(1.05); border-color: #25d366; }
+        .loader-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:#0f2027; z-index:9999; display:flex; justify-content:center; align-items:center; }
+        .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #25d366; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-3 sidebar">
-            <div class="text-center">
-                <img src="logo.png" alt="RetayaX Logo" class="logo-small">
-                <h5>RetayaX</h5>
-            </div>
-            <hr>
-            <p id="userName">Welcome, User!</p>
-            <div id="adminArea" style="display:none;">
-                <button class="btn btn-warning w-100 mb-2">Admin Panel</button>
-            </div>
-            <button class="btn btn-outline-light w-100" onclick="logout()">Logout</button>
-        </div>
+<div class="loader-overlay" id="loader"><div class="spinner"></div></div>
 
-        <div class="col-md-9 p-4">
-            <div class="welcome-box">
-                <h2>Welcome to RetayaX Dashboard</h2>
-                <p>Explore the best modern gadgets and tech solutions at your fingertips.</p>
-            </div>
-            
-            <div id="productFeed" class="row">
-                <p>Trending products will appear here soon...</p>
-            </div>
-        </div>
+<div class="d-flex justify-content-between p-3 align-items-center">
+    <img src="logo.png" class="nav-logo rounded-circle">
+    <div id="userProfile">
+        <button class="btn btn-sm btn-outline-light" onclick="window.location.href='profile.html'">Profile</button>
+        <button class="btn btn-sm btn-danger" onclick="logout()">Logout</button>
     </div>
 </div>
 
-<script type="module">
-    const userData = JSON.parse(localStorage.getItem('amd_user'));
-    if(!userData) window.location.href = "index.html";
+<div class="marquee-container">
+    <marquee>The CEO Auwal MD and Shayibu Ali Baba | Site Active 24/7</marquee>
+</div>
 
-    // Nuna Suna
-    document.getElementById('userName').innerText = "Welcome, " + userData.name;
+<div class="container mt-4">
+    <div class="row g-3" id="serviceGrid">
+        </div>
+</div>
 
-    // Nuna Admin button
-    if(userData.role === 'admin') {
-        document.getElementById('adminArea').style.display = 'block';
-    }
+<script>
+    // Hide Loader
+    window.onload = () => document.getElementById('loader').style.display = 'none';
 
-    window.logout = () => {
+    function logout() {
         localStorage.removeItem('amd_user');
         window.location.href = "index.html";
     }
+
+    // Load User Data
+    const user = JSON.parse(localStorage.getItem('amd_user'));
+    if(!user) window.location.href = "index.html";
 </script>
 </body>
 </html>
