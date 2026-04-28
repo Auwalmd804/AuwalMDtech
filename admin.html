@@ -5,7 +5,7 @@
     <title>RetayaX Super Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background: #0f2027; color: white; }
+        body { background: #0f2027; color: white; font-family: sans-serif; }
         .sidebar { background: #1a2a34; height: 100vh; padding: 20px; }
         .section { display: none; } .active { display: block; }
         .loader { display: none; border: 4px solid #f3f3f3; border-top: 4px solid #25d366; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; }
@@ -18,7 +18,7 @@
 <div class="d-flex">
     <div class="sidebar col-md-3">
         <img src="logo.png" width="60" class="rounded-circle mb-3">
-        <h5>RetayaX Admin</h5>
+        <h5>RetayaX Master Admin</h5>
         <button class="btn btn-outline-light w-100 mb-2" onclick="show('upload')">Add Product</button>
         <button class="btn btn-outline-light w-100 mb-2" onclick="show('users')">Manage Users</button>
         <button class="btn btn-outline-light w-100 mb-2" onclick="show('chat')">Live Chat</button>
@@ -63,10 +63,15 @@
     const db = getFirestore(initializeApp(firebaseConfig));
     const audio = new Audio('https://actions.google.com/sounds/v1/notifications/beep_short.ogg');
 
-    // Password Check
     if(prompt("Admin Password:") !== "Auwal@00") window.location.href = "index.html";
 
-    // Upload Logic
+    // Navigation
+    window.show = (id) => {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    // Upload Product
     window.uploadProduct = async () => {
         document.getElementById('loader').style.display = 'block';
         const file = document.getElementById('img').files[0];
@@ -86,19 +91,27 @@
         alert("Product Uploaded Successfully!");
     }
 
-    // Real-time Chat
+    // Manage Users
+    onSnapshot(collection(db, "users"), (snapshot) => {
+        let userListHtml = "";
+        snapshot.forEach((docSnap) => {
+            const user = docSnap.data();
+            userListHtml += `
+                <div class="p-3 border mb-2 d-flex justify-content-between">
+                    <div><strong>${user.name}</strong><br><small>Phone: ${user.phone}</small></div>
+                    <button onclick="deleteDoc(doc(db, 'users', '${docSnap.id}'))" class="btn btn-danger btn-sm">Block/Delete</button>
+                </div>`;
+        });
+        document.getElementById('userList').innerHTML = userListHtml;
+    });
+
+    // Chat
     onSnapshot(collection(db, "messages"), (snap) => {
         let html = "";
         snap.forEach(d => { html += `<p><b>User:</b> ${d.data().text}</p>`; });
         document.getElementById('chatMessages').innerHTML = html;
-        audio.play(); 
+        audio.play();
     });
-
-    // Navigation
-    window.show = (id) => {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    }
 </script>
 </body>
 </html>
