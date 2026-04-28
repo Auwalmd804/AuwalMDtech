@@ -1,44 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>RetayaX Super Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .loader { display: none; border: 4px solid #f3f3f3; border-top: 4px solid #25d366; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        body { background: #0f2027; color: white; }
+        .sidebar { background: #1a2a34; height: 100vh; padding: 20px; }
+        .section { display: none; } .active { display: block; }
+        .loader { display: none; border: 4px solid #f3f3f3; border-top: 4px solid #25d366; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .chat-box { height: 250px; overflow-y: scroll; background: #fff; color: #000; padding: 10px; border-radius: 5px; }
     </style>
 </head>
-<body class="bg-dark text-white">
+<body>
 
-<div class="container-fluid">
-    <div class="row">
-        <nav class="col-md-2 bg-black vh-100 p-3">
-            <img src="logo.png" width="60" class="rounded-circle mb-3">
-            <h5 class="text-success">RetayaX Admin</h5>
-            <hr>
-            <div class="nav flex-column gap-2">
-                <button class="btn btn-outline-light" onclick="show('upload')">Add Product</button>
-                <button class="btn btn-outline-light" onclick="show('users')">Manage Users</button>
-                <button class="btn btn-outline-light" onclick="show('chat')">Messages</button>
-            </div>
-        </nav>
+<div class="d-flex">
+    <div class="sidebar col-md-3">
+        <img src="logo.png" width="60" class="rounded-circle mb-3">
+        <h5>RetayaX Admin</h5>
+        <button class="btn btn-outline-light w-100 mb-2" onclick="show('upload')">Add Product</button>
+        <button class="btn btn-outline-light w-100 mb-2" onclick="show('users')">Manage Users</button>
+        <button class="btn btn-outline-light w-100 mb-2" onclick="show('chat')">Live Chat</button>
+    </div>
 
-        <main class="col-md-10 p-4">
-            <div id="loader" class="loader mx-auto"></div>
-            
-            <div id="upload" class="section">
-                <h3>Add Product</h3>
-                <input type="text" id="pName" class="form-control mb-2" placeholder="Product Name">
-                <input type="number" id="pPrice" class="form-control mb-2" placeholder="Price">
-                <input type="file" id="img" class="form-control mb-2">
-                <button onclick="uploadProduct()" class="btn btn-success">Upload</button>
-            </div>
+    <div class="col-md-9 p-4">
+        <div id="upload" class="section active">
+            <h3>Add New Product</h3>
+            <input type="text" id="pName" class="form-control mb-2" placeholder="Product Name">
+            <input type="number" id="pPrice" class="form-control mb-2" placeholder="Price">
+            <input type="file" id="img" class="form-control mb-2">
+            <button onclick="uploadProduct()" class="btn btn-success w-100">Upload Product</button>
+            <div id="loader" class="loader"></div>
+        </div>
 
-            <div id="users" class="section" style="display:none;">
-                <h3>Users</h3>
-                <div id="userList"></div>
-            </div>
-        </main>
+        <div id="users" class="section">
+            <h3>User Management</h3>
+            <div id="userList"></div>
+        </div>
+
+        <div id="chat" class="section">
+            <h3>Customer Messages</h3>
+            <div id="chatMessages" class="chat-box mb-2"></div>
+        </div>
     </div>
 </div>
 
@@ -46,22 +50,31 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    const firebaseConfig = { /* SAKA CONFIG DIN KA ANAN */ };
+    const firebaseConfig = {
+        apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
+        authDomain: "auwalmdtech.firebaseapp.com",
+        projectId: "auwalmdtech",
+        storageBucket: "auwalmdtech.firebasestorage.app",
+        messagingSenderId: "202329584080",
+        appId: "1:202329584080:web:e989d7df53d3c3024609d5",
+        measurementId: "G-8SZ1MQRMC9"
+    };
+
     const db = getFirestore(initializeApp(firebaseConfig));
+    const audio = new Audio('https://actions.google.com/sounds/v1/notifications/beep_short.ogg');
 
-    // Security
-    if(prompt("Password:") !== "Auwal@00") window.location.href = "index.html";
+    // Password Check
+    if(prompt("Admin Password:") !== "Auwal@00") window.location.href = "index.html";
 
-    // Upload with Animation
+    // Upload Logic
     window.uploadProduct = async () => {
         document.getElementById('loader').style.display = 'block';
         const file = document.getElementById('img').files[0];
-        
         const data = new FormData();
         data.append("file", file);
         data.append("upload_preset", "unsigned");
         
-        const res = await fetch("https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload", { method: "POST", body: data });
+        const res = await fetch("https://api.cloudinary.com/v1_1/dpxn8b7ao/image/upload", { method: "POST", body: data });
         const img = await res.json();
         
         await addDoc(collection(db, "products"), {
@@ -70,22 +83,21 @@
             image: img.secure_url
         });
         document.getElementById('loader').style.display = 'none';
-        alert("Success!");
-    };
+        alert("Product Uploaded Successfully!");
+    }
 
-    // User Management (BLOCK)
-    onSnapshot(collection(db, "users"), (snap) => {
+    // Real-time Chat
+    onSnapshot(collection(db, "messages"), (snap) => {
         let html = "";
-        snap.forEach(d => {
-            html += `<div class="d-flex justify-content-between p-2 border">${d.data().name} 
-                     <button class="btn btn-danger btn-sm" onclick="deleteDoc(doc(db, 'users', '${d.id}'))">Block</button></div>`;
-        });
-        document.getElementById('userList').innerHTML = html;
+        snap.forEach(d => { html += `<p><b>User:</b> ${d.data().text}</p>`; });
+        document.getElementById('chatMessages').innerHTML = html;
+        audio.play(); 
     });
 
+    // Navigation
     window.show = (id) => {
-        document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-        document.getElementById(id).style.display = 'block';
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
     }
 </script>
 </body>
