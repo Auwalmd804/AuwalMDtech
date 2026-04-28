@@ -9,11 +9,15 @@
     <style>
         body { background: #0f2027; color: white; min-height: 100vh; display: flex; flex-direction: column; }
         .loader { position: fixed; inset: 0; background: #0f2027; z-index: 9999; display: flex; justify-content: center; align-items: center; }
-        .service-card { background: #1a2a34; border-radius: 20px; padding: 10px; text-align: center; border: 1px solid #2c5364; height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.3s; }
+        .service-card { background: #1a2a34; border-radius: 20px; padding: 10px; text-align: center; border: 1px solid #2c5364; height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.3s; cursor: pointer; }
+        .service-card:active { transform: scale(0.95); }
         .service-card img { height: 50px; width: auto; object-fit: contain; margin-bottom: 5px; }
         .service-card h6 { font-size: 0.70rem; color: #fff; margin: 0; }
-        .wa-btn { position: fixed; bottom: 80px; right: 20px; background: #25d366; color: white; width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 28px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000; text-decoration: none; }
+        .wa-btn { position: fixed; bottom: 80px; right: 20px; background: #25d366; color: white; width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 28px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000; }
         footer { padding: 20px; text-align: center; color: rgba(255,255,255,0.6); font-size: 14px; margin-top: auto; }
+        /* Gyaran Menu */
+        .offcanvas { background: #0f2027; }
+        .offcanvas-title { color: white; }
     </style>
 </head>
 <body>
@@ -31,8 +35,8 @@
 <div class="offcanvas offcanvas-end" id="menu">
     <div class="offcanvas-header"><h5 class="offcanvas-title">Menu</h5><button class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button></div>
     <div class="offcanvas-body">
-        <button class="btn btn-outline-light w-100 mb-2" onclick="location.href='profile.html'">Profile</button>
-        <button class="btn btn-danger w-100" onclick="logout()">Logout</button>
+        <a href="profile.html" class="btn btn-outline-light w-100 mb-3 py-2" style="border: 1px solid white;">Profile</a>
+        <button class="btn btn-danger w-100 py-2" id="logoutBtn">Logout</button>
     </div>
 </div>
 
@@ -47,11 +51,16 @@
 <footer>&copy; 2026 RetayaX - All Rights Reserved</footer>
 
 <script type="module">
+    // Tabbatar da User yayi login
     const user = JSON.parse(localStorage.getItem('amd_user'));
     if(user) document.getElementById('userName').innerText = "Hi, " + user.name;
     else location.href = "index.html";
 
-    window.logout = () => { localStorage.removeItem('amd_user'); location.href = "index.html"; };
+    // Gyaran Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('amd_user');
+        window.location.replace("index.html"); // Amfani da replace don kada ya dawo baya
+    });
 
     const services = [
         {name: "Sunking", img: "sunking.png"}, {name: "NIN Device", img: "nin-device.png"},
