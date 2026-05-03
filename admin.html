@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RetayaX - Super Admin Panel</title>
+    <title>RetayaX - Sign In</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body { 
             background: #0f2027; 
@@ -16,44 +15,43 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .main-container {
-            max-width: 500px;
+            max-width: 420px;
             margin: auto;
-            padding: 25px;
+            padding: 30px;
             background: #162b36;
             border-radius: 16px;
             border: 1px solid #2c5364;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
             width: 90%;
-            margin-top: 30px;
-            margin-bottom: 30px;
         }
         .logo-area {
             text-align: center;
-            margin-bottom: 20px;
-        }
-        .logo-area img {
-            width: 60px;
-            height: auto;
-            border-radius: 50%;
+            margin-bottom: 25px;
         }
         .logo-area h4 {
             color: #25d366;
             font-weight: 700;
-            margin-top: 8px;
+            margin-top: 10px;
         }
         .form-label {
-            font-size: 0.82rem;
-            color: #a0aab0;
-            margin-bottom: 4px;
+            font-size: 0.88rem;
+            color: #e0e6ed;
+            font-weight: 600;
+            margin-bottom: 6px;
         }
         .form-control {
             background-color: #1a2a34;
-            border: 1px solid #2c5364;
+            border: 1px solid #4a6d7c; /* An kara kauri da karfin layin wajen rubutu */
             color: #ffffff;
+            font-weight: 500;
             border-radius: 8px;
-            padding: 10px 12px;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+        }
+        .form-control::placeholder {
+            color: #8fa0aa; /* Rubutu a ciki zai fito fili */
+            opacity: 1; 
         }
         .form-control:focus {
             background-color: #1a2a34;
@@ -66,47 +64,15 @@
             color: #000000;
             font-weight: 600;
             width: 100%;
-            padding: 11px;
+            padding: 12px;
             border-radius: 8px;
             border: none;
             transition: 0.2s;
-            margin-bottom: 8px;
+            margin-top: 8px;
         }
         .btn-green:hover {
             background-color: #128C7E;
             color: #ffffff;
-        }
-        .btn-danger-custom {
-            background-color: #d9534f;
-            color: #ffffff;
-            width: 100%;
-            padding: 11px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 600;
-            margin-top: 6px;
-        }
-        .btn-danger-custom:hover {
-            background-color: #c9302c;
-        }
-        #authOverlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #0f2027;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .auth-box {
-            background: #162b36;
-            padding: 30px;
-            border-radius: 16px;
-            border: 1px solid #2c5364;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
         }
         .alert-box {
             position: fixed;
@@ -122,113 +88,46 @@
             font-weight: 600;
             display: none;
         }
-        .divider {
-            border-top: 1px solid #2c5364;
-            margin: 15px 0;
-        }
     </style>
 </head>
 <body>
 
     <div id="alertBox" class="alert-box"></div>
 
-    <div id="authOverlay">
-        <div class="auth-box">
-            <h4 class="text-success mb-3"><i class="fas fa-lock me-2"></i>Admin Panel Lock</h4>
-            <p class="text-muted small mb-4">Enter your credentials to access the admin area.</p>
-            
-            <div class="mb-3 text-start">
-                <label class="form-label">Admin PIN (4-digit)</label>
-                <input type="password" class="form-control" id="adminPin" placeholder="e.g., 8332" maxlength="4">
-            </div>
-            
-            <div class="mb-3 text-start">
-                <label class="form-label">Admin Password</label>
-                <input type="password" class="form-control" id="adminPass" placeholder="e.g., Auwal@00">
-            </div>
-
-            <button class="btn btn-green mt-2" id="unlockBtn">Unlock Panel</button>
-            <button class="btn btn-secondary w-100 mt-2" onclick="location.href='dashboard.html'">Back to Dashboard</button>
-        </div>
-    </div>
-
-    <div class="main-container" id="adminPanel" style="display: none;">
+    <div class="main-container">
         <div class="logo-area">
-            <img src="logo.png" alt="RetayaX Logo">
-            <h4>Super Admin Panel</h4>
-            <p class="text-muted small">Welcome, CEO Auwal & Shayibu Ali Baba</p>
+            <h4>RetayaX</h4>
+            <p class="text-muted small">Sign in to continue to your account</p>
         </div>
 
-        <div class="divider"></div>
+        <form id="loginForm">
+            <div class="mb-2">
+                <label class="form-label">Phone Number or Email</label>
+                <input type="text" class="form-control" id="loginEmail" placeholder="Enter phone or email" required>
+            </div>
 
-        <h6 class="text-success mb-3"><i class="fas fa-users-cog me-2"></i>Admin Management</h6>
-        <button class="btn btn-green mb-3" onclick="alert('Za a sanya tsarin ƙara Admin a nan gaba!')">Add New Admin</button>
+            <div class="mb-2">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-control" id="loginPassword" placeholder="Enter password" required>
+            </div>
 
-        <h6 class="text-success mb-3"><i class="fas fa-database me-2"></i>Services Management</h6>
-        <button class="btn btn-green mb-2" onclick="alert('Za a sanya tsarin ƙara sabon Service a nan gaba!')">Add New Service</button>
-        <button class="btn btn-danger-custom mb-4" onclick="alert('Za a sanya tsarin goge Service a nan gaba!')">Remove Service</button>
+            <div class="text-end mb-3">
+                <a href="forgot.html" class="text-success text-decoration-none small">Forgot Password?</a>
+            </div>
 
-        <h6 class="text-success mb-3"><i class="fas fa-user-check me-2"></i>User Records</h6>
-        <button class="btn btn-green w-100 mb-4" onclick="alert('Za a sanya tsarin duba masu amfani a nan gaba!')">View All Users</button>
+            <button type="submit" class="btn btn-green">Sign In</button>
+        </form>
 
-        <button type="button" class="btn btn-secondary w-100" id="logoutBtn">Exit Admin Panel</button>
+        <hr style="border-color: #2c5364;">
+        
+        <div class="text-center mt-3">
+            <p class="text-muted small">Don't have an account yet? <a href="register.html" class="text-success text-decoration-none">Create Account</a></p>
+            <p class="text-muted small">&copy; 2026 RetayaX - All Rights Reserved</p>
+        </div>
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
-            authDomain: "auwalmdtech.firebaseapp.com",
-            projectId: "auwalmdtech",
-            storageBucket: "auwalmdtech.firebasestorage.app",
-            messagingSenderId: "202329584080",
-            appId: "1:202329584080:web:e989d7df53d3c3024609d5",
-            measurementId: "G-8SZ1MQRMC9"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        function showMessage(type, text) {
-            const box = document.getElementById('alertBox');
-            box.innerText = text;
-            if (type === 'success') {
-                box.className = 'alert-box bg-success text-black shadow';
-            } else {
-                box.className = 'alert-box bg-danger text-white shadow';
-            }
-            box.style.display = 'block';
-            setTimeout(() => { box.style.display = 'none'; }, 4500);
-        }
-
-        // Tantance wanda ya shiga shafin
-        auth.onAuthStateChanged((user) => {
-            if (!user) {
-                location.replace("index.html");
-            }
-        });
-
-        // Bincika PIN da Password
-        document.getElementById('unlockBtn').addEventListener('click', () => {
-            const enteredPin = document.getElementById('adminPin').value;
-            const enteredPass = document.getElementById('adminPass').value;
-
-            // Daidaitawar PIN (8332) da Password (Auwal@00)
-            if (enteredPin === '8332' && enteredPass === 'Auwal@00') {
-                document.getElementById('authOverlay').style.display = 'none';
-                document.getElementById('adminPanel').style.display = 'block';
-                showMessage('success', 'Access Granted: Welcome Super Admin!');
-            } else {
-                showMessage('error', 'Access Denied: Incorrect PIN or Password.');
-            }
-        });
-
-        // Fita daga Admin Panel zuwa Dashboard
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            location.replace("dashboard.html");
-        });
+        // Wannan wuri ne na rubuta JavaScript
     </script>
 </body>
 </html>
