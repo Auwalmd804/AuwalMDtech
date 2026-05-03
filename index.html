@@ -14,11 +14,11 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center; /* Gyara: Wannan zai dawo da shi tsakiya a kowace waya */
         }
         .main-container {
             max-width: 420px;
-            margin: 20px auto;
+            margin: auto; /* Gyara: Ya dawo tsakiya sosai */
             padding: 25px;
             background: #162b36;
             border-radius: 16px;
@@ -97,11 +97,10 @@
             color: #7b8890;
             margin-top: 15px;
         }
-        /* Loading da kuma Alert styling */
         #loadingOverlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 32, 39, 0.9);
+            background: rgba(15, 32, 39, 0.95);
             z-index: 9999;
             display: flex;
             flex-direction: column;
@@ -134,7 +133,7 @@
         <h5 id="loadingText">Processing, please wait...</h5>
     </div>
 
-    <div class="main-container mt-4">
+    <div class="main-container">
         <div class="logo-area">
             <img src="logo.png" alt="RetayaX Logo">
             <h3>RetayaX</h3>
@@ -238,7 +237,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // Ayyukan Nuna Faɗakarwa
+        // Nuna Sako Mai Kyu
         function showMessage(type, text) {
             const box = document.getElementById('alertBox');
             box.innerText = text;
@@ -251,14 +250,12 @@
             setTimeout(() => { box.style.display = 'none'; }, 4500);
         }
 
-        // Ayyukan Loading
-        function toggleLoading(show, text = 'Processing, please wait...') {
+        function toggleLoading(show, text = 'Processing...') {
             const overlay = document.getElementById('loadingOverlay');
             document.getElementById('loadingText').innerText = text;
             overlay.style.display = show ? 'flex' : 'none';
         }
 
-        // Sauya Sashe
         window.toggleSection = function(sectionId) {
             document.getElementById('signInSection').style.display = 'none';
             document.getElementById('registerSection').style.display = 'none';
@@ -285,16 +282,21 @@
             const password = document.getElementById('siPassword').value;
 
             try {
-                // Domin za a iya amfani da Email kai tsaye wajen Shiga a Firebase
                 await signInWithEmailAndPassword(auth, emailOrPhone, password);
-                showMessage('success', 'Login Successful! Redirecting to Dashboard...');
+                showMessage('success', 'Login Successful! Redirecting to dashboard...');
                 
                 setTimeout(() => {
                     window.location.replace('dashboard.html');
-                }, 2000);
+                }, 1800);
             } catch (error) {
                 toggleLoading(false);
-                showMessage('error', 'Login Failed: ' + error.message);
+                
+                // Gyara kuskure domin ya zama sauki ga abokin harka
+                if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+                    showMessage('error', 'Invalid Email or Password');
+                } else {
+                    showMessage('error', 'Error: ' + error.message);
+                }
             }
         });
 
@@ -306,7 +308,7 @@
             const firstName = document.getElementById('regFirstName').value;
             const lastName = document.getElementById('regLastName').value;
             const phone = document.getElementById('regPhone').value;
-            const email = document.getElementById('regEmail').value || `${phone}@retayax.com`; // Tabbatar da phone ya zama default email idan babu.
+            const email = document.getElementById('regEmail').value || `${phone}@retayax.com`;
             const password = document.getElementById('regPassword').value;
 
             try {
@@ -315,19 +317,18 @@
                     displayName: `${firstName} ${lastName}`
                 });
                 
-                showMessage('success', 'Registration Successful! Redirecting...');
-                localStorage.setItem('amd_user', JSON.stringify({ name: `${firstName} ${lastName}`, phone: phone }));
-
+                showMessage('success', 'Registration Successful! Redirecting to dashboard...');
+                
                 setTimeout(() => {
                     window.location.replace('dashboard.html');
-                }, 2000);
+                }, 1800);
             } catch (error) {
                 toggleLoading(false);
                 showMessage('error', 'Registration Failed: ' + error.message);
             }
         });
 
-        // Mantawa da Kalmar Sirri (Forgot Password Form)
+        // Mantawa da kalmar sirri
         document.getElementById('forgotForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             toggleLoading(true, 'Sending recovery link...');
@@ -336,7 +337,7 @@
             
             try {
                 await sendPasswordResetEmail(auth, email);
-                showMessage('success', 'Recovery link sent! Please check your email.');
+                showMessage('success', 'Recovery link sent! Check your email.');
                 toggleLoading(false);
                 toggleSection('signInSection');
             } catch (error) {
