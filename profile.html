@@ -59,6 +59,12 @@
             color: #ffffff;
             box-shadow: none;
         }
+        /* Gyara: Wannan zai sa wajen email ya zama normal (ba tare da ya yi fari/toshewa ba) */
+        .form-control:read-only {
+            background-color: #1a2a34;
+            color: #b0c4de;
+            border: 1px solid #2c5364;
+        }
         .btn-green {
             background-color: #25d366;
             color: #000000;
@@ -136,12 +142,12 @@
             </div>
 
             <div class="mb-2">
-                <label class="form-label">Email Address</label>
-                <input type="email" class="form-control" id="profileEmail" readonly disabled>
+                <label class="form-label">Email Address / Phone</label>
+                <input type="text" class="form-control" id="profileEmail" readonly>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">New Password (Optional)</label>
+                <label class="form-label">Change Password (Optional)</label>
                 <input type="password" class="form-control" id="profilePassword" placeholder="Leave blank to keep current">
             </div>
 
@@ -152,7 +158,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, updateProfile, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, updateProfile, updatePassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
