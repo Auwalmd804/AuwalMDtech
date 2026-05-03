@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RetayaX - Sign In & Registration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RetayaX - Sign In & Create Account</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
             background-color: #0f2027;
@@ -17,30 +16,32 @@
             justify-content: space-between;
         }
         .main-container {
-            max-width: 450px;
+            max-width: 420px;
             margin: 30px auto;
             padding: 25px;
             background: #162b36;
             border-radius: 16px;
             border: 1px solid #2c5364;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            width: 90%;
         }
         .logo-area {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         .logo-area img {
-            width: 75px;
+            width: 70px;
             height: auto;
             border-radius: 50%;
         }
         .logo-area h3 {
             color: #25d366;
             font-weight: 700;
-            margin-top: 12px;
+            margin-top: 10px;
+            margin-bottom: 2px;
         }
         .form-label {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: #a0aab0;
             margin-bottom: 4px;
         }
@@ -50,7 +51,8 @@
             color: #ffffff;
             border-radius: 8px;
             padding: 10px 12px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
         }
         .form-control:focus {
             background-color: #1a2a34;
@@ -67,6 +69,7 @@
             border-radius: 8px;
             border: none;
             transition: 0.2s;
+            margin-bottom: 10px;
         }
         .btn-green:hover {
             background-color: #128C7E;
@@ -81,7 +84,6 @@
             border-radius: 8px;
             background: transparent;
             transition: 0.2s;
-            margin-top: 10px;
         }
         .btn-outline-green:hover {
             background-color: #25d366;
@@ -89,44 +91,120 @@
         }
         .footer-text {
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: #7b8890;
             margin-top: 15px;
+        }
+        /* Style don gane juzu'in shiga ko rajista */
+        .auth-toggle {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: #ddd;
+        }
+        .auth-toggle span {
+            color: #25d366;
+            cursor: pointer;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
 
-    <div class="main-container mt-5">
+    <div class="main-container mt-4">
         <div class="logo-area">
             <img src="logo.png" alt="RetayaX Logo">
             <h3>RetayaX</h3>
-            <p class="text-muted small">Sign In or Create Account</p>
+            <p class="text-muted small" id="authSubtitle">Sign in to continue to your account</p>
         </div>
 
-        <form id="authForm">
-            <div class="mb-2">
-                <label for="phoneOrEmail" class="form-label">* Phone Number or Email</label>
-                <input type="text" class="form-control" id="phoneOrEmail" placeholder="Enter phone or email" required>
-            </div>
-            
-            <div class="mb-3">
-                <label for="password" class="form-label">* Password</label>
-                <input type="password" class="form-control" id="password" placeholder="At least 8 characters" required>
-                <div class="text-end">
-                    <a href="forgot.html" class="text-success small text-decoration-none">Forgot Password?</a>
+        <div id="signInSection">
+            <form id="signInForm">
+                <div class="mb-2">
+                    <label class="form-label">* Phone Number or Email</label>
+                    <input type="text" class="form-control" id="siPhoneOrEmail" placeholder="Enter phone or email" required>
                 </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">* Password</label>
+                    <input type="password" class="form-control" id="siPassword" placeholder="Enter password" required>
+                    <div class="text-end">
+                        <a href="forgot.html" class="text-success small text-decoration-none">Forgot Password?</a>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-green">Sign In</button>
+            </form>
+            <hr class="border-secondary">
+            <div class="auth-toggle">
+                Don't have an account yet? <span onclick="toggleAuthMode('register')">Create Account</span>
             </div>
+        </div>
 
-            <button type="submit" class="btn btn-green">Sign In</button>
-        </form>
+        <div id="registerSection" style="display: none;">
+            <form id="registerForm">
+                <div class="row">
+                    <div class="col-6 mb-2">
+                        <label class="form-label">* First Name</label>
+                        <input type="text" class="form-control" id="regFirstName" placeholder="Alex" required>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <label class="form-label">* Last Name</label>
+                        <input type="text" class="form-control" id="regLastName" placeholder="Parkinson" required>
+                    </div>
+                </div>
+                
+                <div class="mb-2">
+                    <label class="form-label">* Phone Number</label>
+                    <input type="tel" class="form-control" id="regPhone" placeholder="080 1234 5678" required>
+                </div>
 
-        <button class="btn btn-outline-green" onclick="location.href='create-account.html'">Create Account</button>
+                <div class="mb-2">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="regEmail" placeholder="alex@example.com">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">* Password</label>
+                    <input type="password" class="form-control" id="regPassword" placeholder="At least 8 characters" required>
+                </div>
+
+                <button type="submit" class="btn btn-green">Create Account</button>
+            </form>
+            <hr class="border-secondary">
+            <div class="auth-toggle">
+                Already have an account? <span onclick="toggleAuthMode('signin')">Sign In</span>
+            </div>
+        </div>
 
         <div class="footer-text">
             &copy; 2026 RetayaX - All Rights Reserved
         </div>
     </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        
+        // Za mu iya shigar da Firebase config dinka anan gaba idan ya dace.
+    </script>
+
+    <script>
+        function toggleAuthMode(mode) {
+            const signInSection = document.getElementById('signInSection');
+            const registerSection = document.getElementById('registerSection');
+            const subtitle = document.getElementById('authSubtitle');
+
+            if (mode === 'register') {
+                signInSection.style.display = 'none';
+                registerSection.style.display = 'block';
+                subtitle.innerText = 'Create your account in less than a minute';
+            } else {
+                registerSection.style.display = 'none';
+                signInSection.style.display = 'block';
+                subtitle.innerText = 'Sign in to continue to your account';
+            }
+        }
+    </script>
 </body>
 </html>
