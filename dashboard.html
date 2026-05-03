@@ -41,7 +41,6 @@
             display: block;
         }
         
-        /* Sabon salo na raba hoton da sassan ayyuka */
         .separator-text {
             text-align: center;
             color: #25d366;
@@ -120,18 +119,43 @@
 <footer>&copy; 2026 RetayaX - All Rights Reserved</footer>
 
 <script type="module">
-    // Tabbatar da User yayi login
-    const user = JSON.parse(localStorage.getItem('amd_user'));
-    if(user) {
-        document.getElementById('userName').innerText = "Hi, " + user.name;
-    } else {
-        location.href = "index.html";
-    }
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
+        authDomain: "auwalmdtech.firebaseapp.com",
+        projectId: "auwalmdtech",
+        storageBucket: "auwalmdtech.firebasestorage.app",
+        messagingSenderId: "202329584080",
+        appId: "1:202329584080:web:e989d7df53d3c3024609d5",
+        measurementId: "G-8SZ1MQRMC9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Bincika ko mai amfani yana ciki a Firebase Authentication
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // Idan akwai shi, nuna sunansa (daga displayName ko email)
+            const userName = user.displayName || user.email || 'User';
+            document.getElementById('userName').innerText = "Hi, " + userName;
+        } else {
+            // Idan babu, mayar da shi shafin index.html
+            location.replace("index.html");
+        }
+    });
 
     // Gyaran Logout
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-        localStorage.removeItem('amd_user');
-        window.location.replace("index.html");
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+        try {
+            await signOut(auth);
+            localStorage.removeItem('amd_user'); // Tsaftace ajiya
+            window.location.replace("index.html");
+        } catch (error) {
+            alert("Error signing out: " + error.message);
+        }
     });
 
     // Jerin Sassan Ayyuka 11
