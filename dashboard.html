@@ -19,7 +19,7 @@
         .top-banner {
             background: #162b36;
             border-radius: 15px;
-            padding: 15px;
+            padding: 0;
             margin: 15px;
             border: 1px solid #25d366;
             display: flex;
@@ -28,10 +28,22 @@
             text-align: center;
             cursor: pointer;
             transition: 0.3s;
+            overflow: hidden;
         }
         .top-banner:active { transform: scale(0.98); }
-        .top-banner h4 { color: #25d366; font-size: 1.2rem; font-weight: bold; margin-bottom: 5px; }
-        .top-banner p { font-size: 0.85rem; color: #ddd; margin: 0; }
+        .top-banner img { 
+            width: 100%; 
+            height: auto; 
+            max-height: 160px; 
+            object-fit: cover;
+        }
+        .banner-text {
+            padding: 10px;
+            width: 100%;
+            background: #162b36;
+        }
+        .top-banner h4 { color: #25d366; font-size: 1.1rem; font-weight: bold; margin-bottom: 3px; }
+        .top-banner p { font-size: 0.8rem; color: #ddd; margin: 0; }
         .service-card { 
             background: #1a2a34; 
             border-radius: 15px; 
@@ -84,8 +96,11 @@
 <marquee class="bg-success text-black fw-bold p-1">The CEO Auwal MD and Shayibu Ali Baba | Site Active 24/7</marquee>
 
 <div class="top-banner" onclick="window.location.href='https://retayax.quark.ng'">
-    <h4>All-in-one Digital Service</h4>
-    <p>Fast. Secure. Reliable. Click here to use our new portal!</p>
+    <img src="all-in-one.png" alt="All-in-one Digital Service">
+    <div class="banner-text">
+        <h4>All-in-one Digital Service</h4>
+        <p>Fast. Secure. Reliable. Click here to use our new portal!</p>
+    </div>
 </div>
 
 <div class="container-fluid">
@@ -111,7 +126,7 @@
         window.location.replace("index.html");
     });
 
-    // Jerin Sassan Ayyuka 11 (An cire Airtime & Data)
+    // Jerin Sassan Ayyuka 11
     const services = [
         {name: "Sunking", img: "sunking.png"},
         {name: "NIN Device", img: "nin-device.png"},
