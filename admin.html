@@ -2,116 +2,233 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>RetayaX Super Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RetayaX - Super Admin Panel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        body { background: #0f2027; color: white; font-family: sans-serif; }
-        .sidebar { background: #1a2a34; height: 100vh; padding: 20px; }
-        .section { display: none; } .active { display: block; }
-        .loader { display: none; border: 4px solid #f3f3f3; border-top: 4px solid #25d366; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        .chat-box { height: 250px; overflow-y: scroll; background: #fff; color: #000; padding: 10px; border-radius: 5px; }
+        body { 
+            background: #0f2027; 
+            color: white; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .main-container {
+            max-width: 500px;
+            margin: auto;
+            padding: 25px;
+            background: #162b36;
+            border-radius: 16px;
+            border: 1px solid #2c5364;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            width: 90%;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        .logo-area {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo-area img {
+            width: 60px;
+            height: auto;
+            border-radius: 50%;
+        }
+        .logo-area h4 {
+            color: #25d366;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .form-label {
+            font-size: 0.82rem;
+            color: #a0aab0;
+            margin-bottom: 4px;
+        }
+        .form-control {
+            background-color: #1a2a34;
+            border: 1px solid #2c5364;
+            color: #ffffff;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+        }
+        .form-control:focus {
+            background-color: #1a2a34;
+            border-color: #25d366;
+            color: #ffffff;
+            box-shadow: none;
+        }
+        .btn-green {
+            background-color: #25d366;
+            color: #000000;
+            font-weight: 600;
+            width: 100%;
+            padding: 11px;
+            border-radius: 8px;
+            border: none;
+            transition: 0.2s;
+            margin-bottom: 8px;
+        }
+        .btn-green:hover {
+            background-color: #128C7E;
+            color: #ffffff;
+        }
+        .btn-danger-custom {
+            background-color: #d9534f;
+            color: #ffffff;
+            width: 100%;
+            padding: 11px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+        .btn-danger-custom:hover {
+            background-color: #c9302c;
+        }
+        #authOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #0f2027;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .auth-box {
+            background: #162b36;
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid #2c5364;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .alert-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 10px;
+            text-align: center;
+            padding: 12px;
+            font-weight: 600;
+            display: none;
+        }
+        .divider {
+            border-top: 1px solid #2c5364;
+            margin: 15px 0;
+        }
     </style>
 </head>
 <body>
 
-<div class="d-flex">
-    <div class="sidebar col-md-3">
-        <img src="logo.png" width="60" class="rounded-circle mb-3">
-        <h5>RetayaX Master Admin</h5>
-        <button class="btn btn-outline-light w-100 mb-2" onclick="show('upload')">Add Product</button>
-        <button class="btn btn-outline-light w-100 mb-2" onclick="show('users')">Manage Users</button>
-        <button class="btn btn-outline-light w-100 mb-2" onclick="show('chat')">Live Chat</button>
-    </div>
+    <div id="alertBox" class="alert-box"></div>
 
-    <div class="col-md-9 p-4">
-        <div id="upload" class="section active">
-            <h3>Add New Product</h3>
-            <input type="text" id="pName" class="form-control mb-2" placeholder="Product Name">
-            <input type="number" id="pPrice" class="form-control mb-2" placeholder="Price">
-            <input type="file" id="img" class="form-control mb-2">
-            <button onclick="uploadProduct()" class="btn btn-success w-100">Upload Product</button>
-            <div id="loader" class="loader"></div>
-        </div>
+    <div id="authOverlay">
+        <div class="auth-box">
+            <h4 class="text-success mb-3"><i class="fas fa-lock me-2"></i>Admin Panel Lock</h4>
+            <p class="text-muted small mb-4">Enter your credentials to access the admin area.</p>
+            
+            <div class="mb-3 text-start">
+                <label class="form-label">Admin PIN (4-digit)</label>
+                <input type="password" class="form-control" id="adminPin" placeholder="e.g., 8332" maxlength="4">
+            </div>
+            
+            <div class="mb-3 text-start">
+                <label class="form-label">Admin Password</label>
+                <input type="password" class="form-control" id="adminPass" placeholder="e.g., Auwal@00">
+            </div>
 
-        <div id="users" class="section">
-            <h3>User Management</h3>
-            <div id="userList"></div>
-        </div>
-
-        <div id="chat" class="section">
-            <h3>Customer Messages</h3>
-            <div id="chatMessages" class="chat-box mb-2"></div>
+            <button class="btn btn-green mt-2" id="unlockBtn">Unlock Panel</button>
+            <button class="btn btn-secondary w-100 mt-2" onclick="location.href='dashboard.html'">Back to Dashboard</button>
         </div>
     </div>
-</div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    <div class="main-container" id="adminPanel" style="display: none;">
+        <div class="logo-area">
+            <img src="logo.png" alt="RetayaX Logo">
+            <h4>Super Admin Panel</h4>
+            <p class="text-muted small">Welcome, CEO Auwal & Shayibu Ali Baba</p>
+        </div>
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
-        authDomain: "auwalmdtech.firebaseapp.com",
-        projectId: "auwalmdtech",
-        storageBucket: "auwalmdtech.firebasestorage.app",
-        messagingSenderId: "202329584080",
-        appId: "1:202329584080:web:e989d7df53d3c3024609d5",
-        measurementId: "G-8SZ1MQRMC9"
-    };
+        <div class="divider"></div>
 
-    const db = getFirestore(initializeApp(firebaseConfig));
-    const audio = new Audio('https://actions.google.com/sounds/v1/notifications/beep_short.ogg');
+        <h6 class="text-success mb-3"><i class="fas fa-users-cog me-2"></i>Admin Management</h6>
+        <button class="btn btn-green mb-3" onclick="alert('Za a sanya tsarin ƙara Admin a nan gaba!')">Add New Admin</button>
 
-    if(prompt("Admin Password:") !== "Auwal@00") window.location.href = "index.html";
+        <h6 class="text-success mb-3"><i class="fas fa-database me-2"></i>Services Management</h6>
+        <button class="btn btn-green mb-2" onclick="alert('Za a sanya tsarin ƙara sabon Service a nan gaba!')">Add New Service</button>
+        <button class="btn btn-danger-custom mb-4" onclick="alert('Za a sanya tsarin goge Service a nan gaba!')">Remove Service</button>
 
-    // Navigation
-    window.show = (id) => {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    }
+        <h6 class="text-success mb-3"><i class="fas fa-user-check me-2"></i>User Records</h6>
+        <button class="btn btn-green w-100 mb-4" onclick="alert('Za a sanya tsarin duba masu amfani a nan gaba!')">View All Users</button>
 
-    // Upload Product
-    window.uploadProduct = async () => {
-        document.getElementById('loader').style.display = 'block';
-        const file = document.getElementById('img').files[0];
-        const data = new FormData();
-        data.append("file", file);
-        data.append("upload_preset", "unsigned");
-        
-        const res = await fetch("https://api.cloudinary.com/v1_1/dpxn8b7ao/image/upload", { method: "POST", body: data });
-        const img = await res.json();
-        
-        await addDoc(collection(db, "products"), {
-            name: document.getElementById('pName').value,
-            price: document.getElementById('pPrice').value,
-            image: img.secure_url
+        <button type="button" class="btn btn-secondary w-100" id="logoutBtn">Exit Admin Panel</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
+            authDomain: "auwalmdtech.firebaseapp.com",
+            projectId: "auwalmdtech",
+            storageBucket: "auwalmdtech.firebasestorage.app",
+            messagingSenderId: "202329584080",
+            appId: "1:202329584080:web:e989d7df53d3c3024609d5",
+            measurementId: "G-8SZ1MQRMC9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        function showMessage(type, text) {
+            const box = document.getElementById('alertBox');
+            box.innerText = text;
+            if (type === 'success') {
+                box.className = 'alert-box bg-success text-black shadow';
+            } else {
+                box.className = 'alert-box bg-danger text-white shadow';
+            }
+            box.style.display = 'block';
+            setTimeout(() => { box.style.display = 'none'; }, 4500);
+        }
+
+        // Tantance wanda ya shiga shafin
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                location.replace("index.html");
+            }
         });
-        document.getElementById('loader').style.display = 'none';
-        alert("Product Uploaded Successfully!");
-    }
 
-    // Manage Users
-    onSnapshot(collection(db, "users"), (snapshot) => {
-        let userListHtml = "";
-        snapshot.forEach((docSnap) => {
-            const user = docSnap.data();
-            userListHtml += `
-                <div class="p-3 border mb-2 d-flex justify-content-between">
-                    <div><strong>${user.name}</strong><br><small>Phone: ${user.phone}</small></div>
-                    <button onclick="deleteDoc(doc(db, 'users', '${docSnap.id}'))" class="btn btn-danger btn-sm">Block/Delete</button>
-                </div>`;
+        // Bincika PIN da Password
+        document.getElementById('unlockBtn').addEventListener('click', () => {
+            const enteredPin = document.getElementById('adminPin').value;
+            const enteredPass = document.getElementById('adminPass').value;
+
+            // Daidaitawar PIN (8332) da Password (Auwal@00)
+            if (enteredPin === '8332' && enteredPass === 'Auwal@00') {
+                document.getElementById('authOverlay').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                showMessage('success', 'Access Granted: Welcome Super Admin!');
+            } else {
+                showMessage('error', 'Access Denied: Incorrect PIN or Password.');
+            }
         });
-        document.getElementById('userList').innerHTML = userListHtml;
-    });
 
-    // Chat
-    onSnapshot(collection(db, "messages"), (snap) => {
-        let html = "";
-        snap.forEach(d => { html += `<p><b>User:</b> ${d.data().text}</p>`; });
-        document.getElementById('chatMessages').innerHTML = html;
-        audio.play();
-    });
-</script>
+        // Fita daga Admin Panel zuwa Dashboard
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            location.replace("dashboard.html");
+        });
+    </script>
 </body>
 </html>
