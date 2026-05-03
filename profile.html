@@ -24,6 +24,8 @@
             border: 1px solid #2c5364;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
             width: 90%;
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
         .logo-area {
             text-align: center;
@@ -59,7 +61,6 @@
             color: #ffffff;
             box-shadow: none;
         }
-        /* Gyara: Wannan zai sa wajen email ya zama normal (ba tare da ya yi fari/toshewa ba) */
         .form-control:read-only {
             background-color: #1a2a34;
             color: #b0c4de;
@@ -117,6 +118,10 @@
             font-weight: 600;
             display: none;
         }
+        .divider {
+            border-top: 1px solid #2c5364;
+            margin: 15px 0;
+        }
     </style>
 </head>
 <body>
@@ -138,27 +143,41 @@
         <form id="profileForm">
             <div class="mb-2">
                 <label class="form-label">Full Name</label>
-                <input type="text" class="form-control" id="profileName" placeholder="Enter full name" required>
+                <input type="text" class="form-control" id="profileName" placeholder="Enter full name" readonly required>
             </div>
 
-            <div class="mb-2">
+            <div class="mb-3">
                 <label class="form-label">Email Address / Phone</label>
                 <input type="text" class="form-control" id="profileEmail" readonly>
             </div>
 
+            <div class="divider"></div>
+
+            <h6 class="text-success mb-3"><i class="fas fa-lock me-2"></i>Change Password</h6>
+
+            <div class="mb-2">
+                <label class="form-label">Enter Old Password</label>
+                <input type="password" class="form-control" id="oldPassword" placeholder="Enter current password">
+            </div>
+
+            <div class="mb-2">
+                <label class="form-label">Enter New Password</label>
+                <input type="password" class="form-control" id="newPassword" placeholder="Enter new password">
+            </div>
+
             <div class="mb-3">
-                <label class="form-label">Change Password (Optional)</label>
-                <input type="password" class="form-control" id="profilePassword" placeholder="Leave blank to keep current">
+                <label class="form-label">Confirm New Password</label>
+                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password">
             </div>
 
             <button type="submit" class="btn btn-green">Save Changes</button>
-            <button type="button" class="btn btn-secondary-custom" onclick="location.href='dashboard.html'">Back to Dashboard</button>
+            <button type="button" class="btn btn-secondary-custom mt-2" onclick="location.href='dashboard.html'">Back to Dashboard</button>
         </form>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, updateProfile, updatePassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
@@ -173,7 +192,6 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // Nuna Sakon Kuskure ko Nasara
         function showMessage(type, text) {
             const box = document.getElementById('alertBox');
             box.innerText = text;
@@ -186,7 +204,7 @@
             setTimeout(() => { box.style.display = 'none'; }, 4500);
         }
 
-        // Duba User a yayinda shafi ya buɗe
+        // Tabbatar da an nuna sunan mai amfani da email/lamba
         auth.onAuthStateChanged((user) => {
             if (user) {
                 document.getElementById('profileName').value = user.displayName || '';
@@ -196,37 +214,62 @@
             }
         });
 
-        // Adana Gyare-Gyare
+        // Aikin canza kalmar sirri
         document.getElementById('profileForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const overlay = document.getElementById('loadingOverlay');
+            
+            const oldPass = document.getElementById('oldPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const confirmPass = document.getElementById('confirmPassword').value;
+
+            if (!oldPass || !newPass || !confirmPass) {
+                showMessage('error', 'Please fill in all password fields.');
+                return;
+            }
+
+            if (newPass !== confirmPass) {
+                showMessage('error', 'New passwords do not match.');
+                return;
+            }
+
+            if (newPass.length < 6) {
+                showMessage('error', 'Password must be at least 6 characters.');
+                return;
+            }
+
             overlay.style.display = 'flex';
 
-            const user = auth.currentUser;
-            const newName = document.getElementById('profileName').value;
-            const newPassword = document.getElementById('profilePassword').value;
-
             try {
-                // 1. Gyara Suna
-                if (user && newName !== user.displayName) {
-                    await updateProfile(user, { displayName: newName });
-                }
+                const user = auth.currentUser;
+                const credential = EmailAuthProvider.credential(user.email, oldPass);
 
-                // 2. Gyara Kalmar Sirri
-                if (newPassword && newPassword.length >= 6) {
-                    await updatePassword(user, newPassword);
-                }
+                // Re-authenticate user
+                await reauthenticateWithCredential(user, credential);
+
+                // Update to the new password
+                await updatePassword(user, newPass);
 
                 overlay.style.display = 'none';
-                showMessage('success', 'Profile updated successfully!');
+                showMessage('success', 'Password changed successfully!');
                 
+                // Sake saita form din
+                document.getElementById('oldPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+
                 setTimeout(() => {
                     location.replace("dashboard.html");
-                }, 1500);
+                }, 2000);
 
             } catch (error) {
                 overlay.style.display = 'none';
-                showMessage('error', 'Error: ' + error.message);
+                // Sakon da zai fito
+                if (error.code === 'auth/wrong-password') {
+                    showMessage('error', 'Incorrect old password provided.');
+                } else {
+                    showMessage('error', 'Error: ' + error.message);
+                }
             }
         });
     </script>
