@@ -14,11 +14,11 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Gyara: Wannan zai dawo da shi tsakiya a kowace waya */
+            justify-content: center;
         }
         .main-container {
             max-width: 420px;
-            margin: auto; /* Gyara: Ya dawo tsakiya sosai */
+            margin: auto;
             padding: 25px;
             background: #162b36;
             border-radius: 16px;
@@ -221,9 +221,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, updateProfile, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
             authDomain: "auwalmdtech.firebaseapp.com",
@@ -273,6 +272,24 @@
             }
         };
 
+        //fassara kuskure daga firebase
+        function getFriendlyErrorMessage(error) {
+            switch (error.code) {
+                case 'auth/email-already-in-use':
+                    return "This email is already registered.";
+                case 'auth/invalid-email':
+                    return "Invalid email address.";
+                case 'auth/weak-password':
+                    return "Password should be at least 6 characters.";
+                case 'auth/invalid-credential':
+                    return "Invalid Email or Password.";
+                case 'auth/user-not-found':
+                    return "No account found with this email.";
+                default:
+                    return error.message;
+            }
+        }
+
         // Shiga (Sign In Form)
         document.getElementById('signInForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -283,20 +300,14 @@
 
             try {
                 await signInWithEmailAndPassword(auth, emailOrPhone, password);
-                showMessage('success', 'Login Successful! Redirecting to dashboard...');
+                showMessage('success', 'Login Successful! Redirecting...');
                 
                 setTimeout(() => {
                     window.location.replace('dashboard.html');
-                }, 1800);
+                }, 1500);
             } catch (error) {
                 toggleLoading(false);
-                
-                // Gyara kuskure domin ya zama sauki ga abokin harka
-                if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
-                    showMessage('error', 'Invalid Email or Password');
-                } else {
-                    showMessage('error', 'Error: ' + error.message);
-                }
+                showMessage('error', getFriendlyErrorMessage(error));
             }
         });
 
@@ -312,19 +323,15 @@
             const password = document.getElementById('regPassword').value;
 
             try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                await updateProfile(userCredential.user, {
-                    displayName: `${firstName} ${lastName}`
-                });
-                
-                showMessage('success', 'Registration Successful! Redirecting to dashboard...');
+                await createUserWithEmailAndPassword(auth, email, password);
+                showMessage('success', 'Registration Successful! Redirecting...');
                 
                 setTimeout(() => {
                     window.location.replace('dashboard.html');
-                }, 1800);
+                }, 1500);
             } catch (error) {
                 toggleLoading(false);
-                showMessage('error', 'Registration Failed: ' + error.message);
+                showMessage('error', getFriendlyErrorMessage(error));
             }
         });
 
