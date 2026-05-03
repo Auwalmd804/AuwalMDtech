@@ -2,177 +2,227 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile - Auwal MD Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RetayaX - Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        :root { --primary: #0084ff; --dark-bg: #020617; --card-bg: #0f172a; }
-        body { background: var(--dark-bg); color: #ffffff; font-family: 'Inter', sans-serif; padding-bottom: 80px; overflow-x: hidden; }
-        
-        .header-nav { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .profile-info { text-align: center; padding: 20px; }
-        
-        .pfp-container { position: relative; width: 120px; height: 120px; margin: 0 auto; }
-        .profile-img { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; }
-        .camera-overlay { position: absolute; bottom: 5px; right: 5px; background: var(--primary); width: 35px; height: 35px; border-radius: 50%; border: 3px solid var(--card-bg); display: flex; align-items: center; justify-content: center; cursor: pointer; }
-
-        .user-stats { display: flex; justify-content: center; gap: 35px; margin: 25px 0; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; }
-        .stat-box { text-align: center; }
-        .stat-count { display: block; font-weight: 800; font-size: 1.2rem; color: #fff; }
-        .stat-label { font-size: 0.7rem; color: #64748b; text-transform: uppercase; }
-
-        .action-area { display: flex; gap: 10px; padding: 0 20px; margin-bottom: 25px; }
-        .btn-edit-profile { flex: 1; background: var(--primary); border: none; color: white; padding: 12px; border-radius: 10px; font-weight: 600; text-decoration: none; text-align: center; }
-        .btn-logout { width: 50px; background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #ef4444; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
-
-        .media-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; }
-        .media-item { aspect-ratio: 1/1; background: var(--card-bg); overflow: hidden; }
-        .media-item img, .media-item video { width: 100%; height: 100%; object-fit: cover; }
-
-        .bottom-bar { position: fixed; bottom: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #1e293b; z-index: 1000; }
-        .bar-link { color: #64748b; font-size: 22px; text-decoration: none; }
-        .bar-link.active { color: var(--primary); }
-        
-        #uploading-status { display: none; text-align: center; font-size: 12px; color: var(--primary); font-weight: bold; margin-bottom: 10px; }
+        body { 
+            background: #0f2027; 
+            color: white; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .main-container {
+            max-width: 420px;
+            margin: auto;
+            padding: 25px;
+            background: #162b36;
+            border-radius: 16px;
+            border: 1px solid #2c5364;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            width: 90%;
+        }
+        .logo-area {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo-area img {
+            width: 60px;
+            height: auto;
+            border-radius: 50%;
+        }
+        .logo-area h4 {
+            color: #25d366;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .form-label {
+            font-size: 0.82rem;
+            color: #a0aab0;
+            margin-bottom: 4px;
+        }
+        .form-control {
+            background-color: #1a2a34;
+            border: 1px solid #2c5364;
+            color: #ffffff;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+        }
+        .form-control:focus {
+            background-color: #1a2a34;
+            border-color: #25d366;
+            color: #ffffff;
+            box-shadow: none;
+        }
+        .btn-green {
+            background-color: #25d366;
+            color: #000000;
+            font-weight: 600;
+            width: 100%;
+            padding: 11px;
+            border-radius: 8px;
+            border: none;
+            transition: 0.2s;
+            margin-bottom: 8px;
+        }
+        .btn-green:hover {
+            background-color: #128C7E;
+            color: #ffffff;
+        }
+        .btn-secondary-custom {
+            background-color: #2c5364;
+            color: #ffffff;
+            width: 100%;
+            padding: 11px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+        }
+        .btn-secondary-custom:hover {
+            background-color: #1a2a34;
+        }
+        #loadingOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 32, 39, 0.95);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #25d366;
+        }
+        .alert-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 10px;
+            text-align: center;
+            padding: 12px;
+            font-weight: 600;
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-<div class="header-nav">
-    <i class="fas fa-arrow-left" onclick="location.href='dashboard.html'"></i>
-    <span class="fw-bold" id="top-title">My Profile</span>
-    <i class="fas fa-cog text-muted"></i>
-</div>
+    <div id="alertBox" class="alert-box"></div>
 
-<div class="profile-info">
-    <div class="pfp-container">
-        <img id="user-avatar" src="" class="profile-img">
-        <label for="img-upload" class="camera-overlay"><i class="fas fa-camera text-white"></i></label>
-        <input type="file" id="img-upload" hidden accept="image/*">
-    </div>
-    <div id="uploading-status">Uploading to Cloudinary...</div>
-
-    <h5 class="mt-3 fw-bold mb-0" id="display-name">---</h5>
-    <p class="text-muted small" id="display-phone">@username</p>
-
-    <div class="user-stats">
-        <div class="stat-box"><span class="stat-count" id="post-total">0</span><span class="stat-label">Posts</span></div>
-        <div class="stat-box"><span class="stat-count" id="follower-total">0</span><span class="stat-label">Followers</span></div>
-        <div class="stat-box"><span class="stat-count" id="following-total">0</span><span class="stat-label">Following</span></div>
-    </div>
-</div>
-
-<div class="action-area">
-    <a href="edit-profile.html" class="btn-edit-profile">Edit Profile</a>
-    <button class="btn-logout" onclick="appLogout()"><i class="fas fa-sign-out-alt"></i></button>
-</div>
-
-<div class="media-grid" id="user-gallery">
+    <div id="loadingOverlay" style="display: none;">
+        <div class="spinner-border text-success mb-3" role="status"></div>
+        <h5>Processing, please wait...</h5>
     </div>
 
-<div class="bottom-bar">
-    <a href="dashboard.html" class="bar-link"><i class="fas fa-home"></i></a>
-    <a href="chats.html" class="bar-link"><i class="fas fa-comment"></i></a>
-    <a href="create-post.html" class="bar-link"><i class="fas fa-plus-square"></i></a>
-    <a href="explore.html" class="bar-link"><i class="fas fa-compass"></i></a>
-    <a href="profile.html" class="bar-link active"><i class="fas fa-user"></i></a>
-</div>
+    <div class="main-container">
+        <div class="logo-area">
+            <img src="logo.png" alt="RetayaX Logo">
+            <h4>Profile Settings</h4>
+            <p class="text-muted small">Update your account information</p>
+        </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, query, where, getDocs, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        <form id="profileForm">
+            <div class="mb-2">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="profileName" placeholder="Enter full name" required>
+            </div>
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
-        authDomain: "auwalmdtech.firebaseapp.com",
-        projectId: "auwalmdtech",
-        storageBucket: "auwalmdtech.firebasestorage.app",
-        messagingSenderId: "202329584080",
-        appId: "1:202329584080:web:e989d7df53d3c3024609d5"
-    };
+            <div class="mb-2">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="profileEmail" readonly disabled>
+            </div>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const authUser = JSON.parse(localStorage.getItem('amd_user'));
+            <div class="mb-3">
+                <label class="form-label">New Password (Optional)</label>
+                <input type="password" class="form-control" id="profilePassword" placeholder="Leave blank to keep current">
+            </div>
 
-    if(!authUser) { window.location.href = "index.html"; }
+            <button type="submit" class="btn btn-green">Save Changes</button>
+            <button type="button" class="btn btn-secondary-custom" onclick="location.href='dashboard.html'">Back to Dashboard</button>
+        </form>
+    </div>
 
-    // Cloudinary details dinka
-    const CLOUD_NAME = "dpxn8b7ao"; 
-    const UPLOAD_PRESET = "ml_default"; 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, updateProfile, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    // Saka bayanai a fuskar profile
-    document.getElementById('display-name').innerText = authUser.name;
-    document.getElementById('display-phone').innerText = "@" + authUser.phone;
-    document.getElementById('user-avatar').src = authUser.photo || `https://ui-avatars.com/api/?name=${authUser.name}`;
+        const firebaseConfig = {
+            apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
+            authDomain: "auwalmdtech.firebaseapp.com",
+            projectId: "auwalmdtech",
+            storageBucket: "auwalmdtech.firebasestorage.app",
+            messagingSenderId: "202329584080",
+            appId: "1:202329584080:web:e989d7df53d3c3024609d5",
+            measurementId: "G-8SZ1MQRMC9"
+        };
 
-    // 1. Upload hoto zuwa Cloudinary
-    document.getElementById('img-upload').addEventListener('change', async (e) => {
-        const file = e.target.files[0];
-        if(!file) return;
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
-        document.getElementById('uploading-status').style.display = "block";
-
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', UPLOAD_PRESET);
-
-        try {
-            const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-                method: 'POST',
-                body: formData
-            });
-            const data = await res.json();
-            
-            if(data.secure_url) {
-                // Adana sabon hoton a LocalStorage
-                authUser.photo = data.secure_url;
-                localStorage.setItem('amd_user', JSON.stringify(authUser));
-                
-                // Nuna shi a Profile
-                document.getElementById('user-avatar').src = data.secure_url;
-                alert("Profile Picture Updated!");
+        // Nuna Sakon Kuskure ko Nasara
+        function showMessage(type, text) {
+            const box = document.getElementById('alertBox');
+            box.innerText = text;
+            if (type === 'success') {
+                box.className = 'alert-box bg-success text-black shadow';
+            } else {
+                box.className = 'alert-box bg-danger text-white shadow';
             }
-        } catch (err) {
-            alert("Upload failed! Tabbatar ka kunna 'Unsigned' a Cloudinary settings.");
+            box.style.display = 'block';
+            setTimeout(() => { box.style.display = 'none'; }, 4500);
         }
-        document.getElementById('uploading-status').style.display = "none";
-    });
 
-    // 2. Load Posts da Lambobin Followers
-    function loadUserData() {
-        const gallery = document.getElementById('user-gallery');
-        
-        // A. Dauko hotunan mutum (Muna amfani da phone)
-        const qPosts = query(collection(db, "posts"), where("phone", "==", authUser.phone));
-        onSnapshot(qPosts, (snap) => {
-            document.getElementById('post-total').innerText = snap.size;
-            gallery.innerHTML = "";
-            snap.forEach(doc => {
-                const p = doc.data();
-                let media = p.type === 'video' ? `<video src="${p.fileUrl}"></video>` : `<img src="${p.fileUrl}">`;
-                gallery.innerHTML += `<div class="media-item">${media}</div>`;
-            });
+        // Duba User a yayinda shafi ya buɗe
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById('profileName').value = user.displayName || '';
+                document.getElementById('profileEmail').value = user.email || '';
+            } else {
+                location.replace("index.html");
+            }
         });
 
-        // B. Followers & Following Count
-        onSnapshot(query(collection(db, "follows"), where("following", "==", authUser.phone)), s => {
-            document.getElementById('follower-total').innerText = s.size;
-        });
-        onSnapshot(query(collection(db, "follows"), where("follower", "==", authUser.phone)), s => {
-            document.getElementById('following-total').innerText = s.size;
-        });
-    }
+        // Adana Gyare-Gyare
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = 'flex';
 
-    window.appLogout = () => {
-        if(confirm("Logout from Auwal MD Chat?")) {
-            localStorage.clear();
-            window.location.href = "index.html";
-        }
-    }
+            const user = auth.currentUser;
+            const newName = document.getElementById('profileName').value;
+            const newPassword = document.getElementById('profilePassword').value;
 
-    loadUserData();
-</script>
+            try {
+                // 1. Gyara Suna
+                if (user && newName !== user.displayName) {
+                    await updateProfile(user, { displayName: newName });
+                }
+
+                // 2. Gyara Kalmar Sirri
+                if (newPassword && newPassword.length >= 6) {
+                    await updatePassword(user, newPassword);
+                }
+
+                overlay.style.display = 'none';
+                showMessage('success', 'Profile updated successfully!');
+                
+                setTimeout(() => {
+                    location.replace("dashboard.html");
+                }, 1500);
+
+            } catch (error) {
+                overlay.style.display = 'none';
+                showMessage('error', 'Error: ' + error.message);
+            }
+        });
+    </script>
 </body>
 </html>
