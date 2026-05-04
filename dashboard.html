@@ -84,10 +84,12 @@
 <div class="loader" id="loader"><div class="spinner-border text-success"></div></div>
 
 <nav class="navbar navbar-dark bg-dark p-3 shadow">
-    <div class="container-fluid">
+    <div class="container-fluid w-100 d-flex justify-content-between align-items-center">
         <img src="logo.png" width="38" class="rounded-circle" alt="Logo">
         <span class="text-white fw-bold" id="userName">Hi, User</span>
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu"><span class="navbar-toggler-icon"></span></button>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
     </div>
 </nav>
 
@@ -135,30 +137,29 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Bincika ko mai amfani yana ciki a Firebase Authentication
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            // Idan akwai shi, nuna sunansa (daga displayName ko email)
-            const userName = user.displayName || user.email || 'User';
-            document.getElementById('userName').innerText = "Hi, " + userName;
+            // Karanta suna: duba displayName, ko mu cire kason @gmail daga email
+            let userName = user.displayName;
+            if (!userName && user.email) {
+                userName = user.email.split('@')[0];
+            }
+            document.getElementById('userName').innerText = "Hi, " + (userName || 'User');
         } else {
-            // Idan babu, mayar da shi shafin index.html
             location.replace("index.html");
         }
     });
 
-    // Gyaran Logout
     document.getElementById('logoutBtn').addEventListener('click', async () => {
         try {
             await signOut(auth);
-            localStorage.removeItem('amd_user'); // Tsaftace ajiya
+            localStorage.removeItem('amd_user');
             window.location.replace("index.html");
         } catch (error) {
             alert("Error signing out: " + error.message);
         }
     });
 
-    // Jerin Sassan Ayyuka 11
     const services = [
         {name: "Sunking", img: "sunking.png"},
         {name: "NIN Device", img: "nin-device.png"},
