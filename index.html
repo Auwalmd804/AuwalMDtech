@@ -323,7 +323,13 @@
             const password = document.getElementById('regPassword').value;
 
             try {
-                await createUserWithEmailAndPassword(auth, email, password);
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+                // Gyaran da muka yi kenan domin ajiye sunan a matsayin sunan da zai bayyana
+                await updateProfile(userCredential.user, {
+                    displayName: firstName
+                });
+
                 showMessage('success', 'Registration Successful! Redirecting...');
                 
                 setTimeout(() => {
