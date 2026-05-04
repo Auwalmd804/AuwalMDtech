@@ -139,7 +139,6 @@
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            // Zai duba displayName, idan babu zai duba email ya cire kason @gmail ko @retayax
             let userName = user.displayName;
             if (!userName && user.email) {
                 userName = user.email.split('@')[0];
@@ -177,9 +176,15 @@
 
     const grid = document.getElementById('grid');
     services.forEach(s => {
+        // Gyara na musamman domin Wifi/Router ya kira fayil din wifi.html
+        let fileLink = s.name.toLowerCase().replace(/ /g,'');
+        if (s.name === "Wifi/Router") {
+            fileLink = "wifi";
+        }
+        
         grid.innerHTML += `
             <div class="col-4">
-                <div class="service-card" onclick="location.href='${s.name.toLowerCase().replace(/ /g,'')}.html'">
+                <div class="service-card" onclick="location.href='${fileLink}.html'">
                     <img src="${s.img}" alt="${s.name}">
                     <h6 class="text-truncate">${s.name}</h6>
                 </div>
