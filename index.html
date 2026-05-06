@@ -1,363 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RetayaX - Sign In & Create Account</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RetayaX - Redirecting...</title>
     <style>
         body {
-            background-color: #0f2027;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
+            background: #0f2027;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .main-container {
-            max-width: 420px;
-            margin: auto;
-            padding: 25px;
-            background: #162b36;
-            border-radius: 16px;
-            border: 1px solid #2c5364;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-            width: 90%;
-        }
-        .logo-area {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .logo-area img {
-            width: 70px;
-            height: auto;
-            border-radius: 50%;
-        }
-        .logo-area h3 {
-            color: #25d366;
-            font-weight: 700;
-            margin-top: 10px;
-            margin-bottom: 2px;
-        }
-        .form-label {
-            font-size: 0.82rem;
-            color: #a0aab0;
-            margin-bottom: 4px;
-        }
-        .form-control {
-            background-color: #1a2a34;
-            border: 1px solid #2c5364;
-            color: #ffffff;
-            border-radius: 8px;
-            padding: 10px 12px;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
-        }
-        .form-control::placeholder {
-            color: #5c6c77;
-            opacity: 1;
-        }
-        .form-control:focus {
-            background-color: #1a2a34;
-            border-color: #25d366;
-            color: #ffffff;
-            box-shadow: none;
-        }
-        .btn-green {
-            background-color: #25d366;
-            color: #000000;
-            font-weight: 600;
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: none;
-            transition: 0.2s;
-            margin-bottom: 10px;
-        }
-        .btn-green:hover {
-            background-color: #128C7E;
-            color: #ffffff;
-        }
-        .auth-toggle {
-            text-align: center;
-            margin-bottom: 15px;
-            font-size: 0.85rem;
-            color: #ddd;
-        }
-        .auth-toggle span {
-            color: #25d366;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .footer-text {
-            text-align: center;
-            font-size: 0.72rem;
-            color: #7b8890;
-            margin-top: 15px;
-        }
-        #loadingOverlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 32, 39, 0.95);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: #25d366;
+            height: 100vh;
+            margin: 0;
+            color: white;
+            font-family: sans-serif;
         }
-        .alert-box {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10000;
-            width: 90%;
-            max-width: 400px;
-            border-radius: 10px;
+        .loading-text {
             text-align: center;
-            padding: 12px;
-            font-weight: 600;
-            display: none;
         }
     </style>
+    <script type="text/javascript">
+        window.location.href = "dashboard.html";
+    </script>
 </head>
 <body>
-
-    <div id="alertBox" class="alert-box"></div>
-
-    <div id="loadingOverlay" style="display: none;">
-        <div class="spinner-border text-success mb-3" role="status"></div>
-        <h5 id="loadingText">Processing, please wait...</h5>
+    <div class="loading-text">
+        <div style="border: 4px solid #f3f3f3; border-top: 4px solid #25d366; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: auto;"></div>
+        <p>Loading RetayaX...</p>
     </div>
 
-    <div class="main-container">
-        <div class="logo-area">
-            <img src="logo.png" alt="RetayaX Logo">
-            <h3>RetayaX</h3>
-            <p class="text-muted small" id="authSubtitle">Sign in to continue to your account</p>
-        </div>
-
-        <div id="signInSection">
-            <form id="signInForm">
-                <div class="mb-2">
-                    <label class="form-label">* Phone Number or Email</label>
-                    <input type="text" class="form-control" id="siPhoneOrEmail" placeholder="Enter phone or email" required>
-                </div>
-                
-                <div class="mb-3">
-                    <label class="form-label">* Password</label>
-                    <input type="password" class="form-control" id="siPassword" placeholder="At least 8 characters" required>
-                    <div class="text-end">
-                        <span onclick="toggleSection('forgotSection')" class="text-success small text-decoration-none" style="cursor: pointer;">Forgot Password?</span>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-green">Sign In</button>
-            </form>
-            <hr class="border-secondary">
-            <div class="auth-toggle">
-                Don't have an account yet? <span onclick="toggleSection('registerSection')">Create Account</span>
-            </div>
-        </div>
-
-        <div id="registerSection" style="display: none;">
-            <form id="registerForm">
-                <div class="row">
-                    <div class="col-6 mb-2">
-                        <label class="form-label">* First Name</label>
-                        <input type="text" class="form-control" id="regFirstName" placeholder="Alex" required>
-                    </div>
-                    <div class="col-6 mb-2">
-                        <label class="form-label">* Last Name</label>
-                        <input type="text" class="form-control" id="regLastName" placeholder="Parkinson" required>
-                    </div>
-                </div>
-                
-                <div class="mb-2">
-                    <label class="form-label">* Phone Number</label>
-                    <input type="tel" class="form-control" id="regPhone" placeholder="08012345678" required>
-                </div>
-
-                <div class="mb-2">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="regEmail" placeholder="alex@example.com">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">* Password</label>
-                    <input type="password" class="form-control" id="regPassword" placeholder="At least 8 characters" required>
-                </div>
-
-                <button type="submit" class="btn btn-green">Create Account</button>
-            </form>
-            <hr class="border-secondary">
-            <div class="auth-toggle">
-                Already have an account? <span onclick="toggleSection('signInSection')">Sign In</span>
-            </div>
-        </div>
-
-        <div id="forgotSection" style="display: none;">
-            <h5 class="text-center text-success mb-3">Reset Password</h5>
-            <form id="forgotForm">
-                <div class="mb-3">
-                    <label class="form-label">Enter your email address</label>
-                    <input type="email" class="form-control" id="fgEmail" placeholder="alex@example.com" required>
-                </div>
-                <button type="submit" class="btn btn-green">Send Reset Email</button>
-            </form>
-            <hr class="border-secondary">
-            <div class="auth-toggle">
-                Remember your password? <span onclick="toggleSection('signInSection')">Sign In</span>
-            </div>
-        </div>
-
-        <div class="footer-text">
-            &copy; 2026 RetayaX - All Rights Reserved
-        </div>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, updateProfile, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
-            authDomain: "auwalmdtech.firebaseapp.com",
-            projectId: "auwalmdtech",
-            storageBucket: "auwalmdtech.firebasestorage.app",
-            messagingSenderId: "202329584080",
-            appId: "1:202329584080:web:e989d7df53d3c3024609d5",
-            measurementId: "G-8SZ1MQRMC9"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        // Nuna Sako Mai Kyu
-        function showMessage(type, text) {
-            const box = document.getElementById('alertBox');
-            box.innerText = text;
-            if (type === 'success') {
-                box.className = 'alert-box bg-success text-black shadow';
-            } else {
-                box.className = 'alert-box bg-danger text-white shadow';
-            }
-            box.style.display = 'block';
-            setTimeout(() => { box.style.display = 'none'; }, 4500);
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-
-        function toggleLoading(show, text = 'Processing...') {
-            const overlay = document.getElementById('loadingOverlay');
-            document.getElementById('loadingText').innerText = text;
-            overlay.style.display = show ? 'flex' : 'none';
-        }
-
-        window.toggleSection = function(sectionId) {
-            document.getElementById('signInSection').style.display = 'none';
-            document.getElementById('registerSection').style.display = 'none';
-            document.getElementById('forgotSection').style.display = 'none';
-            
-            document.getElementById(sectionId).style.display = 'block';
-            
-            const subtitle = document.getElementById('authSubtitle');
-            if (sectionId === 'signInSection') {
-                subtitle.innerText = 'Sign in to continue to your account';
-            } else if (sectionId === 'registerSection') {
-                subtitle.innerText = 'Create your account in less than a minute';
-            } else if (sectionId === 'forgotSection') {
-                subtitle.innerText = 'Recover your account access safely';
-            }
-        };
-
-        //fassara kuskure daga firebase
-        function getFriendlyErrorMessage(error) {
-            switch (error.code) {
-                case 'auth/email-already-in-use':
-                    return "This email is already registered.";
-                case 'auth/invalid-email':
-                    return "Invalid email address.";
-                case 'auth/weak-password':
-                    return "Password should be at least 6 characters.";
-                case 'auth/invalid-credential':
-                    return "Invalid Email or Password.";
-                case 'auth/user-not-found':
-                    return "No account found with this email.";
-                default:
-                    return error.message;
-            }
-        }
-
-        // Shiga (Sign In Form)
-        document.getElementById('signInForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            toggleLoading(true, 'Signing in, please wait...');
-
-            const emailOrPhone = document.getElementById('siPhoneOrEmail').value;
-            const password = document.getElementById('siPassword').value;
-
-            try {
-                await signInWithEmailAndPassword(auth, emailOrPhone, password);
-                showMessage('success', 'Login Successful! Redirecting...');
-                
-                setTimeout(() => {
-                    window.location.replace('dashboard.html');
-                }, 1500);
-            } catch (error) {
-                toggleLoading(false);
-                showMessage('error', getFriendlyErrorMessage(error));
-            }
-        });
-
-        // Rajista (Register Form)
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            toggleLoading(true, 'Creating account, please wait...');
-
-            const firstName = document.getElementById('regFirstName').value;
-            const lastName = document.getElementById('regLastName').value;
-            const phone = document.getElementById('regPhone').value;
-            const email = document.getElementById('regEmail').value || `${phone}@retayax.com`;
-            const password = document.getElementById('regPassword').value;
-
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
-                // Gyaran da muka yi kenan domin ajiye sunan a matsayin sunan da zai bayyana
-                await updateProfile(userCredential.user, {
-                    displayName: firstName
-                });
-
-                showMessage('success', 'Registration Successful! Redirecting...');
-                
-                setTimeout(() => {
-                    window.location.replace('dashboard.html');
-                }, 1500);
-            } catch (error) {
-                toggleLoading(false);
-                showMessage('error', getFriendlyErrorMessage(error));
-            }
-        });
-
-        // Mantawa da kalmar sirri
-        document.getElementById('forgotForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            toggleLoading(true, 'Sending recovery link...');
-            
-            const email = document.getElementById('fgEmail').value;
-            
-            try {
-                await sendPasswordResetEmail(auth, email);
-                showMessage('success', 'Recovery link sent! Check your email.');
-                toggleLoading(false);
-                toggleSection('signInSection');
-            } catch (error) {
-                toggleLoading(false);
-                showMessage('error', 'Error: ' + error.message);
-            }
-        });
-    </script>
+    </style>
 </body>
 </html>
