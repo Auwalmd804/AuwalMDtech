@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RetayaX - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body { 
+            background: #0f2027; 
+            color: white; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .loader { position: fixed; inset: 0; background: #0f2027; z-index: 9999; display: flex; justify-content: center; align-items: center; }
+        
+        /* Animation na Tuta */
+        @keyframes wave {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(-8deg); }
+            50% { transform: rotate(5deg); }
+            75% { transform: rotate(-4deg); }
+            100% { transform: rotate(0deg); }
+        }
+        .waving-logo {
+            animation: wave 3s infinite ease-in-out;
+            transform-origin: center;
+        }
+
+        .top-banner {
+            background: #162b36;
+            border-radius: 15px;
+            padding: 0;
+            margin: 12px auto;
+            border: 2px solid #25d366;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            overflow: hidden;
+            width: 92%;
+            max-width: 500px;
+            position: relative;
+        }
+        .top-banner:active { transform: scale(0.98); }
+        .top-banner img { 
+            width: 100%; 
+            height: auto; 
+            max-height: 140px; 
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Hannu mai motsi */
+        @keyframes pointHand {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(15px, 0) scale(1.1); }
+        }
+        .pointing-hand {
+            position: absolute;
+            right: 20px;
+            bottom: 15px;
+            font-size: 32px;
+            color: #25d366;
+            animation: pointHand 1.5s infinite;
+        }
+        
+        .separator-text {
+            text-align: center;
+            color: #25d366;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin: 8px 0 4px 0;
+            text-transform: uppercase;
+        }
+        
+        .service-card { 
+            background: #1a2a34; 
+            border-radius: 15px; 
+            padding: 8px; 
+            text-align: center; 
+            border: 1px solid #2c5364; 
+            height: 105px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            transition: 0.2s; 
+            cursor: pointer; 
+        }
+        .service-card:active { transform: scale(0.95); }
+        .service-card img { height: 42px; width: auto; object-fit: contain; margin-bottom: 6px; }
+        .service-card h6 { font-size: 0.65rem; color: #fff; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+        .wa-btn { 
+            position: fixed; bottom: 80px; right: 20px; background: #25d366; color: white; 
+            width: 50px; height: 50px; border-radius: 50%; display: flex; 
+            justify-content: center; align-items: center; font-size: 24px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000; 
+        }
+        footer { padding: 12px; text-align: center; color: rgba(255,255,255,0.6); font-size: 12px; margin-top: auto; }
+        .offcanvas { background: #0f2027; }
+        .offcanvas-title { color: white; }
+    </style>
+</head>
+<body>
+
+<div class="loader" id="loader"><div class="spinner-border text-success"></div></div>
+
+<nav class="navbar navbar-dark bg-dark p-3 shadow">
+    <div class="container-fluid d-flex justify-content-between align-items-center w-100">
+        <img src="logo.png" width="38" class="rounded-circle waving-logo" alt="Logo">
+        <span class="text-white fw-bold" id="userName">Welcome to RetayaX</span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</nav>
+
+<div class="offcanvas offcanvas-end" id="menu">
+    <div class="offcanvas-header"><h5 class="offcanvas-title">Menu</h5><button class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button></div>
+    <div class="offcanvas-body">
+        <a href="transactions.html" class="btn btn-outline-success w-100 mb-3 py-2">Transaction History</a>
+    </div>
+</div>
+
+<marquee class="bg-success text-black fw-bold p-1">The CEO Auwal MD and Shayibu Ali Baba | Site Active 24/7</marquee>
+
+<div class="top-banner" onclick="window.location.href='https://retayax.quark.ng'">
+    <img src="all-in-one.png" alt="All-in-one Digital Service">
+    <span id="handIcon" class="pointing-hand">👉</span>
+</div>
+
+<div class="separator-text">
+    🚀 Fast, Secure and Reliable Services
+</div>
+
+<div class="container-fluid">
+    <div class="row g-2" id="grid"></div>
+</div>
+
+<a href="https://wa.me/2348164712102" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i></a>
+
+<footer>&copy; 2026 RetayaX - All Rights Reserved</footer>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
+        authDomain: "auwalmdtech.firebaseapp.com",
+        projectId: "auwalmdtech",
+        storageBucket: "auwalmdtech.firebasestorage.app",
+        messagingSenderId: "202329584080",
+        appId: "1:202329584080:web:e989d7df53d3c3024609d5",
+        measurementId: "G-8SZ1MQRMC9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Mun cire redirect saboda kada shafin ya tilasta wa mutum komawa index.html
+    onAuthStateChanged(auth, (user) => {
+        // Ba zai sake tura kowa index.html ba, zai bar mutum a dashboard kai tsaye
+    });
+
+    const services = [
+        {name: "Sunking", img: "sunking.png"},
+        {name: "NIN Device", img: "nin-device.png"},
+        {name: "Airtel Reg", img: "airtel-reg.png"},
+        {name: "BVN Registration", img: "bvn-reg.png"},
+        {name: "WhatsApp Hub", img: "whatsapp-hub.png"},
+        {name: "Data Sim", img: "data-sim.png"},
+        {name: "Wifi/Router", img: "router-wifi.png"},
+        {name: "Product Shop", img: "shop-all.png"},
+        {name: "SIM Swap", img: "sim-swap.png"},
+        {name: "Graphic Design", img: "graphic-design.png"},
+        {name: "Service Match", img: "service-match.png"}
+    ];
+
+    const grid = document.getElementById('grid');
+    services.forEach(s => {
+        let fileLink = s.name.toLowerCase().replace(/ /g,'');
+        if (s.name === "Wifi/Router") {
+            fileLink = "wifi";
+        }
+        
+        grid.innerHTML += `
+            <div class="col-4">
+                <div class="service-card" onclick="location.href='${fileLink}.html'">
+                    <img src="${s.img}" alt="${s.name}">
+                    <h6 class="text-truncate">${s.name}</h6>
+                </div>
+            </div>`;
+    });
+
+    // Cire hannun nuni bayan seconds 30
+    setTimeout(() => {
+        const handIcon = document.getElementById('handIcon');
+        if (handIcon) {
+            handIcon.style.display = 'none';
+        }
+    }, 30000);
+
+    window.onload = () => setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
