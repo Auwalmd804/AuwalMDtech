@@ -7,14 +7,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        /* GYARAN KALA: MUN MAYAR DA SHI FARI DA BAKI KAMAR NA QUARKAXIS */
+        /* GYARAN KALA ZUWA FARI (QUARKAXIS STYLE) */
         body { 
-            background: #ffffff; /* Fari radau */
-            color: #000000; /* Bakin rubutu */
+            background: #ffffff; 
+            color: #333; 
             min-height: 100vh; 
             display: flex; 
             flex-direction: column; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
         /* --- LOADING SCREEN --- */
@@ -33,118 +35,139 @@
             width: 90px;
             height: 90px;
             border: 4px solid #f3f3f3;
-            border-top: 4px solid #28a745;
+            border-top: 4px solid #25d366;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* --- NAVIGATION --- */
-        .navbar { background: #ffffff !important; border-bottom: 1px solid #ddd; }
-        .navbar span { color: #000000 !important; }
-        .navbar-toggler { filter: invert(1); } /* Don icon din ya fito a fari */
-
+        /* --- LOGO --- */
         .waving-logo {
             width: 40px;
             height: 40px;
             object-fit: contain;
             border-radius: 50%;
-            border: 2px solid #28a745;
-            box-shadow: 0 0 10px rgba(40, 167, 69, 0.3);
+            border: 2px solid #25d366;
+            background: white;
         }
 
-        /* --- BANNER & LINK --- */
-        .top-banner {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 0;
-            margin: 12px auto;
-            border: 1px solid #28a745;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow: hidden;
+        /* --- NAVBAR & MENU FIX --- */
+        .navbar { 
+            background: #ffffff !important; 
+            border-bottom: 1px solid #eee;
+            z-index: 1050; /* Tabbatar da menu yana sama */
+        }
+        .navbar span { color: #333 !important; }
+        .navbar-toggler { 
+            border-color: #25d366 !important; 
+            background-color: #f8f9fa;
+        }
+        .navbar-toggler-icon {
+            filter: invert(0); /* Baki zai fito a fari */
+        }
+
+        /* --- THE ANIMATED LOGIN/REGISTER BUTTON --- */
+        .login-btn-container {
             width: 92%;
+            margin: 10px auto;
             max-width: 500px;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        .top-banner img { width: 100%; height: auto; cursor: pointer; }
-
-        /* --- ANIMATED BUTTON (REGISTER/LOGIN) --- */
-        .cta-button {
+        .login-btn {
             width: 100%;
-            background: #28a745;
+            background: linear-gradient(45deg, #25d366, #128c7e);
             color: white;
-            padding: 12px;
             text-align: center;
+            padding: 12px;
+            border-radius: 10px;
             font-weight: bold;
             text-decoration: none;
             display: block;
-            font-size: 18px;
-            animation: glow 2s infinite; /* Animation din da kake so */
-            border: none;
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+            animation: pulse-animation 2s infinite; /* Animation din nan */
         }
-        @keyframes glow {
-            0% { background-color: #28a745; box-shadow: 0 0 5px #28a745; }
-            50% { background-color: #218838; box-shadow: 0 0 20px #28a745; }
-            100% { background-color: #28a745; box-shadow: 0 0 5px #28a745; }
+        @keyframes pulse-animation {
+            0% { transform: scale(1); box-shadow: 0 0 0 0px rgba(37, 211, 102, 0.7); }
+            70% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0px rgba(37, 211, 102, 0); }
         }
+
+        /* --- TOP BANNER --- */
+        .top-banner {
+            background: #fff;
+            border-radius: 15px;
+            margin: 5px auto;
+            border: 1px solid #25d366;
+            overflow: hidden;
+            width: 92%;
+            max-width: 500px;
+            cursor: pointer;
+        }
+        .top-banner img { width: 100%; height: auto; display: block; }
 
         /* --- SERVICE CARDS --- */
         .service-card { 
-            background: #ffffff; 
+            background: #fdfdfd; 
             border-radius: 12px; 
             padding: 8px; 
             text-align: center; 
-            border: 1px solid #eee; 
+            border: 1px solid #eaeaea; 
             height: 105px; 
             display: flex; 
             flex-direction: column; 
             justify-content: center; 
             align-items: center; 
-            transition: 0.3s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
         }
-        .service-card:active { transform: scale(0.95); }
         .service-card img { height: 42px; width: auto; margin-bottom: 6px; }
-        .service-card h6 { font-size: 0.65rem; color: #333; margin: 0; font-weight: 600; }
+        .service-card h6 { font-size: 0.65rem; color: #444; margin: 0; font-weight: 600; }
 
         .wa-btn { position: fixed; bottom: 80px; right: 20px; background: #25d366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 1000; text-decoration: none; font-size: 24px; }
-        footer { padding: 12px; text-align: center; color: #666; font-size: 12px; margin-top: auto; }
+        footer { padding: 12px; text-align: center; color: #888; font-size: 12px; margin-top: auto; }
+        .offcanvas { background: #ffffff; color: #333; }
+        .offcanvas-title { color: #333 !important; }
     </style>
 </head>
 <body>
 
 <div id="loader">
     <div class="loader-spinner"></div>
-    <div class="loading-text" style="margin-top: 110px; color: #28a745; font-weight: bold;">RE-TAYAX LOADING...</div>
+    <div class="loading-text" style="margin-top: 110px; color: #25d366; font-weight: bold;">RE-TAYAX PROCESSING...</div>
 </div>
 
 <nav class="navbar navbar-light p-3 shadow-sm">
-    <div class="container-fluid d-flex justify-content-between align-items-center w-100">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
         <img src="logo.png" class="waving-logo" alt="Logo">
         <span class="fw-bold">Welcome to RetayaX</span>
+        <!-- GYARAN MENU BUTTON -->
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 </nav>
 
-<marquee class="bg-success text-white fw-bold p-1">CEO Auwal MD & Shayibu Ali Baba | RetayaX Site is Active 24/7</marquee>
-
-<!-- BANNER SECTION DA LINK A JIKIN HOTON DA KUMA BUTTON -->
-<div class="top-banner">
-    <div onclick="window.location.href='https://retayax.quark.ng'" style="cursor: pointer; width: 100%;">
-        <img src="all-in-one.png" alt="All-in-one Digital Service">
-        <div style="padding: 10px; color: #333; font-weight: 500; font-size: 14px; text-align: center;">
-            Click Image or Button to Register/Login
-        </div>
+<div class="offcanvas offcanvas-end" id="menu">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Menu Options</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
-    <!-- WANNAN SHINE ANIMATED BUTTON DIN -->
-    <a href="https://retayax.quark.ng" class="cta-button">
-        <i class="fas fa-sign-in-alt"></i> REGISTER OR LOGIN HERE
+    <div class="offcanvas-body">
+        <a href="transactions.html" class="btn btn-outline-success w-100 mb-3 py-2">Transaction History</a>
+        <a href="https://wa.me/2348164712102" class="btn btn-success w-100 mb-3 py-2">Contact Support</a>
+    </div>
+</div>
+
+<marquee class="bg-success text-white fw-bold p-1">CEO Auwal MD & Shayibu Ali Baba | Site Active 24/7</marquee>
+
+<!-- ANIMATED LOGIN BUTTON -->
+<div class="login-btn-container">
+    <a href="https://retayax.quark.ng" class="login-btn">
+        <i class="fas fa-user-circle"></i> LOGIN / REGISTER TO ACCOUNT
     </a>
+</div>
+
+<div class="top-banner" onclick="window.location.href='https://retayax.quark.ng'">
+    <img src="all-in-one.png" alt="All-in-one Digital Service">
 </div>
 
 <div class="container-fluid mt-2">
@@ -154,6 +177,7 @@
 <a href="https://wa.me/2348164712102" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i></a>
 <footer>&copy; 2026 RetayaX - All Rights Reserved</footer>
 
+<!-- SCRIPTS TSAYAYYU -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const services = [
@@ -185,7 +209,7 @@
     window.onload = () => {
         setTimeout(() => {
             document.getElementById('loader').style.display = 'none';
-        }, 1000);
+        }, 1200);
     };
 </script>
 </body>
