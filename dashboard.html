@@ -7,167 +7,195 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        /* GYARAN KALA ZUWA FARI (QUARKAXIS STYLE) */
+        /* ASALIN KALA: BAKIN BACKGROUND DA FARIN RUBUTU */
         body { 
-            background: #ffffff; 
-            color: #333; 
+            background: #0f2027; 
+            color: white; 
             min-height: 100vh; 
             display: flex; 
             flex-direction: column; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
         }
 
-        /* --- LOADING SCREEN --- */
+        /* --- PROFESSIONAL LOADING SCREEN FIX --- */
         #loader {
             position: fixed;
             inset: 0;
-            background: #ffffff;
+            background: #0f2027;
             z-index: 9999;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
+        .loader-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .loader-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            z-index: 2;
+            background: white; /* Don logo din ya fito radau */
+        }
         .loader-spinner {
             position: absolute;
             width: 90px;
             height: 90px;
-            border: 4px solid #f3f3f3;
+            border: 4px solid transparent;
             border-top: 4px solid #25d366;
+            border-right: 4px solid #25d366;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loading-text {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #25d366;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
 
-        /* --- LOGO --- */
+        /* --- LOGO ENHANCEMENT --- */
         .waving-logo {
             width: 40px;
             height: 40px;
             object-fit: contain;
             border-radius: 50%;
             border: 2px solid #25d366;
+            box-shadow: 0 0 10px rgba(37, 211, 102, 0.8);
             background: white;
         }
 
-        /* --- NAVBAR & MENU FIX --- */
-        .navbar { 
-            background: #ffffff !important; 
-            border-bottom: 1px solid #eee;
-            z-index: 1050; /* Tabbatar da menu yana sama */
-        }
-        .navbar span { color: #333 !important; }
-        .navbar-toggler { 
-            border-color: #25d366 !important; 
-            background-color: #f8f9fa;
-        }
-        .navbar-toggler-icon {
-            filter: invert(0); /* Baki zai fito a fari */
-        }
-
-        /* --- THE ANIMATED LOGIN/REGISTER BUTTON --- */
-        .login-btn-container {
-            width: 92%;
-            margin: 10px auto;
-            max-width: 500px;
-        }
-        .login-btn {
-            width: 100%;
-            background: linear-gradient(45deg, #25d366, #128c7e);
-            color: white;
-            text-align: center;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: bold;
-            text-decoration: none;
-            display: block;
-            font-size: 16px;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-            animation: pulse-animation 2s infinite; /* Animation din nan */
-        }
-        @keyframes pulse-animation {
-            0% { transform: scale(1); box-shadow: 0 0 0 0px rgba(37, 211, 102, 0.7); }
-            70% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0px rgba(37, 211, 102, 0); }
-        }
+        /* --- NAVIGATION --- */
+        .navbar { z-index: 1050; }
+        .offcanvas { background: #0f2027; color: white; }
 
         /* --- TOP BANNER --- */
-        .top-banner {
-            background: #fff;
-            border-radius: 15px;
-            margin: 5px auto;
-            border: 1px solid #25d366;
-            overflow: hidden;
+        .top-banner-wrapper {
             width: 92%;
             max-width: 500px;
+            margin: 12px auto;
+            position: relative;
+        }
+        .top-banner {
+            background: #162b36;
+            border-radius: 15px 15px 0 0; /* Sama kawai aka yi wa zagaye */
+            border: 2px solid #25d366;
+            border-bottom: none;
+            overflow: hidden;
             cursor: pointer;
+            position: relative;
         }
         .top-banner img { width: 100%; height: auto; display: block; }
 
+        /* --- ANIMATED LOGIN BUTTON (KASAN HOTO) --- */
+        .login-cta {
+            background: #25d366;
+            color: #000;
+            text-align: center;
+            padding: 12px;
+            font-weight: bold;
+            text-decoration: none;
+            display: block;
+            border-radius: 0 0 15px 15px; /* Kasa aka yi wa zagaye */
+            font-size: 16px;
+            border: 2px solid #25d366;
+            animation: pulse-glow 2s infinite;
+        }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0px rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0px rgba(37, 211, 102, 0); }
+        }
+
+        @keyframes pointHand {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(15px, 0) scale(1.1); }
+        }
+        .pointing-hand {
+            position: absolute;
+            right: 15px;
+            top: 40%;
+            font-size: 28px;
+            z-index: 10;
+            animation: pointHand 1.5s infinite;
+        }
+
         /* --- SERVICE CARDS --- */
         .service-card { 
-            background: #fdfdfd; 
-            border-radius: 12px; 
+            background: #1a2a34; 
+            border-radius: 15px; 
             padding: 8px; 
             text-align: center; 
-            border: 1px solid #eaeaea; 
+            border: 1px solid #2c5364; 
             height: 105px; 
             display: flex; 
             flex-direction: column; 
             justify-content: center; 
             align-items: center; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
         }
         .service-card img { height: 42px; width: auto; margin-bottom: 6px; }
-        .service-card h6 { font-size: 0.65rem; color: #444; margin: 0; font-weight: 600; }
+        .service-card h6 { font-size: 0.65rem; color: #fff; margin: 0; }
 
-        .wa-btn { position: fixed; bottom: 80px; right: 20px; background: #25d366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 1000; text-decoration: none; font-size: 24px; }
-        footer { padding: 12px; text-align: center; color: #888; font-size: 12px; margin-top: auto; }
-        .offcanvas { background: #ffffff; color: #333; }
-        .offcanvas-title { color: #333 !important; }
+        .wa-btn { position: fixed; bottom: 80px; right: 20px; background: #25d366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 1000; text-decoration: none; }
+        footer { padding: 12px; text-align: center; color: rgba(255,255,255,0.6); font-size: 12px; margin-top: auto; }
     </style>
 </head>
 <body>
 
+<!-- LOADING SCREEN -->
 <div id="loader">
-    <div class="loader-spinner"></div>
-    <div class="loading-text" style="margin-top: 110px; color: #25d366; font-weight: bold;">RE-TAYAX PROCESSING...</div>
+    <div class="loader-container">
+        <div class="loader-spinner"></div>
+        <img src="logo.png" class="loader-logo" alt="Loading">
+    </div>
+    <div class="loading-text">RE-TAYAX PROCESSING...</div>
 </div>
 
-<nav class="navbar navbar-light p-3 shadow-sm">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
+<!-- NAVBAR -->
+<nav class="navbar navbar-dark bg-dark p-3 shadow">
+    <div class="container-fluid d-flex justify-content-between align-items-center w-100">
         <img src="logo.png" class="waving-logo" alt="Logo">
-        <span class="fw-bold">Welcome to RetayaX</span>
-        <!-- GYARAN MENU BUTTON -->
+        <span class="text-white fw-bold">Welcome to RetayaX</span>
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 </nav>
 
+<!-- MENU -->
 <div class="offcanvas offcanvas-end" id="menu">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Menu Options</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        <h5 class="offcanvas-title text-white">Menu</h5>
+        <button class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body">
         <a href="transactions.html" class="btn btn-outline-success w-100 mb-3 py-2">Transaction History</a>
-        <a href="https://wa.me/2348164712102" class="btn btn-success w-100 mb-3 py-2">Contact Support</a>
+        <!-- KONTAKT SUPPORT BUTTON -->
+        <a href="https://wa.me/2348164712102" class="btn btn-success w-100 mb-3 py-2">
+            <i class="fab fa-whatsapp"></i> Contact Support
+        </a>
     </div>
 </div>
 
-<marquee class="bg-success text-white fw-bold p-1">CEO Auwal MD & Shayibu Ali Baba | Site Active 24/7</marquee>
+<marquee class="bg-success text-black fw-bold p-1">The CEO Auwal MD and Shayibu Ali Baba | Site Active 24/7</marquee>
 
-<!-- ANIMATED LOGIN BUTTON -->
-<div class="login-btn-container">
-    <a href="https://retayax.quark.ng" class="login-btn">
-        <i class="fas fa-user-circle"></i> LOGIN / REGISTER TO ACCOUNT
+<!-- BANNER DA LOGIN BUTTON -->
+<div class="top-banner-wrapper">
+    <div class="top-banner" onclick="window.location.href='https://retayax.quark.ng'">
+        <img src="all-in-one.png" alt="All-in-one Digital Service">
+        <span id="handIcon" class="pointing-hand">👉</span>
+    </div>
+    <a href="https://retayax.quark.ng" class="login-cta">
+        <i class="fas fa-sign-in-alt"></i> LOGIN / REGISTER TO ACCOUNT
     </a>
-</div>
-
-<div class="top-banner" onclick="window.location.href='https://retayax.quark.ng'">
-    <img src="all-in-one.png" alt="All-in-one Digital Service">
 </div>
 
 <div class="container-fluid mt-2">
@@ -177,9 +205,8 @@
 <a href="https://wa.me/2348164712102" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i></a>
 <footer>&copy; 2026 RetayaX - All Rights Reserved</footer>
 
-<!-- SCRIPTS TSAYAYYU -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
+<script type="module">
     const services = [
         {name: "Sunking", img: "sunking.png"},
         {name: "NIN Device", img: "nin-device.png"},
@@ -209,8 +236,13 @@
     window.onload = () => {
         setTimeout(() => {
             document.getElementById('loader').style.display = 'none';
-        }, 1200);
+        }, 1500);
     };
+
+    setTimeout(() => {
+        const handIcon = document.getElementById('handIcon');
+        if (handIcon) handIcon.style.display = 'none';
+    }, 30000);
 </script>
 </body>
 </html>
