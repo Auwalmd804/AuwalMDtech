@@ -7,157 +7,144 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+        /* GYARAN KALA: MUN MAYAR DA SHI FARI DA BAKI KAMAR NA QUARKAXIS */
         body { 
-            background: #0f2027; 
-            color: white; 
+            background: #ffffff; /* Fari radau */
+            color: #000000; /* Bakin rubutu */
             min-height: 100vh; 
             display: flex; 
             flex-direction: column; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* --- PROFESSIONAL LOADING SCREEN --- */
+        /* --- LOADING SCREEN --- */
         #loader {
             position: fixed;
             inset: 0;
-            background: #0f2027;
+            background: #ffffff;
             z-index: 9999;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
-        .loader-container {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .loader-logo {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            z-index: 2;
-        }
         .loader-spinner {
             position: absolute;
             width: 90px;
             height: 90px;
-            border: 4px solid transparent;
-            border-top: 4px solid #25d366;
-            border-right: 4px solid #25d366;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #28a745;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .loading-text {
-            margin-top: 15px;
-            font-size: 14px;
-            color: #25d366;
-            letter-spacing: 1px;
-            font-weight: bold;
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* --- LOGO ENHANCEMENT --- */
+        /* --- NAVIGATION --- */
+        .navbar { background: #ffffff !important; border-bottom: 1px solid #ddd; }
+        .navbar span { color: #000000 !important; }
+        .navbar-toggler { filter: invert(1); } /* Don icon din ya fito a fari */
+
         .waving-logo {
             width: 40px;
             height: 40px;
             object-fit: contain;
             border-radius: 50%;
-            border: 2px solid #25d366;
-            box-shadow: 0 0 10px rgba(37, 211, 102, 0.8); /* Wannan zai ba shi haske */
-            background: white; /* Don ya fito fili ko da akwai duhu */
+            border: 2px solid #28a745;
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.3);
         }
 
+        /* --- BANNER & LINK --- */
         .top-banner {
-            background: #162b36;
+            background: #f8f9fa;
             border-radius: 15px;
             padding: 0;
             margin: 12px auto;
-            border: 2px solid #25d366;
+            border: 1px solid #28a745;
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.3s;
             overflow: hidden;
             width: 92%;
             max-width: 500px;
             position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        .top-banner img { width: 100%; height: auto; display: block; }
+        .top-banner img { width: 100%; height: auto; cursor: pointer; }
 
-        @keyframes pointHand {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(15px, 0) scale(1.1); }
+        /* --- ANIMATED BUTTON (REGISTER/LOGIN) --- */
+        .cta-button {
+            width: 100%;
+            background: #28a745;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            text-decoration: none;
+            display: block;
+            font-size: 18px;
+            animation: glow 2s infinite; /* Animation din da kake so */
+            border: none;
         }
-        .pointing-hand {
-            position: absolute;
-            right: 20px;
-            bottom: 15px;
-            font-size: 32px;
-            color: #25d366;
-            animation: pointHand 1.5s infinite;
+        @keyframes glow {
+            0% { background-color: #28a745; box-shadow: 0 0 5px #28a745; }
+            50% { background-color: #218838; box-shadow: 0 0 20px #28a745; }
+            100% { background-color: #28a745; box-shadow: 0 0 5px #28a745; }
         }
-        
+
+        /* --- SERVICE CARDS --- */
         .service-card { 
-            background: #1a2a34; 
-            border-radius: 15px; 
+            background: #ffffff; 
+            border-radius: 12px; 
             padding: 8px; 
             text-align: center; 
-            border: 1px solid #2c5364; 
+            border: 1px solid #eee; 
             height: 105px; 
             display: flex; 
             flex-direction: column; 
             justify-content: center; 
             align-items: center; 
-            transition: 0.2s; 
+            transition: 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
+        .service-card:active { transform: scale(0.95); }
         .service-card img { height: 42px; width: auto; margin-bottom: 6px; }
-        .service-card h6 { font-size: 0.65rem; color: #fff; margin: 0; }
-        .wa-btn { position: fixed; bottom: 80px; right: 20px; background: #25d366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 1000; }
-        footer { padding: 12px; text-align: center; color: rgba(255,255,255,0.6); font-size: 12px; margin-top: auto; }
-        .offcanvas { background: #0f2027; }
+        .service-card h6 { font-size: 0.65rem; color: #333; margin: 0; font-weight: 600; }
+
+        .wa-btn { position: fixed; bottom: 80px; right: 20px; background: #25d366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 1000; text-decoration: none; font-size: 24px; }
+        footer { padding: 12px; text-align: center; color: #666; font-size: 12px; margin-top: auto; }
     </style>
 </head>
 <body>
 
 <div id="loader">
-    <div class="loader-container">
-        <div class="loader-spinner"></div>
-        <img src="logo.png" class="loader-logo" alt="Loading">
-    </div>
-    <div class="loading-text">RE-TAYAX PROCESSING...</div>
+    <div class="loader-spinner"></div>
+    <div class="loading-text" style="margin-top: 110px; color: #28a745; font-weight: bold;">RE-TAYAX LOADING...</div>
 </div>
 
-<nav class="navbar navbar-dark bg-dark p-3 shadow">
+<nav class="navbar navbar-light p-3 shadow-sm">
     <div class="container-fluid d-flex justify-content-between align-items-center w-100">
         <img src="logo.png" class="waving-logo" alt="Logo">
-        <span class="text-white fw-bold">Welcome to RetayaX</span>
+        <span class="fw-bold">Welcome to RetayaX</span>
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 </nav>
 
-<div class="offcanvas offcanvas-end" id="menu">
-    <div class="offcanvas-header"><h5 class="offcanvas-title text-white">Menu</h5><button class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button></div>
-    <div class="offcanvas-body">
-        <a href="transactions.html" class="btn btn-outline-success w-100 mb-3 py-2">Transaction History</a>
+<marquee class="bg-success text-white fw-bold p-1">CEO Auwal MD & Shayibu Ali Baba | RetayaX Site is Active 24/7</marquee>
+
+<!-- BANNER SECTION DA LINK A JIKIN HOTON DA KUMA BUTTON -->
+<div class="top-banner">
+    <div onclick="window.location.href='https://retayax.quark.ng'" style="cursor: pointer; width: 100%;">
+        <img src="all-in-one.png" alt="All-in-one Digital Service">
+        <div style="padding: 10px; color: #333; font-weight: 500; font-size: 14px; text-align: center;">
+            Click Image or Button to Register/Login
+        </div>
     </div>
-</div>
-
-<marquee class="bg-success text-black fw-bold p-1">The CEO Auwal MD and Shayibu Ali Baba | Site Active 24/7</marquee>
-
-<div class="top-banner" onclick="window.location.href='https://retayax.quark.ng'">
-    <img src="all-in-one.png" alt="All-in-one Digital Service">
-    <span id="handIcon" class="pointing-hand">👉</span>
+    <!-- WANNAN SHINE ANIMATED BUTTON DIN -->
+    <a href="https://retayax.quark.ng" class="cta-button">
+        <i class="fas fa-sign-in-alt"></i> REGISTER OR LOGIN HERE
+    </a>
 </div>
 
 <div class="container-fluid mt-2">
@@ -167,7 +154,8 @@
 <a href="https://wa.me/2348164712102" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i></a>
 <footer>&copy; 2026 RetayaX - All Rights Reserved</footer>
 
-<script type="module">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
     const services = [
         {name: "Sunking", img: "sunking.png"},
         {name: "NIN Device", img: "nin-device.png"},
@@ -194,18 +182,11 @@
             </div>`;
     });
 
-    // Wannan zai ba wa dukkan abubuwa lokaci su gama fitowa kafin ya cire loading
     window.onload = () => {
         setTimeout(() => {
             document.getElementById('loader').style.display = 'none';
-        }, 1500); // 1.5 seconds loading don kyakkyawan tsari
+        }, 1000);
     };
-
-    setTimeout(() => {
-        const handIcon = document.getElementById('handIcon');
-        if (handIcon) handIcon.style.display = 'none';
-    }, 30000);
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
