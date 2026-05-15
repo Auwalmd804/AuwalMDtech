@@ -17,7 +17,6 @@
             overflow-x: hidden;
         }
 
-        /* --- PROFESSIONAL WELCOME OVERLAY --- */
         #welcome-overlay {
             position: fixed;
             inset: 0;
@@ -59,10 +58,9 @@
         }
         .continue-btn:active { transform: scale(0.95); }
 
-        /* --- DASHBOARD STYLES --- */
         .waving-logo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #25d366; background: white; }
         
-        .top-banner-wrapper { width: 92%; max-width: 500px; margin: 12px auto; }
+        .top-banner-wrapper { width: 92%; max-width: 500px; margin: 12px auto; position: relative; }
         .top-banner {
             background: #162b36; border-radius: 15px 15px 0 0;
             border: 2px solid #25d366; border-bottom: none;
@@ -70,12 +68,25 @@
         }
         .top-banner img { width: 100%; height: auto; display: block; }
 
-        /* Shake animation will be triggered by JS */
         .active-shake { animation: shakeBanner 0.8s infinite ease-in-out; }
         @keyframes shakeBanner {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-3px) rotate(-1deg); }
             75% { transform: translateX(3px) rotate(1deg); }
+        }
+
+        @keyframes pointHand {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(15px, 0) scale(1.1); }
+        }
+        .pointing-hand {
+            position: absolute;
+            right: 20px;
+            bottom: 15px;
+            font-size: 32px;
+            color: #25d366;
+            animation: pointHand 1.5s infinite;
+            z-index: 10;
         }
 
         .login-cta {
@@ -144,6 +155,7 @@
 <div class="top-banner-wrapper">
     <div class="top-banner" id="mainBanner" onclick="window.location.href='https://retayax.quark.ng'">
         <img src="all-in-one.png" alt="All-in-one Digital Service">
+        <span id="handIcon" class="pointing-hand">👉</span>
     </div>
     <a href="https://retayax.quark.ng" class="login-cta">
         <i class="fas fa-sign-in-alt"></i> LOGIN / REGISTER TO ACCOUNT
@@ -160,26 +172,21 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     function enterDashboard() {
-        // 1. Hide Welcome Screen
         const overlay = document.getElementById('welcome-overlay');
         overlay.style.opacity = '0';
         setTimeout(() => { overlay.style.display = 'none'; }, 800);
 
-        // 2. Play Voice Recording
         const voice = document.getElementById('welcomeVoice');
         voice.play().catch(e => console.log("Audio play failed: ", e));
 
-        // 3. Start Banner Vibration (Shake)
         const banner = document.getElementById('mainBanner');
         banner.classList.add('active-shake');
 
-        // Stop shake after 15 seconds to save battery
         setTimeout(() => {
             banner.classList.remove('active-shake');
         }, 15000);
     }
 
-    // --- SERVICE GRID GENERATION ---
     const services = [
         {name: "Sunking", img: "sunking.png"},
         {name: "NIN Device", img: "nin-device.png"},
@@ -196,7 +203,13 @@
 
     const grid = document.getElementById('grid');
     services.forEach(s => {
-        let fileLink = s.name.toLowerCase().replace(/ /g,'').replace('/','');
+        let fileLink;
+        if(s.name === "Wifi/Router") {
+            fileLink = "wifi-router";
+        } else {
+            fileLink = s.name.toLowerCase().replace(/ /g,'').replace('/','');
+        }
+
         grid.innerHTML += `
             <div class="col-4">
                 <div class="service-card" onclick="location.href='${fileLink}.html'">
@@ -205,6 +218,11 @@
                 </div>
             </div>`;
     });
+
+    setTimeout(() => {
+        const handIcon = document.getElementById('handIcon');
+        if (handIcon) handIcon.style.display = 'none';
+    }, 30000);
 </script>
 </body>
 </html>
