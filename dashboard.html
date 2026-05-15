@@ -7,7 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        /* ASALIN KALA: BAKIN BACKGROUND DA FARIN RUBUTU */
         body { 
             background: #0f2027; 
             color: white; 
@@ -17,7 +16,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* --- PROFESSIONAL LOADING SCREEN FIX --- */
+        /* --- LOADING SCREEN --- */
         #loader {
             position: fixed;
             inset: 0;
@@ -41,7 +40,7 @@
             height: 60px;
             border-radius: 50%;
             z-index: 2;
-            background: white; /* Don logo din ya fito radau */
+            background: white;
         }
         .loader-spinner {
             position: absolute;
@@ -54,13 +53,6 @@
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .loading-text {
-            margin-top: 15px;
-            font-size: 14px;
-            color: #25d366;
-            letter-spacing: 1px;
-            font-weight: bold;
-        }
 
         /* --- LOGO ENHANCEMENT --- */
         .waving-logo {
@@ -73,38 +65,41 @@
             background: white;
         }
 
-        /* --- NAVIGATION --- */
-        .navbar { z-index: 1050; }
-        .offcanvas { background: #0f2027; color: white; }
-
-        /* --- TOP BANNER --- */
+        /* --- BANNER SECTION & SHAKE ANIMATION --- */
         .top-banner-wrapper {
             width: 92%;
             max-width: 500px;
             margin: 12px auto;
-            position: relative;
         }
         .top-banner {
             background: #162b36;
-            border-radius: 15px 15px 0 0; /* Sama kawai aka yi wa zagaye */
+            border-radius: 15px 15px 0 0;
             border: 2px solid #25d366;
             border-bottom: none;
             overflow: hidden;
             cursor: pointer;
             position: relative;
+            animation: shakeBanner 3s infinite ease-in-out; /* Girgiza hoto */
         }
         .top-banner img { width: 100%; height: auto; display: block; }
 
-        /* --- ANIMATED LOGIN BUTTON (KASAN HOTO) --- */
+        @keyframes shakeBanner {
+            0%, 100% { transform: rotate(0deg); }
+            10%, 30%, 50% { transform: rotate(-1deg); }
+            20%, 40%, 60% { transform: rotate(1deg); }
+            70% { transform: rotate(0deg); }
+        }
+
+        /* --- LOGIN BUTTON AT THE BOTTOM OF BANNER --- */
         .login-cta {
-            background: #25d366;
-            color: #000;
+            background: linear-gradient(45deg, #25d366, #128c7e);
+            color: white;
             text-align: center;
-            padding: 12px;
+            padding: 14px;
             font-weight: bold;
             text-decoration: none;
             display: block;
-            border-radius: 0 0 15px 15px; /* Kasa aka yi wa zagaye */
+            border-radius: 0 0 15px 15px;
             font-size: 16px;
             border: 2px solid #25d366;
             animation: pulse-glow 2s infinite;
@@ -115,17 +110,17 @@
             100% { box-shadow: 0 0 0 0px rgba(37, 211, 102, 0); }
         }
 
-        @keyframes pointHand {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(15px, 0) scale(1.1); }
-        }
         .pointing-hand {
             position: absolute;
             right: 15px;
             top: 40%;
-            font-size: 28px;
+            font-size: 32px;
             z-index: 10;
             animation: pointHand 1.5s infinite;
+        }
+        @keyframes pointHand {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(15px, 0); }
         }
 
         /* --- SERVICE CARDS --- */
@@ -146,12 +141,10 @@
 
         .wa-btn { position: fixed; bottom: 80px; right: 20px; background: #25d366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 1000; text-decoration: none; }
         footer { padding: 12px; text-align: center; color: rgba(255,255,255,0.6); font-size: 12px; margin-top: auto; }
+        .offcanvas { background: #0f2027; }
     </style>
 </head>
-<body>
-
-<!-- LOADING SCREEN -->
-<div id="loader">
+<body onclick="playWelcomeVoice()"> <div id="loader">
     <div class="loader-container">
         <div class="loader-spinner"></div>
         <img src="logo.png" class="loader-logo" alt="Loading">
@@ -159,7 +152,6 @@
     <div class="loading-text">RE-TAYAX PROCESSING...</div>
 </div>
 
-<!-- NAVBAR -->
 <nav class="navbar navbar-dark bg-dark p-3 shadow">
     <div class="container-fluid d-flex justify-content-between align-items-center w-100">
         <img src="logo.png" class="waving-logo" alt="Logo">
@@ -170,24 +162,21 @@
     </div>
 </nav>
 
-<!-- MENU -->
 <div class="offcanvas offcanvas-end" id="menu">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title text-white">Menu</h5>
+        <h5 class="offcanvas-title text-white">RetayaX Menu</h5>
         <button class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body">
         <a href="transactions.html" class="btn btn-outline-success w-100 mb-3 py-2">Transaction History</a>
-        <!-- KONTAKT SUPPORT BUTTON -->
         <a href="https://wa.me/2348164712102" class="btn btn-success w-100 mb-3 py-2">
             <i class="fab fa-whatsapp"></i> Contact Support
         </a>
     </div>
 </div>
 
-<marquee class="bg-success text-black fw-bold p-1">The CEO Auwal MD and Shayibu Ali Baba | Site Active 24/7</marquee>
+<marquee class="bg-success text-black fw-bold p-1">CEO Auwal MD & Shayibu Ali Baba | RetayaX Active 24/7</marquee>
 
-<!-- BANNER DA LOGIN BUTTON -->
 <div class="top-banner-wrapper">
     <div class="top-banner" onclick="window.location.href='https://retayax.quark.ng'">
         <img src="all-in-one.png" alt="All-in-one Digital Service">
@@ -206,7 +195,21 @@
 <footer>&copy; 2026 RetayaX - All Rights Reserved</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script type="module">
+<script>
+    // --- MURYAR HAUSA (VOICE GUIDE) ---
+    let voicePlayed = false;
+    function playWelcomeVoice() {
+        if (!voicePlayed) {
+            const msg = new SpeechSynthesisUtterance();
+            msg.text = "Barka da zuwa RetayaX. Domin yin rijista ko login, danna babban hoton nan da kake gani a sama.";
+            msg.lang = 'en-US'; // Browser mafi yawa basu da Hausa asali, amma tana fadar Hausar da kyau idan aka rubuta a haka
+            msg.rate = 0.9; 
+            window.speechSynthesis.speak(msg);
+            voicePlayed = true;
+        }
+    }
+
+    // --- SERVICE GRID ---
     const services = [
         {name: "Sunking", img: "sunking.png"},
         {name: "NIN Device", img: "nin-device.png"},
@@ -236,6 +239,8 @@
     window.onload = () => {
         setTimeout(() => {
             document.getElementById('loader').style.display = 'none';
+            // Kokarin kunna muryar da zaran an gama loading
+            playWelcomeVoice();
         }, 1500);
     };
 
