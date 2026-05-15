@@ -6,6 +6,7 @@
     <title>RetayaX - Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@500;700;800&display=swap" rel="stylesheet">
     <style>
         body { 
             background: #0f2027; 
@@ -13,7 +14,7 @@
             min-height: 100vh; 
             display: flex; 
             flex-direction: column; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
 
@@ -27,36 +28,63 @@
             align-items: center;
             text-align: center;
             transition: opacity 0.8s ease-out;
+            padding: 15px;
         }
         .welcome-box {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            padding: 35px 25px;
-            border-radius: 25px;
-            border: 1px solid rgba(37, 211, 102, 0.3);
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            background: rgba(22, 43, 54, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px 30px;
+            border-radius: 24px;
+            border: 1px solid rgba(37, 211, 102, 0.35);
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
-        .welcome-logo { width: 80px; margin-bottom: 20px; animation: pulseLogo 2s infinite; }
-        @keyframes pulseLogo { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .welcome-logo { 
+            width: 90px; 
+            height: auto;
+            margin-bottom: 25px; 
+            animation: pulseLogo 2s infinite; 
+        }
+        @keyframes pulseLogo { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
         
-        .welcome-title { font-weight: 800; color: #25d366; letter-spacing: 1px; margin-bottom: 15px; text-transform: uppercase; }
-        .welcome-text { font-size: 14px; line-height: 1.6; color: #e0e0e0; margin-bottom: 25px; }
+        .welcome-title { 
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800; 
+            color: #25d366; 
+            letter-spacing: 0.5px; 
+            margin-bottom: 20px; 
+            text-transform: uppercase;
+            font-size: 1.5rem;
+        }
+        .welcome-text { 
+            font-size: 14px; 
+            line-height: 1.7; 
+            color: #eceff1; 
+            margin-bottom: 35px;
+            font-weight: 400;
+        }
         
         .continue-btn {
             background: linear-gradient(45deg, #25d366, #128c7e);
             color: white;
             border: none;
-            padding: 15px 40px;
+            padding: 16px 40px;
             border-radius: 50px;
-            font-weight: bold;
-            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
             width: 100%;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-            transition: 0.3s;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+            transition: transform 0.2s ease;
+            letter-spacing: 0.5px;
         }
-        .continue-btn:active { transform: scale(0.95); }
+        .continue-btn:active { transform: scale(0.96); }
 
         .waving-logo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #25d366; background: white; }
         
@@ -113,6 +141,13 @@
         .wa-btn { position: fixed; bottom: 80px; right: 20px; background: #25d366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 1000; text-decoration: none; }
         footer { padding: 12px; text-align: center; color: rgba(255,255,255,0.6); font-size: 12px; margin-top: auto; }
         .offcanvas { background: #0f2027; }
+
+        @media (max-width: 360px) {
+            .welcome-box { padding: 25px 15px; }
+            .welcome-title { font-size: 1.25rem; margin-bottom: 12px; }
+            .welcome-text { font-size: 12px; line-height: 1.6; margin-bottom: 25px; }
+            .continue-btn { padding: 12px 30px; font-size: 14px; }
+        }
     </style>
 </head>
 <body>
