@@ -16,14 +16,14 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .main-container {
-            max-width: 500px;
+            max-width: 800px;
             margin: auto;
             padding: 25px;
             background: #162b36;
             border-radius: 16px;
             border: 1px solid #2c5364;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-            width: 90%;
+            width: 95%;
             margin-top: 30px;
             margin-bottom: 30px;
         }
@@ -43,13 +43,14 @@
         }
         .form-label {
             font-size: 0.82rem;
-            color: #a0aab0;
+            color: rgba(255, 255, 255, 0.8);
             margin-bottom: 4px;
+            font-weight: 600;
         }
         .form-control {
             background-color: #1a2a34;
             border: 1px solid #2c5364;
-            color: #ffffff;
+            color: #ffffff !important;
             border-radius: 8px;
             padding: 10px 12px;
             margin-bottom: 12px;
@@ -58,8 +59,11 @@
         .form-control:focus {
             background-color: #1a2a34;
             border-color: #25d366;
-            color: #ffffff;
+            color: #ffffff !important;
             box-shadow: none;
+        }
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5) !important;
         }
         .btn-green {
             background-color: #25d366;
@@ -76,19 +80,73 @@
             background-color: #128C7E;
             color: #ffffff;
         }
-        .btn-danger-custom {
-            background-color: #d9534f;
-            color: #ffffff;
-            width: 100%;
-            padding: 11px;
-            border-radius: 8px;
-            border: none;
+        
+        /* Table and Search Custom Layout */
+        .search-box {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            color: #25d366;
+        }
+        .table-responsive-wrapper {
+            background: #11222c;
+            border-radius: 12px;
+            border: 1px solid #2c5364;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .table {
+            color: white;
+            margin-bottom: 0;
+            font-size: 13px;
+        }
+        .table th {
+            background: #1a3341;
+            color: #25d366;
             font-weight: 600;
-            margin-top: 6px;
+            border-bottom: 2px solid #2c5364;
+            padding: 12px;
         }
-        .btn-danger-custom:hover {
-            background-color: #c9302c;
+        .table td {
+            padding: 12px;
+            vertical-align: middle;
+            border-bottom: 1px solid rgba(44, 83, 100, 0.5);
         }
+        .status-badge {
+            background: rgba(255, 193, 7, 0.15);
+            color: #ffc107;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .action-btn-group {
+            display: flex;
+            gap: 6px;
+        }
+        .btn-table-wa {
+            background: #25d366;
+            color: black;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .btn-table-del {
+            background: #d9534f;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
         #authOverlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -154,9 +212,42 @@
 
     <div class="main-container" id="adminPanel" style="display: none;">
         <div class="logo-area">
-            <img src="logo.png" alt="RetayaX Logo">
+            <img src="logo.png" alt="RetayaX Logo" onerror="this.src='sunking.png'">
             <h4>Super Admin Panel</h4>
             <p class="text-muted small">Welcome, CEO Auwal & Shayibu Ali Baba</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="text-success m-0"><i class="fas fa-solar-panel me-2"></i>Sun King Solar Orders</h6>
+            <span class="badge bg-success" id="order-count">0 Orders</span>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="adminSearch" class="form-control" placeholder="Search by Order ID or Phone Number..." onkeyup="filterOrders()">
+            <i class="fas fa-search"></i>
+        </div>
+
+        <div class="table-responsive-wrapper">
+            <div class="table-responsive">
+                <table class="table" id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th>Order ID / Date</th>
+                            <th>Customer</th>
+                            <th>Product & Plan</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="order-rows">
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">Connecting to Live Database...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div class="divider"></div>
@@ -164,19 +255,13 @@
         <h6 class="text-success mb-3"><i class="fas fa-users-cog me-2"></i>Admin Management</h6>
         <button class="btn btn-green mb-3" onclick="alert('Za a sanya tsarin ƙara Admin a nan gaba!')">Add New Admin</button>
 
-        <h6 class="text-success mb-3"><i class="fas fa-database me-2"></i>Services Management</h6>
-        <button class="btn btn-green mb-2" onclick="alert('Za a sanya tsarin ƙara sabon Service a nan gaba!')">Add New Service</button>
-        <button class="btn btn-danger-custom mb-4" onclick="alert('Za a sanya tsarin goge Service a nan gaba!')">Remove Service</button>
-
-        <h6 class="text-success mb-3"><i class="fas fa-user-check me-2"></i>User Records</h6>
-        <button class="btn btn-green w-100 mb-4" onclick="alert('Za a sanya tsarin duba masu amfani a nan gaba!')">View All Users</button>
-
-        <button type="button" class="btn btn-secondary w-100" id="logoutBtn">Exit Admin Panel</button>
+        <button type="button" class="btn btn-secondary w-100 mt-3" id="logoutBtn">Exit Admin Panel</button>
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
@@ -190,7 +275,9 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
 
+        // Alert Message Service
         function showMessage(type, text) {
             const box = document.getElementById('alertBox');
             box.innerText = text;
@@ -203,32 +290,110 @@
             setTimeout(() => { box.style.display = 'none'; }, 4500);
         }
 
-        // Tantance wanda ya shiga shafin
+        // Auth Gate Check
         auth.onAuthStateChanged((user) => {
             if (!user) {
                 location.replace("index.html");
             }
         });
 
-        // Bincika PIN da Password
+        // Gate Access Unlock Event
         document.getElementById('unlockBtn').addEventListener('click', () => {
             const enteredPin = document.getElementById('adminPin').value;
             const enteredPass = document.getElementById('adminPass').value;
 
-            // Daidaitawar PIN (8332) da Password (Auwal@00)
             if (enteredPin === '8332' && enteredPass === 'Auwal@00') {
                 document.getElementById('authOverlay').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
                 showMessage('success', 'Access Granted: Welcome Super Admin!');
+                listenToLiveOrders();
             } else {
                 showMessage('error', 'Access Denied: Incorrect PIN or Password.');
             }
         });
 
-        // Fita daga Admin Panel zuwa Dashboard
+        // Exit Admin Panel View
         document.getElementById('logoutBtn').addEventListener('click', () => {
             location.replace("dashboard.html");
         });
+
+        // Realtime Listener for Incoming Orders from Sun King Page
+        function listenToLiveOrders() {
+            onSnapshot(collection(db, "sunking_orders"), (snapshot) => {
+                const tbody = document.getElementById('order-rows');
+                document.getElementById('order-count').innerText = `${snapshot.size} Orders`;
+                
+                if(snapshot.empty) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-4">No active solar orders found.</td></tr>`;
+                    return;
+                }
+
+                let rowsHtml = "";
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const docId = docSnap.id;
+                    
+                    rowsHtml += `
+                        <tr class="order-item-row">
+                            <td>
+                                <strong class="text-success search-id">${data.orderId || 'N/A'}</strong><br>
+                                <small class="text-muted">${data.date || ''}</small>
+                            </td>
+                            <td>
+                                <strong>${data.customerName || 'N/A'}</strong><br>
+                                <span class="text-muted search-phone">${data.customerPhone || ''}</span>
+                            </td>
+                            <td>
+                                <span class="fw-semibold">${data.productName || 'N/A'}</span><br>
+                                <small class="badge bg-secondary">${data.paymentMethod || 'N/A'}</small>
+                            </td>
+                            <td><span class="status-badge">🟡 Pending</span></td>
+                            <td>
+                                <div class="action-btn-group">
+                                    <a href="https://wa.me/234${data.customerPhone ? data.customerPhone.replace(/^0/, '') : ''}" target="_blank" class="btn-table-wa"><i class="fab fa-whatsapp"></i> Chat</a>
+                                    <button class="btn-table-del" data-id="${docId}"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = rowsHtml;
+
+                // Bind Delete Functions Dynamic
+                document.querySelectorAll('.btn-table-del').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const targetId = e.currentTarget.getAttribute('data-id');
+                        if(confirm("Are you sure you want to permanently delete this order?")) {
+                            try {
+                                await deleteDoc(doc(db, "sunking_orders", targetId));
+                                showMessage('success', 'Order cleared from database successfully.');
+                            } catch (err) {
+                                showMessage('error', 'Failed to delete record.');
+                            }
+                        }
+                    });
+                });
+            });
+        }
+    </script>
+
+    <script>
+        // Front-end Filtering Algorithm for Live Search Input Box
+        function filterOrders() {
+            const query = document.getElementById('adminSearch').value.toLowerCase().trim();
+            const rows = document.querySelectorAll('.order-item-row');
+
+            rows.forEach(row => {
+                const orderId = row.querySelector('.search-id').innerText.toLowerCase();
+                const phone = row.querySelector('.search-phone').innerText.toLowerCase();
+
+                if (orderId.includes(query) || phone.includes(query)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
     </script>
 </body>
 </html>
