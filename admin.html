@@ -16,7 +16,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .main-container {
-            max-width: 800px;
+            max-width: 900px;
             margin: auto;
             padding: 25px;
             background: #162b36;
@@ -42,9 +42,9 @@
             margin-top: 8px;
         }
         .form-label {
-            font-size: 0.82rem;
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 4px;
+            font-size: 0.85rem;
+            color: #25d366;
+            margin-bottom: 6px;
             font-weight: 600;
         }
         .form-control {
@@ -52,9 +52,9 @@
             border: 1px solid #2c5364;
             color: #ffffff !important;
             border-radius: 8px;
-            padding: 10px 12px;
+            padding: 12px;
             margin-bottom: 12px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
         .form-control:focus {
             background-color: #1a2a34;
@@ -63,7 +63,7 @@
             box-shadow: none;
         }
         .form-control::placeholder {
-            color: rgba(255, 255, 255, 0.5) !important;
+            color: rgba(255, 255, 255, 0.3) !important;
         }
         .btn-green {
             background-color: #25d366;
@@ -74,14 +74,39 @@
             border-radius: 8px;
             border: none;
             transition: 0.2s;
-            margin-bottom: 8px;
         }
         .btn-green:hover {
             background-color: #128C7E;
             color: #ffffff;
         }
         
-        /* Table and Search Custom Layout */
+        /* Navigation Tabs Control */
+        .nav-tabs-custom {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #2c5364;
+        }
+        .tab-btn {
+            background: #11222c;
+            color: #a0aab0;
+            border: 1px solid #2c5364;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .tab-btn.active, .tab-btn:hover {
+            background: #25d366;
+            color: black;
+            font-weight: 600;
+            border-color: #25d366;
+        }
+
         .search-box {
             position: relative;
             margin-bottom: 15px;
@@ -97,7 +122,6 @@
             border-radius: 12px;
             border: 1px solid #2c5364;
             overflow: hidden;
-            margin-top: 10px;
         }
         .table {
             color: white;
@@ -192,17 +216,17 @@
 
     <div id="authOverlay">
         <div class="auth-box">
-            <h4 class="text-success mb-3"><i class="fas fa-lock me-2"></i>Admin Panel Lock</h4>
-            <p class="text-muted small mb-4">Enter your credentials to access the admin area.</p>
+            <h4 class="text-success mb-3"><i class="fas fa-user-shield me-2"></i>Admin Verification</h4>
+            <p class="text-muted small mb-4">Shigar da lambobin tsaro domin gudanar da RetayaX</p>
             
             <div class="mb-3 text-start">
-                <label class="form-label">Admin PIN (4-digit)</label>
-                <input type="password" class="form-control" id="adminPin" placeholder="e.g., 8332" maxlength="4">
+                <label class="form-label">Admin PIN</label>
+                <input type="password" class="form-control text-white" id="adminPin" placeholder="Saka lambar PIN taka" maxlength="4">
             </div>
             
             <div class="mb-3 text-start">
                 <label class="form-label">Admin Password</label>
-                <input type="password" class="form-control" id="adminPass" placeholder="e.g., Auwal@00">
+                <input type="password" class="form-control text-white" id="adminPass" placeholder="Saka kalmar sirri">
             </div>
 
             <button class="btn btn-green mt-2" id="unlockBtn">Unlock Panel</button>
@@ -213,19 +237,19 @@
     <div class="main-container" id="adminPanel" style="display: none;">
         <div class="logo-area">
             <img src="logo.png" alt="RetayaX Logo" onerror="this.src='sunking.png'">
-            <h4>Super Admin Panel</h4>
-            <p class="text-muted small">Welcome, CEO Auwal & Shayibu Ali Baba</p>
+            <h4>Super Admin Control</h4>
+            <p class="text-muted small">Welcome Back, CEO Auwal & Shayibu Ali Baba</p>
         </div>
 
-        <div class="divider"></div>
-
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <h6 class="text-success m-0"><i class="fas fa-solar-panel me-2"></i>Sun King Solar Orders</h6>
-            <span class="badge bg-success" id="order-count">0 Orders</span>
+        <div class="nav-tabs-custom">
+            <div class="tab-btn active" onclick="switchTab('sunking')"><i class="fas fa-solar-panel me-1"></i> SunKing Solar</div>
+            <div class="tab-btn" onclick="switchTab('nin_bvn')"><i class="fas fa-id-card me-1"></i> NIN & BVN</div>
+            <div class="tab-btn" onclick="switchTab('sim_reg')"><i class="fas fa-sim-card me-1"></i> Airtel & SIM Swap</div>
+            <div class="tab-btn" onclick="switchTab('devices')"><i class="fas fa-wifi me-1"></i> Routers & Shop</div>
         </div>
 
         <div class="search-box">
-            <input type="text" id="adminSearch" class="form-control" placeholder="Search by Order ID or Phone Number..." onkeyup="filterOrders()">
+            <input type="text" id="adminSearch" class="form-control" placeholder="Bincika ta amfani da Order ID ko Lambar Waya..." onkeyup="filterLiveOrders()">
             <i class="fas fa-search"></i>
         </div>
 
@@ -234,16 +258,16 @@
                 <table class="table" id="ordersTable">
                     <thead>
                         <tr>
-                            <th>Order ID / Date</th>
-                            <th>Customer</th>
-                            <th>Product & Plan</th>
+                            <th>ID / Ranar Oda</th>
+                            <th>Abokin Ciniki</th>
+                            <th>Kayan Da Aka Zaba</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <th>Aiki (Action)</th>
                         </tr>
                     </thead>
                     <tbody id="order-rows">
                         <tr>
-                            <td colspan="5" class="text-center text-muted py-4">Connecting to Live Database...</td>
+                            <td colspan="5" class="text-center text-muted py-4">Connecting to live network database...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -251,11 +275,7 @@
         </div>
 
         <div class="divider"></div>
-
-        <h6 class="text-success mb-3"><i class="fas fa-users-cog me-2"></i>Admin Management</h6>
-        <button class="btn btn-green mb-3" onclick="alert('Za a sanya tsarin ƙara Admin a nan gaba!')">Add New Admin</button>
-
-        <button type="button" class="btn btn-secondary w-100 mt-3" id="logoutBtn">Exit Admin Panel</button>
+        <button type="button" class="btn btn-secondary w-100" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Exit Admin Panel</button>
     </div>
 
     <script type="module">
@@ -277,27 +297,20 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Alert Message Service
+        let currentActiveCollection = "sunking_orders";
+
         function showMessage(type, text) {
             const box = document.getElementById('alertBox');
             box.innerText = text;
-            if (type === 'success') {
-                box.className = 'alert-box bg-success text-black shadow';
-            } else {
-                box.className = 'alert-box bg-danger text-white shadow';
-            }
+            box.className = type === 'success' ? 'alert-box bg-success text-black shadow' : 'alert-box bg-danger text-white shadow';
             box.style.display = 'block';
-            setTimeout(() => { box.style.display = 'none'; }, 4500);
+            setTimeout(() => { box.style.display = 'none'; }, 4000);
         }
 
-        // Auth Gate Check
         auth.onAuthStateChanged((user) => {
-            if (!user) {
-                location.replace("index.html");
-            }
+            if (!user) location.replace("index.html");
         });
 
-        // Gate Access Unlock Event
         document.getElementById('unlockBtn').addEventListener('click', () => {
             const enteredPin = document.getElementById('adminPin').value;
             const enteredPass = document.getElementById('adminPass').value;
@@ -305,53 +318,50 @@
             if (enteredPin === '8332' && enteredPass === 'Auwal@00') {
                 document.getElementById('authOverlay').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
-                showMessage('success', 'Access Granted: Welcome Super Admin!');
-                listenToLiveOrders();
+                showMessage('success', 'Barka da shigowa Super Admin Panel!');
+                loadLiveDatabaseLogs(currentActiveCollection);
             } else {
-                showMessage('error', 'Access Denied: Incorrect PIN or Password.');
+                showMessage('error', 'PIN ko Password bai yi daidai ba!');
             }
         });
 
-        // Exit Admin Panel View
         document.getElementById('logoutBtn').addEventListener('click', () => {
             location.replace("dashboard.html");
         });
 
-        // Realtime Listener for Incoming Orders from Sun King Page
-        function listenToLiveOrders() {
-            onSnapshot(collection(db, "sunking_orders"), (snapshot) => {
+        // Janyo dukkan bayanan kowane bangare daga Firebase Live
+        function loadLiveDatabaseLogs(collectionName) {
+            onSnapshot(collection(db, collectionName), (snapshot) => {
                 const tbody = document.getElementById('order-rows');
-                document.getElementById('order-count').innerText = `${snapshot.size} Orders`;
-                
                 if(snapshot.empty) {
-                    tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-4">No active solar orders found.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-4">Babu wani rahoto da aka samu a wannan sashen tukunna.</td></tr>`;
                     return;
                 }
 
                 let rowsHtml = "";
                 snapshot.forEach((docSnap) => {
                     const data = docSnap.data();
-                    const docId = docSnap.id;
+                    const id = docSnap.id;
                     
                     rowsHtml += `
                         <tr class="order-item-row">
                             <td>
-                                <strong class="text-success search-id">${data.orderId || 'N/A'}</strong><br>
-                                <small class="text-muted">${data.date || ''}</small>
+                                <strong class="text-success search-id">${data.orderId || 'RTX-'+id.substring(0,5).toUpperCase()}</strong><br>
+                                <small class="text-muted">${data.date || 'Kwanan baya'}</small>
                             </td>
                             <td>
-                                <strong>${data.customerName || 'N/A'}</strong><br>
-                                <span class="text-muted search-phone">${data.customerPhone || ''}</span>
+                                <strong>${data.customerName || data.fullName || 'N/A'}</strong><br>
+                                <span class="text-muted search-phone">${data.customerPhone || data.phone || 'N/A'}</span>
                             </td>
                             <td>
-                                <span class="fw-semibold">${data.productName || 'N/A'}</span><br>
-                                <small class="badge bg-secondary">${data.paymentMethod || 'N/A'}</small>
+                                <span class="fw-semibold">${data.productName || data.serviceType || 'Service Request'}</span><br>
+                                <small class="badge bg-secondary">${data.paymentMethod || data.plan || 'Default'}</small>
                             </td>
                             <td><span class="status-badge">🟡 Pending</span></td>
                             <td>
                                 <div class="action-btn-group">
-                                    <a href="https://wa.me/234${data.customerPhone ? data.customerPhone.replace(/^0/, '') : ''}" target="_blank" class="btn-table-wa"><i class="fab fa-whatsapp"></i> Chat</a>
-                                    <button class="btn-table-del" data-id="${docId}"><i class="fas fa-trash"></i></button>
+                                    <a href="https://wa.me/234${(data.customerPhone || data.phone || '').replace(/^0/, '')}" target="_blank" class="btn-table-wa"><i class="fab fa-whatsapp"></i> Chat</a>
+                                    <button class="btn-table-del" data-id="${id}"><i class="fas fa-trash"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -359,27 +369,40 @@
                 });
                 tbody.innerHTML = rowsHtml;
 
-                // Bind Delete Functions Dynamic
+                // Kunna tsarin goge oda
                 document.querySelectorAll('.btn-table-del').forEach(btn => {
                     btn.addEventListener('click', async (e) => {
                         const targetId = e.currentTarget.getAttribute('data-id');
-                        if(confirm("Are you sure you want to permanently delete this order?")) {
+                        if(confirm("Kana da tabbas kana son goge wannan bayanin gaba daya?")) {
                             try {
-                                await deleteDoc(doc(db, "sunking_orders", targetId));
-                                showMessage('success', 'Order cleared from database successfully.');
+                                await deleteDoc(doc(db, currentActiveCollection, targetId));
+                                showMessage('success', 'An cire bayanin nasara.');
                             } catch (err) {
-                                showMessage('error', 'Failed to delete record.');
+                                showMessage('error', 'An samu matsala wajen gogewa.');
                             }
                         }
                     });
                 });
             });
         }
+
+        // Juya gidajen zabi (Tabs Switcher)
+        window.switchTab = function(type) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            if(type === 'sunking') currentActiveCollection = "sunking_orders";
+            else if(type === 'nin_bvn') currentActiveCollection = "nin_bvn_logs";
+            else if(type === 'sim_reg') currentActiveCollection = "sim_registration_logs";
+            else if(type === 'devices') currentActiveCollection = "device_shop_orders";
+            
+            loadLiveDatabaseLogs(currentActiveCollection);
+        }
     </script>
 
     <script>
-        // Front-end Filtering Algorithm for Live Search Input Box
-        function filterOrders() {
+        // Injin Tacewa da Bincike (Live Engine Search)
+        function filterLiveOrders() {
             const query = document.getElementById('adminSearch').value.toLowerCase().trim();
             const rows = document.querySelectorAll('.order-item-row');
 
