@@ -77,13 +77,26 @@
         }
         .step-dot.active { background: #25d366; color: black; border-color: #25d366; box-shadow: 0 0 10px #25d366; }
         
+        /* Input & Form Controls Styles with Bright Text and Bright Placeholders */
         .form-control, .form-select {
-            background: #11222c; border: 1px solid #2c5364; color: white;
-            padding: 12px; border-radius: 10px; font-size: 14px;
+            background: #11222c; border: 1px solid #2c5364; color: #ffffff !important;
+            padding: 12px; border-radius: 10px; font-size: 15px; font-weight: 500;
         }
         .form-control:focus, .form-select:focus {
-            background: #11222c; border-color: #25d366; color: white; box-shadow: none;
+            background: #11222c; border-color: #25d366; color: #ffffff !important; box-shadow: none;
         }
+        /* Custom Styling to brighten placeholder text */
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.65) !important;
+            opacity: 1;
+        }
+        .form-control:-ms-input-placeholder {
+            color: rgba(255, 255, 255, 0.65) !important;
+        }
+        .form-control::-ms-input-placeholder {
+            color: rgba(255, 255, 255, 0.65) !important;
+        }
+        
         label { font-size: 13px; color: #25d366; margin-bottom: 6px; font-weight: 600; }
         
         /* Large 2-Column Grid Setup for Grid View Visibility */
@@ -209,9 +222,9 @@
             <div class="mb-3">
                 <label>Payment Method</label>
                 <select id="payMethod" class="form-select" required>
-                    <option value="">-- Choose Method --</option>
-                    <option value="Cash">Cash Payment</option>
-                    <option value="EasyBuy">EasyBuy (Installment)</option>
+                    <option value="" style="color: #000;">-- Choose Method --</option>
+                    <option value="Cash" style="color: #000;">Cash Payment</option>
+                    <option value="EasyBuy" style="color: #000;">EasyBuy (Installment)</option>
                 </select>
             </div>
             <button type="button" class="btn-next" onclick="goToStep(2)">Next Step <i class="fas fa-arrow-right"></i></button>
