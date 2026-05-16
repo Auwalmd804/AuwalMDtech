@@ -6,6 +6,7 @@
     <title>RetayaX - Super Admin Panel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@500;700;800&display=swap" rel="stylesheet">
     <style>
         body { 
             background: #0f2027; 
@@ -13,10 +14,11 @@
             min-height: 100vh; 
             display: flex; 
             flex-direction: column; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
         }
         .main-container {
-            max-width: 900px;
+            max-width: 950px;
             margin: auto;
             padding: 25px;
             background: #162b36;
@@ -40,6 +42,7 @@
             color: #25d366;
             font-weight: 700;
             margin-top: 8px;
+            font-family: 'Poppins', sans-serif;
         }
         .form-label {
             font-size: 0.85rem;
@@ -80,27 +83,36 @@
             color: #ffffff;
         }
         
-        /* Navigation Tabs Control */
-        .nav-tabs-custom {
+        /* Navigation Tabs Layout */
+        .admin-tabs-scroller {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             overflow-x: auto;
-            padding-bottom: 10px;
+            padding-bottom: 12px;
             margin-bottom: 20px;
             border-bottom: 1px solid #2c5364;
+            scrollbar-width: thin;
         }
-        .tab-btn {
+        .admin-tab-item {
             background: #11222c;
-            color: #a0aab0;
+            color: #fff;
             border: 1px solid #2c5364;
-            padding: 8px 16px;
-            border-radius: 20px;
+            padding: 8px 14px;
+            border-radius: 30px;
             font-size: 13px;
             white-space: nowrap;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .tab-btn.active, .tab-btn:hover {
+        .admin-tab-item img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+        .admin-tab-item.active {
             background: #25d366;
             color: black;
             font-weight: 600;
@@ -217,57 +229,52 @@
     <div id="authOverlay">
         <div class="auth-box">
             <h4 class="text-success mb-3"><i class="fas fa-user-shield me-2"></i>Admin Verification</h4>
-            <p class="text-muted small mb-4">Shigar da lambobin tsaro domin gudanar da RetayaX</p>
+            <p class="text-muted small mb-4">Enter protected access credentials to manage system resources.</p>
             
             <div class="mb-3 text-start">
-                <label class="form-label">Admin PIN</label>
-                <input type="password" class="form-control text-white" id="adminPin" placeholder="Saka lambar PIN taka" maxlength="4">
+                <label class="form-label">Admin Security PIN</label>
+                <input type="password" class="form-control" id="adminPin" placeholder="Enter 4-digit PIN" maxlength="4">
             </div>
             
             <div class="mb-3 text-start">
-                <label class="form-label">Admin Password</label>
-                <input type="password" class="form-control text-white" id="adminPass" placeholder="Saka kalmar sirri">
+                <label class="form-label">Admin Account Password</label>
+                <input type="password" class="form-control" id="adminPass" placeholder="Enter secure password">
             </div>
 
-            <button class="btn btn-green mt-2" id="unlockBtn">Unlock Panel</button>
-            <button class="btn btn-secondary w-100 mt-2" onclick="location.href='dashboard.html'">Back to Dashboard</button>
+            <button class="btn btn-green mt-2" id="unlockBtn">Unlock Master Panel</button>
+            <button class="btn btn-secondary w-100 mt-2" onclick="location.href='dashboard.html'">Return to Dashboard</button>
         </div>
     </div>
 
     <div class="main-container" id="adminPanel" style="display: none;">
         <div class="logo-area">
-            <img src="logo.png" alt="RetayaX Logo" onerror="this.src='sunking.png'">
-            <h4>Super Admin Control</h4>
-            <p class="text-muted small">Welcome Back, CEO Auwal & Shayibu Ali Baba</p>
+            <img src="logo.png" alt="RetayaX Security Logo">
+            <h4>Super Admin Workspace</h4>
+            <p class="text-muted small">Systems Operations: CEO Auwal & Shayibu Ali Baba</p>
         </div>
 
-        <div class="nav-tabs-custom">
-            <div class="tab-btn active" onclick="switchTab('sunking')"><i class="fas fa-solar-panel me-1"></i> SunKing Solar</div>
-            <div class="tab-btn" onclick="switchTab('nin_bvn')"><i class="fas fa-id-card me-1"></i> NIN & BVN</div>
-            <div class="tab-btn" onclick="switchTab('sim_reg')"><i class="fas fa-sim-card me-1"></i> Airtel & SIM Swap</div>
-            <div class="tab-btn" onclick="switchTab('devices')"><i class="fas fa-wifi me-1"></i> Routers & Shop</div>
-        </div>
+        <div class="admin-tabs-scroller" id="dynamicTabsContainer"></div>
 
         <div class="search-box">
-            <input type="text" id="adminSearch" class="form-control" placeholder="Bincika ta amfani da Order ID ko Lambar Waya..." onkeyup="filterLiveOrders()">
+            <input type="text" id="adminSearch" class="form-control" placeholder="Filter by unique Order ID or registered Phone number..." onkeyup="executeClientSearch()">
             <i class="fas fa-search"></i>
         </div>
 
         <div class="table-responsive-wrapper">
             <div class="table-responsive">
-                <table class="table" id="ordersTable">
+                <table class="table">
                     <thead>
                         <tr>
-                            <th>ID / Ranar Oda</th>
-                            <th>Abokin Ciniki</th>
-                            <th>Kayan Da Aka Zaba</th>
+                            <th>Transaction ID / Date</th>
+                            <th>Customer Identification</th>
+                            <th>Requested Item Details</th>
                             <th>Status</th>
-                            <th>Aiki (Action)</th>
+                            <th>Administrative Action</th>
                         </tr>
                     </thead>
                     <tbody id="order-rows">
                         <tr>
-                            <td colspan="5" class="text-center text-muted py-4">Connecting to live network database...</td>
+                            <td colspan="5" class="text-center text-muted py-4">Establishing secure connection to operational server logs...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -275,7 +282,7 @@
         </div>
 
         <div class="divider"></div>
-        <button type="button" class="btn btn-secondary w-100" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Exit Admin Panel</button>
+        <button type="button" class="btn btn-secondary w-100" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Exit Security Workspace</button>
     </div>
 
     <script type="module">
@@ -297,19 +304,58 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let currentActiveCollection = "sunking_orders";
+        // Core Dashboard Services Dataset Definition Matrix
+        const businessServices = [
+            {name: "Sunking", img: "sunking.png"},
+            {name: "NIN Device", img: "nin-device.png"},
+            {name: "Airtel Reg", img: "airtel-reg.png"},
+            {name: "BVN Registration", img: "bvn-reg.png"},
+            {name: "WhatsApp Hub", img: "whatsapp-hub.png"},
+            {name: "Data Sim", img: "data-sim.png"},
+            {name: "Wifi/Router", img: "router-wifi.png"},
+            {name: "Product Shop", img: "shop-all.png"},
+            {name: "SIM Swap", img: "sim-swap.png"},
+            {name: "Graphic Design", img: "graphic-design.png"},
+            {name: "Service Match", img: "service-match.png"}
+        ];
 
-        function showMessage(type, text) {
-            const box = document.getElementById('alertBox');
-            box.innerText = text;
-            box.className = type === 'success' ? 'alert-box bg-success text-black shadow' : 'alert-box bg-danger text-white shadow';
-            box.style.display = 'block';
-            setTimeout(() => { box.style.display = 'none'; }, 4000);
+        let activeTargetCollection = "sunking_orders";
+
+        function pushSystemNotification(type, content) {
+            const container = document.getElementById('alertBox');
+            container.innerText = content;
+            container.className = type === 'success' ? 'alert-box bg-success text-black shadow' : 'alert-box bg-danger text-white shadow';
+            container.style.display = 'block';
+            setTimeout(() => { container.style.display = 'none'; }, 4000);
         }
 
         auth.onAuthStateChanged((user) => {
             if (!user) location.replace("index.html");
         });
+
+        // Initialize Workspace Render Layout Logic
+        function buildDashboardTabs() {
+            const menuScroller = document.getElementById('dynamicTabsContainer');
+            menuScroller.innerHTML = "";
+            
+            businessServices.forEach((service, index) => {
+                let collectionIdentifier = service.name === "Wifi/Router" ? "wifi-router" : service.name.toLowerCase().replace(/ /g, '').replace('/', '');
+                collectionIdentifier += "_orders"; 
+                
+                const tabElement = document.createElement('div');
+                tabElement.className = `admin-tab-item ${index === 0 ? 'active' : ''}`;
+                tabElement.innerHTML = `<img src="${service.img}" alt="${service.name}"> <span>${service.name}</span>`;
+                tabElement.onclick = () => activateServiceDataStream(collectionIdentifier, tabElement);
+                menuScroller.appendChild(tabElement);
+            });
+        }
+
+        function activateServiceDataStream(collectionId, componentRef) {
+            document.querySelectorAll('.admin-tab-item').forEach(element => element.classList.remove('active'));
+            componentRef.classList.add('active');
+            activeTargetCollection = collectionId;
+            fetchLiveServiceLogs(activeTargetCollection);
+        }
 
         document.getElementById('unlockBtn').addEventListener('click', () => {
             const enteredPin = document.getElementById('adminPin').value;
@@ -318,10 +364,11 @@
             if (enteredPin === '8332' && enteredPass === 'Auwal@00') {
                 document.getElementById('authOverlay').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
-                showMessage('success', 'Barka da shigowa Super Admin Panel!');
-                loadLiveDatabaseLogs(currentActiveCollection);
+                pushSystemNotification('success', 'Security authentication cleared. Access granted.');
+                buildDashboardTabs();
+                fetchLiveServiceLogs(activeTargetCollection);
             } else {
-                showMessage('error', 'PIN ko Password bai yi daidai ba!');
+                pushSystemNotification('error', 'Authentication rejected: Invalid security PIN or Password.');
             }
         });
 
@@ -329,91 +376,79 @@
             location.replace("dashboard.html");
         });
 
-        // Janyo dukkan bayanan kowane bangare daga Firebase Live
-        function loadLiveDatabaseLogs(collectionName) {
-            onSnapshot(collection(db, collectionName), (snapshot) => {
-                const tbody = document.getElementById('order-rows');
-                if(snapshot.empty) {
-                    tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-4">Babu wani rahoto da aka samu a wannan sashen tukunna.</td></tr>`;
+        // Live Operational Document Streaming Pipeline
+        function fetchLiveServiceLogs(targetCollectionPath) {
+            const logTableBody = document.getElementById('order-rows');
+            
+            onSnapshot(collection(db, targetCollectionPath), (snapshotData) => {
+                if(snapshotData.empty) {
+                    logTableBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-4">No active execution logs or records found inside this sector.</td></tr>`;
                     return;
                 }
 
-                let rowsHtml = "";
-                snapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    const id = docSnap.id;
+                let streamMarkup = "";
+                snapshotData.forEach((recordDoc) => {
+                    const dataPayload = recordDoc.data();
+                    const recordKey = recordDoc.id;
                     
-                    rowsHtml += `
+                    streamMarkup += `
                         <tr class="order-item-row">
                             <td>
-                                <strong class="text-success search-id">${data.orderId || 'RTX-'+id.substring(0,5).toUpperCase()}</strong><br>
-                                <small class="text-muted">${data.date || 'Kwanan baya'}</small>
+                                <strong class="text-success search-id">${dataPayload.orderId || 'RTX-'+recordKey.substring(0,5).toUpperCase()}</strong><br>
+                                <small class="text-muted">${dataPayload.date || 'Realtime standard'}</small>
                             </td>
                             <td>
-                                <strong>${data.customerName || data.fullName || 'N/A'}</strong><br>
-                                <span class="text-muted search-phone">${data.customerPhone || data.phone || 'N/A'}</span>
+                                <strong>${dataPayload.customerName || dataPayload.fullName || 'Unidentified Client'}</strong><br>
+                                <span class="text-muted search-phone">${dataPayload.customerPhone || dataPayload.phone || 'No Contact Data'}</span>
                             </td>
                             <td>
-                                <span class="fw-semibold">${data.productName || data.serviceType || 'Service Request'}</span><br>
-                                <small class="badge bg-secondary">${data.paymentMethod || data.plan || 'Default'}</small>
+                                <span class="fw-semibold">${dataPayload.productName || dataPayload.serviceType || 'Standard Module'}</span><br>
+                                <small class="badge bg-secondary">${dataPayload.paymentMethod || dataPayload.plan || 'Default Process'}</small>
                             </td>
-                            <td><span class="status-badge">🟡 Pending</span></td>
+                            <td><span class="status-badge">🟡 Processing</span></td>
                             <td>
                                 <div class="action-btn-group">
-                                    <a href="https://wa.me/234${(data.customerPhone || data.phone || '').replace(/^0/, '')}" target="_blank" class="btn-table-wa"><i class="fab fa-whatsapp"></i> Chat</a>
-                                    <button class="btn-table-del" data-id="${id}"><i class="fas fa-trash"></i></button>
+                                    <a href="https://wa.me/234${(dataPayload.customerPhone || dataPayload.phone || '').replace(/^0/, '')}" target="_blank" class="btn-table-wa"><i class="fab fa-whatsapp"></i> Contact</a>
+                                    <button class="btn-table-del" data-id="${recordKey}"><i class="fas fa-trash"></i> Drop</button>
                                 </div>
                             </td>
                         </tr>
                     `;
                 });
-                tbody.innerHTML = rowsHtml;
+                logTableBody.innerHTML = streamMarkup;
 
-                // Kunna tsarin goge oda
-                document.querySelectorAll('.btn-table-del').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        const targetId = e.currentTarget.getAttribute('data-id');
-                        if(confirm("Kana da tabbas kana son goge wannan bayanin gaba daya?")) {
+                // Bind Document Eviction Trigger Events
+                document.querySelectorAll('.btn-table-del').forEach(actionBtn => {
+                    actionBtn.addEventListener('click', async (eventRef) => {
+                        const targetDocumentKey = eventRef.currentTarget.getAttribute('data-id');
+                        if(confirm("Confirm action: Do you want to permanently clear this row from storage?")) {
                             try {
-                                await deleteDoc(doc(db, currentActiveCollection, targetId));
-                                showMessage('success', 'An cire bayanin nasara.');
-                            } catch (err) {
-                                showMessage('error', 'An samu matsala wajen gogewa.');
+                                await deleteDoc(doc(db, activeTargetCollection, targetDocumentKey));
+                                pushSystemNotification('success', 'Document row dropped successfully.');
+                            } catch (error) {
+                                pushSystemNotification('error', 'Database write error encountered.');
                             }
                         }
                     });
                 });
             });
         }
-
-        // Juya gidajen zabi (Tabs Switcher)
-        window.switchTab = function(type) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            
-            if(type === 'sunking') currentActiveCollection = "sunking_orders";
-            else if(type === 'nin_bvn') currentActiveCollection = "nin_bvn_logs";
-            else if(type === 'sim_reg') currentActiveCollection = "sim_registration_logs";
-            else if(type === 'devices') currentActiveCollection = "device_shop_orders";
-            
-            loadLiveDatabaseLogs(currentActiveCollection);
-        }
     </script>
 
     <script>
-        // Injin Tacewa da Bincike (Live Engine Search)
+        // High Performance Content In-Memory Filtering Algorithm
         function filterLiveOrders() {
-            const query = document.getElementById('adminSearch').value.toLowerCase().trim();
-            const rows = document.querySelectorAll('.order-item-row');
+            const queryText = document.getElementById('adminSearch').value.toLowerCase().trim();
+            const documentRows = document.querySelectorAll('.order-item-row');
 
-            rows.forEach(row => {
-                const orderId = row.querySelector('.search-id').innerText.toLowerCase();
-                const phone = row.querySelector('.search-phone').innerText.toLowerCase();
+            documentRows.forEach(rowElement => {
+                const uniqueIdValue = rowElement.querySelector('.search-id').innerText.toLowerCase();
+                const trackingPhoneValue = rowElement.querySelector('.search-phone').innerText.toLowerCase();
 
-                if (orderId.includes(query) || phone.includes(query)) {
-                    row.style.display = "";
+                if (uniqueIdValue.includes(queryText) || trackingPhoneValue.includes(queryText)) {
+                    rowElement.style.display = "";
                 } else {
-                    row.style.display = "none";
+                    rowElement.style.display = "none";
                 }
             });
         }
