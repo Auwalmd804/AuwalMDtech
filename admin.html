@@ -354,6 +354,10 @@
             document.querySelectorAll('.admin-tab-item').forEach(element => element.classList.remove('active'));
             componentRef.classList.add('active');
             activeTargetCollection = collectionId;
+            
+            // Clear input box on switching categories
+            document.getElementById('adminSearch').value = "";
+            
             fetchLiveServiceLogs(activeTargetCollection);
         }
 
@@ -437,7 +441,7 @@
 
     <script>
         // High Performance Content In-Memory Filtering Algorithm
-        function filterLiveOrders() {
+        function executeClientSearch() {
             const queryText = document.getElementById('adminSearch').value.toLowerCase().trim();
             const documentRows = document.querySelectorAll('.order-item-row');
 
