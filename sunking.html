@@ -3,94 +3,361 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RetayaX - Coming Soon</title>
+    <title>RetayaX - Sun King Solar</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@500;700;800&display=swap" rel="stylesheet">
     <style>
-        body {
-            background-color: #0f2027;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        body { 
+            background: #0f2027; 
+            color: white; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
         }
-        .main-container {
-            max-width: 420px;
-            padding: 30px;
-            background: #162b36;
-            border-radius: 16px;
-            border: 1px solid #2c5364;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-            width: 90%;
-            text-align: center;
+        .navbar { background: #162b36; border-bottom: 2px solid #25d366; }
+        .system-gif-wrapper { width: 100%; max-width: 600px; margin: 0 auto; border-bottom: 2px solid #25d366; }
+        .system-gif-wrapper img { width: 100%; height: auto; display: block; }
+        
+        .step-container {
+            width: 92%; max-width: 500px; margin: 20px auto;
+            background: rgba(22, 43, 54, 0.4); backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px); padding: 25px;
+            border-radius: 20px; border: 1px solid rgba(37, 211, 102, 0.25);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
-        .logo-area img {
-            width: 70px;
-            height: auto;
-            border-radius: 50%;
-            margin-bottom: 15px;
+        .step-header { display: flex; justify-content: space-between; margin-bottom: 25px; position: relative; }
+        .step-dot {
+            width: 35px; height: 35px; border-radius: 50%; background: #1a2a34;
+            display: flex; justify-content: center; align-items: center;
+            font-weight: bold; color: #aaa; border: 2px solid #2c5364; z-index: 2;
         }
-        .logo-area h3 {
-            color: #25d366;
-            font-weight: 700;
+        .step-dot.active { background: #25d366; color: black; border-color: #25d366; box-shadow: 0 0 10px #25d366; }
+        .step-dot.line::after {
+            content: ''; position: absolute; top: 17px; left: 35px; right: 35px;
+            height: 2px; background: #2c5364; z-index: 1;
         }
-        .coming-text {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin: 20px 0 10px 0;
+        
+        .form-control, .form-select {
+            background: #11222c; border: 1px solid #2c5364; color: white;
+            padding: 12px; border-radius: 10px; font-size: 14px;
         }
-        .sub-text {
-            color: #a0aab0;
-            font-size: 0.95rem;
-            margin-bottom: 25px;
-            line-height: 1.5;
+        .form-control:focus, .form-select:focus {
+            background: #11222c; border-color: #25d366; color: white; box-shadow: none;
         }
-        .btn-green {
-            background-color: #25d366;
-            color: #000000;
-            font-weight: 600;
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: none;
-            transition: 0.2s;
-            text-decoration: none;
-            display: inline-block;
+        label { font-size: 13px; color: #25d366; margin-bottom: 6px; font-weight: 600; }
+        
+        .pricing-box {
+            background: rgba(37, 211, 102, 0.08); border: 1px dashed #25d366;
+            border-radius: 12px; padding: 15px; margin-top: 15px; display: none;
         }
-        .btn-green:hover {
-            background-color: #128C7E;
-            color: #ffffff;
+        .pricing-item { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; }
+        .pricing-item:last-child { margin-bottom: 0; font-weight: bold; color: #25d366; }
+
+        .btn-next, .btn-submit {
+            background: linear-gradient(45deg, #25d366, #128c7e); color: white;
+            border: none; padding: 14px; border-radius: 50px; font-family: 'Poppins', sans-serif;
+            font-weight: 700; width: 100%; margin-top: 20px; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
         }
-        .footer-text {
-            font-size: 0.75rem;
-            color: #7b8890;
-            margin-top: 25px;
+        .btn-back {
+            background: transparent; border: 1px solid #2c5364; color: #aaa;
+            padding: 14px; border-radius: 50px; width: 100%; margin-top: 10px; font-weight: 600;
         }
+
+        .support-box {
+            width: 92%; max-width: 500px; margin: 10px auto 30px auto;
+            background: #162b36; border-radius: 15px; border: 1px solid #2c5364; padding: 20px;
+        }
+        .support-title { font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 700; color: white; margin-bottom: 15px; text-align: center; }
+        .admin-card {
+            display: flex; align-items: center; justify-content: space-between;
+            background: #11222c; padding: 12px 15px; border-radius: 10px;
+            margin-bottom: 10px; text-decoration: none; border: 1px solid transparent; transition: 0.3s;
+        }
+        .admin-card:hover { border-color: #25d366; }
+        .admin-info { display: flex; align-items: center; gap: 12px; }
+        .admin-icon { width: 35px; height: 35px; background: #25d366; color: black; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; }
+        .admin-name { font-size: 14px; font-weight: 600; color: white; margin: 0; }
+        .admin-role { font-size: 11px; color: #888; margin: 0; }
+        .wa-chat-btn { background: rgba(37, 211, 102, 0.1); color: #25d366; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+
+        footer { padding: 15px; text-align: center; color: rgba(255,255,255,0.5); font-size: 12px; margin-top: auto; border-top: 1px solid #162b36; }
     </style>
 </head>
 <body>
 
-    <div class="main-container">
-        <div class="logo-area">
-            <img src="logo.png" alt="RetayaX Logo">
-            <h3>RetayaX</h3>
-            
-            <div class="coming-text">🚀 Coming Soon</div>
-            <p class="sub-text">We are putting the finishing touches on this service. It will be live very soon!</p>
-            
-            <button onclick="location.href='dashboard.html'" class="btn btn-green">
-                <i class="fas fa-home me-2"></i> Back to Dashboard
-            </button>
-        </div>
-        
-        <div class="footer-text">
-            &copy; 2026 RetayaX - All Rights Reserved
-        </div>
+<nav class="navbar navbar-dark p-3 shadow-sm">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <a href="dashboard.html" style="color: white; text-decoration: none; font-size: 18px;"><i class="fas fa-arrow-left"></i></a>
+        <span class="text-white fw-bold" style="font-family: 'Poppins', sans-serif;">Sun King Solar</span>
+        <div style="width: 18px;"></div>
+    </div>
+</nav>
+
+<div class="system-gif-wrapper">
+    <img src="sunking-system.gif" alt="Sun King Solar Energy System">
+</div>
+
+<marquee class="bg-success text-black fw-bold p-1" style="font-size: 13px;">Welcome to Sun King Solar Solutions | Secure your favorite solar systems and premium smartphones on flexible installment plans via EasyBuy today!</marquee>
+
+<div class="step-container">
+    <div class="step-header">
+        <div class="step-dot active" id="dot1">1</div>
+        <div class="step-dot" id="dot2">2</div>
+        <div class="step-dot" id="dot3">3</div>
     </div>
 
+    <form id="sunkingForm" onsubmit="return false;">
+        <div id="step1-view">
+            <div class="mb-3">
+                <label>Full Name</label>
+                <input type="text" id="custName" class="form-control" placeholder="Enter full name" required>
+            </div>
+            <div class="mb-3">
+                <label>Phone Number</label>
+                <input type="tel" id="custPhone" class="form-control" placeholder="080xxxxxxxx" required>
+            </div>
+            <div class="mb-3">
+                <label>Select Product</label>
+                <select id="productSelect" class="form-select" onchange="calculatePrice()" required>
+                    <option value="">-- Choose Sun King Product --</option>
+                    <option value="max_tv24">HomePlus Max + 24″ HD TV</option>
+                    <option value="max">HomePlus Max</option>
+                    <option value="homeplus">HomePlus</option>
+                    <option value="pro">HomePlus Pro</option>
+                    <option value="fan16">16″ Solar Fan</option>
+                    <option value="max_fan">HomePlus Max + Pedestal Fan</option>
+                    <option value="max_tv32_fan">HomePlus Max + 32″ HD TV + Pedestal Fan</option>
+                    <option value="max_tv24_fan">HomePlus Max + 24″ HD TV + Pedestal Fan</option>
+                    <option value="max_tv43">HomePlus Max + 43″ HD TV</option>
+                    <option value="max_tv32">HomePlus Max + 32″ HD TV</option>
+                    <option value="inverter3300">PowerHub 3300 solar inverter</option>
+                    <option value="boom">Sunking boom</option>
+                    <option value="powerplay">PowerPlay Pro</option>
+                    <option value="freezer">Sunking freezer</option>
+                    <option value="itel_a80">Itel A80</option>
+                    <option value="itel_a06">Itel A06</option>
+                    <option value="samsung_a05">Samsung A05</option>
+                    <option value="infinix_60i">Infinix Hot 60i</option>
+                    <option value="infinix_smart10">Infinix Smart 10</option>
+                    <option value="tecno_pop10">Tecno Pop 10</option>
+                    <option value="samsung_a06">Samsung A06</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label>Payment Method</label>
+                <select id="payMethod" class="form-select" onchange="calculatePrice()" required>
+                    <option value="">-- Choose Method --</option>
+                    <option value="Cash">Cash Payment</option>
+                    <option value="EasyBuy">EasyBuy (Installment)</option>
+                </select>
+            </div>
+
+            <div class="pricing-box" id="priceDisplay">
+                <div class="pricing-item" id="row-cash"><span>Cash Price:</span><span id="val-cash">₦0</span></div>
+                <div class="pricing-item" id="row-down"><span>Down Payment:</span><span id="val-down">₦0</span></div>
+                <div class="pricing-item" id="row-weekly"><span>Weekly Installment:</span><span id="val-weekly">₦0</span></div>
+                <div class="pricing-item" id="row-duration"><span>Duration:</span><span id="val-duration">0 Months</span></div>
+                <div class="pricing-item" id="row-total"><span>Total EasyBuy Price:</span><span id="val-total">₦0</span></div>
+            </div>
+
+            <button type="button" class="btn-next" onclick="goToStep(2)">Next Step <i class="fas fa-arrow-right"></i></button>
+        </div>
+
+        <div id="step2-view" style="display: none;">
+            <div class="mb-4 text-center">
+                <i class="fas fa-cloud-upload-alt text-success" style="font-size: 40px; margin-bottom: 15px;"></i>
+                <h6 style="font-weight: 600;">Verification Document</h6>
+                <p style="font-size: 12px; color: #888;">Upload a clear photo of National ID card, NIN Slip, or Down Payment receipt slip.</p>
+            </div>
+            <div class="mb-3">
+                <label>Upload Document Image</label>
+                <input type="file" id="docFile" class="form-control" accept="image/*" required>
+            </div>
+            <button type="button" class="btn-next" onclick="goToStep(3)">Review Details <i class="fas fa-arrow-right"></i></button>
+            <button type="button" class="btn-back" onclick="goToStep(1)"><i class="fas fa-arrow-left"></i> Back</button>
+        </div>
+
+        <div id="step3-view" style="display: none;">
+            <h6 class="mb-3 text-success" style="font-family: 'Poppins', sans-serif; font-weight: 700;">Confirm Order Details</h6>
+            <div style="background: #11222c; padding: 15px; border-radius: 12px; font-size: 13px;">
+                <div class="d-flex justify-content-between border-bottom border-secondary py-2"><span>Customer Name:</span><span id="lbl-name" class="fw-bold"></span></div>
+                <div class="d-flex justify-content-between border-bottom border-secondary py-2"><span>Phone Number:</span><span id="lbl-phone" class="fw-bold"></span></div>
+                <div class="d-flex justify-content-between border-bottom border-secondary py-2"><span>Selected Product:</span><span id="lbl-product" class="text-success fw-bold"></span></div>
+                <div class="d-flex justify-content-between border-bottom border-secondary py-2"><span>Payment Type:</span><span id="lbl-method" class="fw-bold"></span></div>
+                <div id="eb-summary-rows">
+                    <div class="d-flex justify-content-between border-bottom border-secondary py-2"><span>Down Payment:</span><span id="lbl-down" class="fw-bold"></span></div>
+                    <div class="d-flex justify-content-between border-bottom border-secondary py-2"><span>Weekly Pay:</span><span id="lbl-weekly" class="fw-bold"></span></div>
+                    <div class="d-flex justify-content-between border-bottom border-secondary py-2"><span>Duration:</span><span id="lbl-duration" class="fw-bold"></span></div>
+                </div>
+                <div class="d-flex justify-content-between py-2 text-success fw-bold" style="font-size: 14px;"><span>Final Payable Cost:</span><span id="lbl-final"></span></div>
+            </div>
+            <button type="button" class="btn-submit" onclick="submitToWhatsAppGroup()">Submit Order To Group <i class="fab fa-whatsapp"></i></button>
+            <button type="button" class="btn-back" onclick="goToStep(2)"><i class="fas fa-arrow-left"></i> Back</button>
+        </div>
+    </form>
+</div>
+
+<div class="support-box">
+    <div class="support-title">Talk to Our Solar Experts</div>
+    <a href="https://wa.me/2348164712102" target="_blank" class="admin-card">
+        <div class="admin-info">
+            <div class="admin-icon"><i class="fab fa-whatsapp"></i></div>
+            <div>
+                <p class="admin-name">Shayibu Ali Baba</p>
+                <p class="admin-role">Admin 1 • Active Support</p>
+            </div>
+        </div>
+        <span class="wa-chat-btn">CHAT</span>
+    </a>
+    <a href="https://wa.me/2348164712102" target="_blank" class="admin-card">
+        <div class="admin-info">
+            <div class="admin-icon"><i class="fab fa-whatsapp"></i></div>
+            <div>
+                <p class="admin-name">Auwal MD</p>
+                <p class="admin-role">Admin 2 • Technical Support</p>
+            </div>
+        </div>
+        <span class="wa-chat-btn">CHAT</span>
+    </a>
+</div>
+
+<footer>&copy; 2026 RetayaX - All Rights Reserved</footer>
+
+<script>
+    const productData = {
+        max_tv24: { name: "HomePlus Max + 24″ HD TV", cash: 290000, down: 45000, weekly: 4800, duration: 12 },
+        max: { name: "HomePlus Max", cash: 185000, down: 28000, weekly: 3200, duration: 12 },
+        homeplus: { name: "HomePlus", cash: 130000, down: 20000, weekly: 2400, duration: 12 },
+        pro: { name: "HomePlus Pro", cash: 160000, down: 25000, weekly: 2800, duration: 12 },
+        fan16: { name: "16″ Solar Fan", cash: 95000, down: 15000, weekly: 1800, duration: 9 },
+        max_fan: { name: "HomePlus Max + Pedestal Fan", cash: 240000, down: 38000, weekly: 4100, duration: 12 },
+        max_tv32_fan: { name: "HomePlus Max + 32″ HD TV + Pedestal Fan", cash: 395000, down: 65000, weekly: 6200, duration: 12 },
+        max_tv24_fan: { name: "HomePlus Max + 24″ HD TV + Pedestal Fan", cash: 345000, down: 55000, weekly: 5500, duration: 12 },
+        max_tv43: { name: "HomePlus Max + 43″ HD TV", cash: 420000, down: 75000, weekly: 6800, duration: 12 },
+        max_tv32: { name: "HomePlus Max + 32″ HD TV", cash: 340000, down: 50000, weekly: 5400, duration: 12 },
+        inverter3300: { name: "PowerHub 3300 solar inverter", cash: 980000, down: 180000, weekly: 15500, duration: 18 },
+        boom: { name: "Sunking boom", cash: 45000, down: 8000, weekly: 1100, duration: 6 },
+        powerplay: { name: "PowerPlay Pro", cash: 75000, down: 12000, weekly: 1500, duration: 9 },
+        freezer: { name: "Sunking freezer", cash: 550000, down: 95000, weekly: 9200, duration: 15 },
+        itel_a80: { name: "Itel A80", cash: 115000, down: 22000, weekly: 2300, duration: 9 },
+        itel_a06: { name: "Itel A06", cash: 85000, down: 15000, weekly: 1800, duration: 9 },
+        samsung_a05: { name: "Samsung A05", cash: 140000, down: 30000, weekly: 2900, duration: 9 },
+        infinix_60i: { name: "Infinix Hot 60i", cash: 145000, down: 32000, weekly: 3000, duration: 9 },
+        infinix_smart10: { name: "Infinix Smart 10", cash: 125000, down: 25000, weekly: 2600, duration: 9 },
+        tecno_pop10: { name: "Tecno Pop 10", cash: 110000, down: 20000, weekly: 2200, duration: 9 },
+        samsung_a06: { name: "Samsung A06", cash: 165000, down: 35000, weekly: 3400, duration: 9 }
+    };
+
+    function calculatePrice() {
+        const pKey = document.getElementById('productSelect').value;
+        const method = document.getElementById('payMethod').value;
+        const pBox = document.getElementById('priceDisplay');
+
+        if (!pKey || !method) { pBox.style.display = 'none'; return; }
+        pBox.style.display = 'block';
+
+        const item = productData[pKey];
+        if (method === 'Cash') {
+            document.getElementById('row-cash').style.display = 'flex';
+            document.getElementById('row-down').style.display = 'none';
+            document.getElementById('row-weekly').style.display = 'none';
+            document.getElementById('row-duration').style.display = 'none';
+            document.getElementById('row-total').style.display = 'none';
+            document.getElementById('val-cash').innerText = '₦' + item.cash.toLocaleString();
+        } else {
+            document.getElementById('row-cash').style.display = 'none';
+            document.getElementById('row-down').style.display = 'flex';
+            document.getElementById('row-weekly').style.display = 'flex';
+            document.getElementById('row-duration').style.display = 'flex';
+            document.getElementById('row-total').style.display = 'flex';
+
+            let totalEasyBuy = item.down + (item.weekly * (item.duration * 4));
+            document.getElementById('val-down').innerText = '₦' + item.down.toLocaleString();
+            document.getElementById('val-weekly').innerText = '₦' + item.weekly.toLocaleString();
+            document.getElementById('val-duration').innerText = item.duration + ' Months';
+            document.getElementById('val-total').innerText = '₦' + totalEasyBuy.toLocaleString();
+        }
+    }
+
+    function goToStep(step) {
+        if (step === 2) {
+            if (!document.getElementById('custName').value || !document.getElementById('custPhone').value || !document.getElementById('productSelect').value || !document.getElementById('payMethod').value) {
+                alert('Please fill out all fields in Step 1.'); return;
+            }
+        }
+        if (step === 3) {
+            if (!document.getElementById('docFile').value) {
+                alert('Please select a verification document image.'); return;
+            }
+            setupReview();
+        }
+
+        document.getElementById('step1-view').style.display = step === 1 ? 'block' : 'none';
+        document.getElementById('step2-view').style.display = step === 2 ? 'block' : 'none';
+        document.getElementById('step3-view').style.display = step === 3 ? 'block' : 'none';
+
+        document.getElementById('dot1').classList.toggle('active', step >= 1);
+        document.getElementById('dot2').classList.toggle('active', step >= 2);
+        document.getElementById('dot3').classList.toggle('active', step >= 3);
+    }
+
+    function setupReview() {
+        const pKey = document.getElementById('productSelect').value;
+        const method = document.getElementById('payMethod').value;
+        const item = productData[pKey];
+
+        document.getElementById('lbl-name').innerText = document.getElementById('custName').value;
+        document.getElementById('lbl-phone').innerText = document.getElementById('custPhone').value;
+        document.getElementById('lbl-product').innerText = item.name;
+        document.getElementById('lbl-method').innerText = method;
+
+        if (method === 'Cash') {
+            document.getElementById('eb-summary-rows').style.display = 'none';
+            document.getElementById('lbl-final').innerText = '₦' + item.cash.toLocaleString();
+        } else {
+            document.getElementById('eb-summary-rows').style.display = 'block';
+            document.getElementById('lbl-down').innerText = '₦' + item.down.toLocaleString();
+            document.getElementById('lbl-weekly').innerText = '₦' + item.weekly.toLocaleString();
+            document.getElementById('lbl-duration').innerText = item.duration + ' Months';
+            let totalEasyBuy = item.down + (item.weekly * (item.duration * 4));
+            document.getElementById('lbl-final').innerText = '₦' + totalEasyBuy.toLocaleString();
+        }
+    }
+
+    function submitToWhatsAppGroup() {
+        const name = document.getElementById('custName').value;
+        const phone = document.getElementById('custPhone').value;
+        const pKey = document.getElementById('productSelect').value;
+        const method = document.getElementById('payMethod').value;
+        const item = productData[pKey];
+
+        let text = `*NEW SUN KING ORDER - RETAYAX*\n`;
+        text += `-----------------------------------\n`;
+        text += `*Customer:* ${name}\n`;
+        text += `*Phone:* ${phone}\n`;
+        text += `*Product:* ${item.name}\n`;
+        text += `*Payment Method:* ${method}\n`;
+
+        if (method === 'Cash') {
+            text += `*Total Amount:* ₦${item.cash.toLocaleString()}\n`;
+        } else {
+            let totalEasyBuy = item.down + (item.weekly * (item.duration * 4));
+            text += `*Down Payment:* ₦${item.down.toLocaleString()}\n`;
+            text += `*Weekly Payment:* ₦${item.weekly.toLocaleString()}\n`;
+            text += `*Duration:* ${item.duration} Months\n`;
+            text += `*Total EasyBuy Price:* ₦${totalEasyBuy.toLocaleString()}\n`;
+        }
+        text += `-----------------------------------\n`;
+        text += `_Document uploaded via user dashboard._`;
+
+        let encText = encodeURIComponent(text);
+        
+        // MAFI KYAWUN MATAKI: Saka Group Link ko Lambar tura order anan
+        window.location.href = `https://wa.me/2348164712102?text=${encText}`;
+    }
+</script>
 </body>
 </html>
