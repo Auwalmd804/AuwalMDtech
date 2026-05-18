@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ha">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -7,19 +7,18 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@500;700;800&display=swap" rel="stylesheet">
-    
+
     <style>
-        body { 
-            background: #0f2027; 
-            color: white; 
-            min-height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
+        body {
+            background: #0f2027;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
 
-        /* Welcome Overlay */
         #welcome-overlay {
             position: fixed;
             inset: 0;
@@ -32,7 +31,7 @@
             transition: opacity 0.8s ease-out;
             padding: 15px;
         }
-        .welcome-box {
+       .welcome-box {
             background: rgba(22, 43, 54, 0.4);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -43,32 +42,32 @@
             max-width: 420px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.6);
         }
-        .welcome-logo { 
-            width: 90px; 
+       .welcome-logo {
+            width: 90px;
             height: auto;
-            margin-bottom: 25px; 
-            animation: pulseLogo 2s infinite; 
+            margin-bottom: 25px;
+            animation: pulseLogo 2s infinite;
         }
         @keyframes pulseLogo { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
-        
-        .welcome-title { 
+
+       .welcome-title {
             font-family: 'Poppins', sans-serif;
-            font-weight: 800; 
-            color: #25d366; 
-            letter-spacing: 0.5px; 
-            margin-bottom: 20px; 
+            font-weight: 800;
+            color: #25d366;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
             text-transform: uppercase;
             font-size: 1.5rem;
         }
-        .welcome-text { 
-            font-size: 14px; 
-            line-height: 1.7; 
-            color: #eceff1; 
+       .welcome-text {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #eceff1;
             margin-bottom: 35px;
             font-weight: 400;
         }
-        
-        .continue-btn {
+
+       .continue-btn {
             background: linear-gradient(45deg, #25d366, #128c7e);
             color: white;
             border: none;
@@ -81,20 +80,32 @@
             box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
             transition: transform 0.2s ease;
         }
-        .continue-btn:active { transform: scale(0.96); }
+       .continue-btn:active { transform: scale(0.96); }
 
-        /* Navbar & Menu */
-        .waving-logo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #25d366; background: white; }
-        .offcanvas { background: #0f2027; }
+       .lang-switch {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(37, 211, 102, 0.2);
+            border: 1px solid #25d366;
+            color: #25d366;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
 
-        /* Professional Marquee */
-        .marquee-wrapper {
+       .waving-logo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #25d366; background: white; }
+       .offcanvas { background: #0f2027; }
+
+       .marquee-wrapper {
             background: #25d366;
             overflow: hidden;
             white-space: nowrap;
             padding: 8px 0;
         }
-        .marquee-content {
+       .marquee-content {
             display: inline-block;
             color: #000;
             font-weight: 700;
@@ -105,23 +116,22 @@
             100% { transform: translateX(-100%); }
         }
 
-        /* Banner */
-        .top-banner-wrapper { width: 92%; max-width: 500px; margin: 12px auto; position: relative; }
-        .top-banner {
+       .top-banner-wrapper { width: 92%; max-width: 500px; margin: 12px auto; position: relative; }
+       .top-banner {
             background: #162b36; border-radius: 15px 15px 0 0;
             border: 2px solid #25d366; border-bottom: none;
             overflow: hidden; cursor: pointer; position: relative;
         }
-        .top-banner img { width: 100%; height: auto; display: block; }
+       .top-banner img { width: 100%; height: auto; display: block; }
 
-        .active-shake { animation: shakeBanner 0.8s infinite ease-in-out; }
+       .active-shake { animation: shakeBanner 0.8s infinite ease-in-out; }
         @keyframes shakeBanner {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-3px) rotate(-1deg); }
             75% { transform: translateX(3px) rotate(1deg); }
         }
 
-        .pointing-hand {
+       .pointing-hand {
             position: absolute;
             right: 20px;
             bottom: 15px;
@@ -135,7 +145,7 @@
             50% { transform: translate(15px, 0) scale(1.1); }
         }
 
-        .login-cta {
+       .login-cta {
             background: linear-gradient(45deg, #25d366, #128c7e);
             color: white; text-align: center; padding: 14px;
             font-weight: bold; text-decoration: none; display: block;
@@ -148,32 +158,30 @@
             100% { box-shadow: 0 0 0 0px rgba(37, 211, 102, 0); }
         }
 
-        /* Service Cards */
-        .service-card { 
-            background: #1a2a34; border-radius: 15px; padding: 8px; text-align: center; 
-            border: 1px solid #2c5364; height: 105px; display: flex; 
-            flex-direction: column; justify-content: center; align-items: center; 
+       .service-card {
+            background: #1a2a34; border-radius: 15px; padding: 8px; text-align: center;
+            border: 1px solid #2c5364; height: 105px; display: flex;
+            flex-direction: column; justify-content: center; align-items: center;
             transition: transform 0.2s ease;
         }
-        .service-card:active { transform: scale(0.95); }
-        .service-card img { height: 42px; width: auto; margin-bottom: 6px; }
-        .service-card h6 { font-size: 0.65rem; color: #fff; margin: 0; }
+       .service-card:active { transform: scale(0.95); }
+       .service-card img { height: 42px; width: auto; margin-bottom: 6px; }
+       .service-card h6 { font-size: 0.65rem; color: #fff; margin: 0; }
 
-        /* Floating WhatsApp Button */
-        .wa-btn { 
-            position: fixed; bottom: 80px; right: 20px; background: #25d366; 
-            color: white; width: 50px; height: 50px; border-radius: 50%; 
-            display: flex; justify-content: center; align-items: center; 
+       .wa-btn {
+            position: fixed; bottom: 80px; right: 20px; background: #25d366;
+            color: white; width: 50px; height: 50px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
             z-index: 1000; text-decoration: none; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
         }
-        
+
         footer { padding: 12px; text-align: center; color: rgba(255,255,255,0.6); font-size: 12px; margin-top: auto; }
 
         @media (max-width: 360px) {
-            .welcome-box { padding: 25px 15px; }
-            .welcome-title { font-size: 1.25rem; margin-bottom: 12px; }
-            .welcome-text { font-size: 12px; line-height: 1.6; margin-bottom: 25px; }
-            .continue-btn { padding: 12px 30px; font-size: 14px; }
+           .welcome-box { padding: 25px 15px; }
+           .welcome-title { font-size: 1.25rem; margin-bottom: 12px; }
+           .welcome-text { font-size: 12px; line-height: 1.6; margin-bottom: 25px; }
+           .continue-btn { padding: 12px 30px; font-size: 14px; }
         }
     </style>
 </head>
@@ -181,13 +189,14 @@
 
 <!-- Welcome Overlay -->
 <div id="welcome-overlay">
+    <button class="lang-switch" onclick="toggleLang()">HA/EN</button>
     <div class="welcome-box">
         <img src="logo.png" class="welcome-logo" alt="RetayaX Logo">
-        <h3 class="welcome-title">Barka da zuwa RetayaX</h3>
-        <div class="welcome-text">
-            RetayaX ba kawai wurin siyan data da airtime ba ne. Mu ne ecosystem na digital da ke sauƙaƙa rayuwarka da kasuwancinka. Ji daɗin sabis na zamani, duk a wuri ɗaya.
+        <h3 class="welcome-title" id="welcomeTitle">WELCOME TO RETAYAX</h3>
+        <div class="welcome-text" id="welcomeText">
+            RetayaX is beyond just a data and airtime hub. We are a premier digital ecosystem dedicated to empowering your lifestyle with seamless connectivity and professional business solutions.
         </div>
-        <button class="continue-btn" onclick="enterDashboard()">SHIGA DASHBOARD</button>
+        <button class="continue-btn" id="continueBtn" onclick="enterDashboard()">CONTINUE TO DASHBOARD</button>
     </div>
 </div>
 
@@ -199,29 +208,29 @@
 <nav class="navbar navbar-dark bg-dark p-3 shadow">
     <div class="container-fluid d-flex justify-content-between align-items-center w-100">
         <img src="logo.png" class="waving-logo" alt="Logo">
-        <span class="text-white fw-bold">Maraba zuwa RetayaX</span>
+        <span class="text-white fw-bold" id="navTitle">Welcome to RetayaX</span>
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 </nav>
 
-<!-- Offcanvas Menu -->
+<!-- Menu -->
 <div class="offcanvas offcanvas-end" id="menu">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title text-white">RetayaX Menu</h5>
+        <h5 class="offcanvas-title text-white" id="menuTitle">RetayaX Menu</h5>
         <button class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body">
-        <a href="transactions.html" class="btn btn-outline-success w-100 mb-3 py-2">Tarihin Ma'amaloli</a>
-        <a href="https://wa.me/2348164712102" class="btn btn-success w-100 mb-3 py-2"><i class="fab fa-whatsapp"></i> Tuntubi Support</a>
+        <a href="transactions.html" class="btn btn-outline-success w-100 mb-3 py-2" id="menuTrans">Transaction History</a>
+        <a href="https://wa.me/2348164712102" class="btn btn-success w-100 mb-3 py-2" id="menuSupport"><i class="fab fa-whatsapp"></i> Contact Support</a>
     </div>
 </div>
 
-<!-- Professional Marquee -->
+<!-- Marquee -->
 <div class="marquee-wrapper">
-    <div class="marquee-content">
-        CEO Auwal MD da Shayibu Ali Baba | RetayaX tana aiki 24/7
+    <div class="marquee-content" id="marqueeText">
+        CEO Auwal MD and Shayibu Ali Baba | RetayaX Active 24/7
     </div>
 </div>
 
@@ -231,7 +240,7 @@
         <img src="all-in-one.png" alt="All-in-one Digital Service">
         <span id="handIcon" class="pointing-hand">👉</span>
     </div>
-    <a href="https://retayax.quark.ng" class="login-cta">
+    <a href="https://retayax.quark.ng" class="login-cta" id="loginBtn">
         <i class="fas fa-sign-in-alt"></i> LOGIN / REGISTER TO ACCOUNT
     </a>
 </div>
@@ -245,10 +254,86 @@
 <a href="https://wa.me/2348164712102" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i></a>
 
 <!-- Footer -->
-<footer>&copy; 2026 RetayaX - Duk Haƙin Mallaka Na Tare da Mu</footer>
+<footer id="footerText">&copy; 2026 RetayaX - All Rights Reserved</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    let currentLang = 'en';
+
+    const translations = {
+        en: {
+            welcomeTitle: "WELCOME TO RETAYAX",
+            welcomeText: "RetayaX is beyond just a data and airtime hub. We are a premier digital ecosystem dedicated to empowering your lifestyle with seamless connectivity and professional business solutions.",
+            continueBtn: "CONTINUE TO DASHBOARD",
+            navTitle: "Welcome to RetayaX",
+            menuTitle: "RetayaX Menu",
+            menuTrans: "Transaction History",
+            menuSupport: "Contact Support",
+            marqueeText: "CEO Auwal MD and Shayibu Ali Baba | RetayaX Active 24/7",
+            loginBtn: '<i class="fas fa-sign-in-alt"></i> LOGIN / REGISTER TO ACCOUNT',
+            footerText: "&copy; 2026 RetayaX - All Rights Reserved",
+            services: [
+                {name: "Sunking", img: "sunking.png"},
+                {name: "NIN Device", img: "nin-device.png"},
+                {name: "Airtel Reg", img: "airtel-reg.png"},
+                {name: "BVN Registration", img: "bvn-reg.png"},
+                {name: "WhatsApp Hub", img: "whatsapp-hub.png"},
+                {name: "Data Sim", img: "data-sim.png"},
+                {name: "Wifi/Router", img: "router-wifi.png"},
+                {name: "Product Shop", img: "shop-all.png"},
+                {name: "SIM Swap", img: "sim-swap.png"},
+                {name: "Graphic Design", img: "graphic-design.png"},
+                {name: "Service Match", img: "service-match.png"}
+            ]
+        },
+        ha: {
+            welcomeTitle: "BARKA DA ZUWA RETAYAX",
+            welcomeText: "RetayaX ba kawai wurin siyan data da airtime ba ne. Mu ne tsarin dijital da ke sauƙaƙa rayuwarka da kasuwancinka da mafita na ƙwararru.",
+            continueBtn: "CI GABA ZUWA DASHBOARD",
+            navTitle: "Maraba zuwa RetayaX",
+            menuTitle: "Menu na RetayaX",
+            menuTrans: "Tarihin Ma'amaloli",
+            menuSupport: "Tuntubi Tallafi",
+            marqueeText: "Shugaba Auwal MD da Shayibu Ali Baba | RetayaX tana aiki 24/7",
+            loginBtn: '<i class="fas fa-sign-in-alt"></i> SHIGA KO RAJISTA ASUSU',
+            footerText: "&copy; 2026 RetayaX - Duk Haƙin Mallaka An Ajiye",
+            services: [
+                {name: "Sunking", img: "sunking.png"},
+                {name: "Na'urar NIN", img: "nin-device.png"},
+                {name: "Rijistar Airtel", img: "airtel-reg.png"},
+                {name: "Rijistar BVN", img: "bvn-reg.png"},
+                {name: "HUB na WhatsApp", img: "whatsapp-hub.png"},
+                {name: "SIM na Data", img: "data-sim.png"},
+                {name: "Wifi/Router", img: "router-wifi.png"},
+                {name: "Shagon Kaya", img: "shop-all.png"},
+                {name: "Sauya SIM", img: "sim-swap.png"},
+                {name: "Zane-zane", img: "graphic-design.png"},
+                {name: "Daidaita Sabis", img: "service-match.png"}
+            ]
+        }
+    };
+
+    function toggleLang() {
+        currentLang = currentLang === 'en'? 'ha' : 'en';
+        document.documentElement.lang = currentLang;
+        updateContent();
+    }
+
+    function updateContent() {
+        const t = translations[currentLang];
+        document.getElementById('welcomeTitle').innerText = t.welcomeTitle;
+        document.getElementById('welcomeText').innerText = t.welcomeText;
+        document.getElementById('continueBtn').innerText = t.continueBtn;
+        document.getElementById('navTitle').innerText = t.navTitle;
+        document.getElementById('menuTitle').innerText = t.menuTitle;
+        document.getElementById('menuTrans').innerText = t.menuTrans;
+        document.getElementById('menuSupport').innerHTML = '<i class="fab fa-whatsapp"></i> ' + t.menuSupport;
+        document.getElementById('marqueeText').innerText = t.marqueeText;
+        document.getElementById('loginBtn').innerHTML = t.loginBtn;
+        document.getElementById('footerText').innerHTML = t.footerText;
+        loadServices(t.services);
+    }
+
     function enterDashboard() {
         const overlay = document.getElementById('welcome-overlay');
         overlay.style.opacity = '0';
@@ -262,31 +347,23 @@
         setTimeout(() => { banner.classList.remove('active-shake'); }, 15000);
     }
 
-    const services = [
-        {name: "Sunking", img: "sunking.png"},
-        {name: "NIN Device", img: "nin-device.png"},
-        {name: "Airtel Reg", img: "airtel-reg.png"},
-        {name: "BVN Registration", img: "bvn-reg.png"},
-        {name: "WhatsApp Hub", img: "whatsapp-hub.png"},
-        {name: "Data Sim", img: "data-sim.png"},
-        {name: "Wifi/Router", img: "router-wifi.png"},
-        {name: "Product Shop", img: "shop-all.png"},
-        {name: "SIM Swap", img: "sim-swap.png"},
-        {name: "Graphic Design", img: "graphic-design.png"},
-        {name: "Service Match", img: "service-match.png"}
-    ];
+    function loadServices(services) {
+        const grid = document.getElementById('grid');
+        grid.innerHTML = '';
+        services.forEach(s => {
+            let fileLink = s.name.toLowerCase().replace(/ /g,'').replace('/','').replace('na\'urar','naurar');
+            grid.innerHTML += `
+                <div class="col-4">
+                    <div class="service-card" onclick="location.href='${fileLink}.html'">
+                        <img src="${s.img}" alt="${s.name}">
+                        <h6 class="text-truncate">${s.name}</h6>
+                    </div>
+                </div>`;
+        });
+    }
 
-    const grid = document.getElementById('grid');
-    services.forEach(s => {
-        let fileLink = s.name.toLowerCase().replace(/ /g,'').replace('/','');
-        grid.innerHTML += `
-            <div class="col-4">
-                <div class="service-card" onclick="location.href='${fileLink}.html'">
-                    <img src="${s.img}" alt="${s.name}">
-                    <h6 class="text-truncate">${s.name}</h6>
-                </div>
-            </div>`;
-    });
+    // Load default services on start
+    loadServices(translations.en.services);
 
     setTimeout(() => {
         const handIcon = document.getElementById('handIcon');
