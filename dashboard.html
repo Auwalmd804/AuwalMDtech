@@ -31,7 +31,7 @@
             transition: opacity 0.8s ease-out;
             padding: 15px;
         }
-       .welcome-box {
+     .welcome-box {
             background: rgba(22, 43, 54, 0.4);
             backdrop-filter: blur(20px);
             padding: 40px 30px;
@@ -42,7 +42,7 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.6);
             position: relative;
         }
-       .welcome-logo {
+     .welcome-logo {
             width: 90px;
             height: auto;
             margin-bottom: 25px;
@@ -50,23 +50,22 @@
         }
         @keyframes pulseLogo { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
 
-       .welcome-title {
+     .welcome-title {
             font-family: 'Poppins', sans-serif;
             font-weight: 800;
             color: #25d366;
-            letter-spacing: 0.5px;
             margin-bottom: 20px;
             text-transform: uppercase;
             font-size: 1.5rem;
         }
-       .welcome-text {
+     .welcome-text {
             font-size: 14px;
             line-height: 1.7;
             color: #eceff1;
             margin-bottom: 35px;
         }
 
-       .continue-btn {
+     .continue-btn {
             background: linear-gradient(45deg, #25d366, #128c7e);
             color: white;
             border: none;
@@ -77,10 +76,11 @@
             font-size: 15px;
             width: 100%;
             box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+            cursor: pointer;
         }
-       .continue-btn:active { transform: scale(0.96); }
+     .continue-btn:active { transform: scale(0.96); }
 
-       .lang-switch {
+     .lang-switch {
             position: absolute;
             top: 15px;
             right: 15px;
@@ -94,16 +94,16 @@
             cursor: pointer;
         }
 
-       .waving-logo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #25d366; background: white; }
-       .offcanvas { background: #0f2027; }
+     .waving-logo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #25d366; background: white; }
+     .offcanvas { background: #0f2027; }
 
-       .marquee-wrapper {
+     .marquee-wrapper {
             background: #25d366;
             overflow: hidden;
             white-space: nowrap;
             padding: 8px 0;
         }
-       .marquee-content {
+     .marquee-content {
             display: inline-block;
             color: #000;
             font-weight: 700;
@@ -114,22 +114,22 @@
             100% { transform: translateX(-100%); }
         }
 
-       .top-banner-wrapper { width: 92%; max-width: 500px; margin: 12px auto; position: relative; }
-       .top-banner {
+     .top-banner-wrapper { width: 92%; max-width: 500px; margin: 12px auto; position: relative; }
+     .top-banner {
             background: #162b36; border-radius: 15px 15px 0 0;
             border: 2px solid #25d366; border-bottom: none;
             overflow: hidden; cursor: pointer; position: relative;
         }
-       .top-banner img { width: 100%; height: auto; display: block; }
+     .top-banner img { width: 100%; height: auto; display: block; }
 
-       .active-shake { animation: shakeBanner 0.8s infinite ease-in-out; }
+     .active-shake { animation: shakeBanner 0.8s infinite ease-in-out; }
         @keyframes shakeBanner {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-3px) rotate(-1deg); }
             75% { transform: translateX(3px) rotate(1deg); }
         }
 
-       .pointing-hand {
+     .pointing-hand {
             position: absolute;
             right: 20px;
             bottom: 15px;
@@ -142,7 +142,7 @@
             50% { transform: translate(15px, 0) scale(1.1); }
         }
 
-       .login-cta {
+     .login-cta {
             background: linear-gradient(45deg, #25d366, #128c7e);
             color: white; text-align: center; padding: 14px;
             font-weight: bold; text-decoration: none; display: block;
@@ -155,15 +155,15 @@
             100% { box-shadow: 0 0 0 0px rgba(37, 211, 102, 0); }
         }
 
-       .service-card {
+     .service-card {
             background: #1a2a34; border-radius: 15px; padding: 8px; text-align: center;
             border: 1px solid #2c5364; height: 105px; display: flex;
             flex-direction: column; justify-content: center; align-items: center;
         }
-       .service-card img { height: 42px; width: auto; margin-bottom: 6px; }
-       .service-card h6 { font-size: 0.65rem; color: #fff; margin: 0; }
+     .service-card img { height: 42px; width: auto; margin-bottom: 6px; }
+     .service-card h6 { font-size: 0.65rem; color: #fff; margin: 0; }
 
-       .wa-btn {
+     .wa-btn {
             position: fixed; bottom: 80px; right: 20px; background: #25d366;
             color: white; width: 50px; height: 50px; border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
@@ -188,7 +188,7 @@
     </div>
 </div>
 
-<!-- Audio elements -->
+<!-- Audio element -->
 <audio id="welcomeVoice"></audio>
 
 <!-- Navbar -->
@@ -247,7 +247,7 @@
 <script>
     let currentLang = 'en';
 
-    // REPLACE THESE WITH REAL AUDIO IDs AFTER I GENERATE THEM
+    // REPLACE THESE WITH REAL AUDIO IDS WHEN I GENERATE THEM
     const AUDIO_IDS = {
         ha: "HAUSA_AUDIO_ID",
         en: "ENGLISH_AUDIO_ID"
@@ -328,18 +328,21 @@
     }
 
     function enterDashboard() {
+        // Fade out welcome screen
         const overlay = document.getElementById('welcome-overlay');
         overlay.style.opacity = '0';
         setTimeout(() => { overlay.style.display = 'none'; }, 800);
 
-        // Play voice based on current language
+        // Play voice immediately on click - browsers allow this
         const voice = document.getElementById('welcomeVoice');
         const audioId = AUDIO_IDS[currentLang];
+
         if (audioId && audioId!== "HAUSA_AUDIO_ID" && audioId!== "ENGLISH_AUDIO_ID") {
             voice.src = `audio/${audioId}.mp3`;
             voice.play().catch(e => console.log("Audio play failed: ", e));
         }
 
+        // Shake banner
         const banner = document.getElementById('mainBanner');
         banner.classList.add('active-shake');
         setTimeout(() => { banner.classList.remove('active-shake'); }, 15000);
@@ -360,7 +363,6 @@
         });
     }
 
-    // Load default services on start
     loadServices(translations.en.services);
 
     setTimeout(() => {
