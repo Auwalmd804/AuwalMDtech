@@ -239,10 +239,10 @@
 <script>
     let currentLang = 'en';
 
-    // BOTH DYNAMIC REAL AUDIO GITHUB DATA STREAM LINKS
+    // AMFANI DA SEPARATE AUDIO CHANNELS - CORRECT GITHUB AUDIO DATA LINKS
     const AUDIO_PATHS = {
-        ha: "https://raw.githubusercontent.com/Auwalmd804/AuwalMDtech/24b6c63b684309e1dbf37bbaa25376c2b1758adc/welcome.mp3",
-        en: "https://raw.githubusercontent.com/Auwalmd804/AuwalMDtech/3825727ed1fdc8cf61b52981004fc76aedb14c0f/welcome.mp3"
+        ha: "https://raw.githubusercontent.com/Auwalmd804/AuwalMDtech/f22ed23f1de31a4dee094f963472f7c8ddbcc656/welcome.mp3",
+        en: "https://raw.githubusercontent.com/Auwalmd804/AuwalMDtech/f22ed23f1de31a4dee094f963472f7c8ddbcc656/welcome-en.mp3"
     };
 
     const translations = {
@@ -319,16 +319,17 @@
         loadServices(t.services);
     }
 
-    // INTERACTIVE VOICE ENGINE RESOLUTION CONTROLLER PIPELINE
+    // VOEOVER AUDIO LAUNCH ENGINE CONTROLLER
     function enterDashboard() {
         const overlay = document.getElementById('welcome-overlay');
         overlay.style.opacity = '0';
         setTimeout(() => { overlay.style.display = 'none'; }, 800);
 
-        // STABLE STREAM AUDIO INITIATOR BASED ON LANGUAGE SELECTION PROFILE
+        // STREAM SELECTED DYNAMIC AUDIO MP3 CHANNELS CORRECTLY FROM GITHUB STORAGE
         const voice = document.getElementById('welcomeVoice');
         voice.src = AUDIO_PATHS[currentLang];
-        voice.play().catch(e => console.log("Audio playback initialization blocked: ", e));
+        voice.load(); // Force the browser to read the newly loaded path
+        voice.play().catch(e => console.log("Audio streaming was interrupted by client setup: ", e));
 
         const banner = document.getElementById('mainBanner');
         banner.classList.add('active-shake');
