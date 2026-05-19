@@ -31,7 +31,7 @@
             transition: opacity 0.8s ease-out;
             padding: 15px;
         }
-     .welcome-box {
+        .welcome-box {
             background: rgba(22, 43, 54, 0.4);
             backdrop-filter: blur(20px);
             padding: 40px 30px;
@@ -42,7 +42,7 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.6);
             position: relative;
         }
-     .welcome-logo {
+        .welcome-logo {
             width: 90px;
             height: auto;
             margin-bottom: 25px;
@@ -50,7 +50,7 @@
         }
         @keyframes pulseLogo { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
 
-     .welcome-title {
+        .welcome-title {
             font-family: 'Poppins', sans-serif;
             font-weight: 800;
             color: #25d366;
@@ -58,14 +58,14 @@
             text-transform: uppercase;
             font-size: 1.5rem;
         }
-     .welcome-text {
+        .welcome-text {
             font-size: 14px;
             line-height: 1.7;
             color: #eceff1;
             margin-bottom: 35px;
         }
 
-     .continue-btn {
+        .continue-btn {
             background: linear-gradient(45deg, #25d366, #128c7e);
             color: white;
             border: none;
@@ -78,9 +78,9 @@
             box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
             cursor: pointer;
         }
-     .continue-btn:active { transform: scale(0.96); }
+        .continue-btn:active { transform: scale(0.96); }
 
-     .lang-switch {
+        .lang-switch {
             position: absolute;
             top: 15px;
             right: 15px;
@@ -92,18 +92,19 @@
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
+            z-index: 10001;
         }
 
-     .waving-logo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #25d366; background: white; }
-     .offcanvas { background: #0f2027; }
+        .waving-logo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #25d366; background: white; }
+        .offcanvas { background: #0f2027; }
 
-     .marquee-wrapper {
+        .marquee-wrapper {
             background: #25d366;
             overflow: hidden;
             white-space: nowrap;
             padding: 8px 0;
         }
-     .marquee-content {
+        .marquee-content {
             display: inline-block;
             color: #000;
             font-weight: 700;
@@ -114,22 +115,22 @@
             100% { transform: translateX(-100%); }
         }
 
-     .top-banner-wrapper { width: 92%; max-width: 500px; margin: 12px auto; position: relative; }
-     .top-banner {
+        .top-banner-wrapper { width: 92%; max-width: 500px; margin: 12px auto; position: relative; }
+        .top-banner {
             background: #162b36; border-radius: 15px 15px 0 0;
             border: 2px solid #25d366; border-bottom: none;
             overflow: hidden; cursor: pointer; position: relative;
         }
-     .top-banner img { width: 100%; height: auto; display: block; }
+        .top-banner img { width: 100%; height: auto; display: block; }
 
-     .active-shake { animation: shakeBanner 0.8s infinite ease-in-out; }
+        .active-shake { animation: shakeBanner 0.8s infinite ease-in-out; }
         @keyframes shakeBanner {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-3px) rotate(-1deg); }
             75% { transform: translateX(3px) rotate(1deg); }
         }
 
-     .pointing-hand {
+        .pointing-hand {
             position: absolute;
             right: 20px;
             bottom: 15px;
@@ -142,7 +143,7 @@
             50% { transform: translate(15px, 0) scale(1.1); }
         }
 
-     .login-cta {
+        .login-cta {
             background: linear-gradient(45deg, #25d366, #128c7e);
             color: white; text-align: center; padding: 14px;
             font-weight: bold; text-decoration: none; display: block;
@@ -155,15 +156,15 @@
             100% { box-shadow: 0 0 0 0px rgba(37, 211, 102, 0); }
         }
 
-     .service-card {
+        .service-card {
             background: #1a2a34; border-radius: 15px; padding: 8px; text-align: center;
             border: 1px solid #2c5364; height: 105px; display: flex;
             flex-direction: column; justify-content: center; align-items: center;
         }
-     .service-card img { height: 42px; width: auto; margin-bottom: 6px; }
-     .service-card h6 { font-size: 0.65rem; color: #fff; margin: 0; }
+        .service-card img { height: 42px; width: auto; margin-bottom: 6px; }
+        .service-card h6 { font-size: 0.65rem; color: #fff; margin: 0; }
 
-     .wa-btn {
+        .wa-btn {
             position: fixed; bottom: 80px; right: 20px; background: #25d366;
             color: white; width: 50px; height: 50px; border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
@@ -175,9 +176,8 @@
 </head>
 <body>
 
-<!-- Welcome Overlay -->
 <div id="welcome-overlay">
-    <button class="lang-switch" onclick="toggleLang()">HA/EN</button>
+    <button class="lang-switch" onclick="toggleLang()">HA / EN</button>
     <div class="welcome-box">
         <img src="logo.png" class="welcome-logo" alt="RetayaX Logo">
         <h3 class="welcome-title" id="welcomeTitle">WELCOME TO RETAYAX</h3>
@@ -188,10 +188,8 @@
     </div>
 </div>
 
-<!-- Audio element -->
 <audio id="welcomeVoice"></audio>
 
-<!-- Navbar -->
 <nav class="navbar navbar-dark bg-dark p-3 shadow">
     <div class="container-fluid d-flex justify-content-between align-items-center w-100">
         <img src="logo.png" class="waving-logo" alt="Logo">
@@ -202,7 +200,6 @@
     </div>
 </nav>
 
-<!-- Menu -->
 <div class="offcanvas offcanvas-end" id="menu">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title text-white" id="menuTitle">RetayaX Menu</h5>
@@ -214,14 +211,12 @@
     </div>
 </div>
 
-<!-- Marquee -->
 <div class="marquee-wrapper">
     <div class="marquee-content" id="marqueeText">
         CEO Auwal MD and Shayibu Ali Baba | RetayaX Active 24/7
     </div>
 </div>
 
-<!-- Banner -->
 <div class="top-banner-wrapper">
     <div class="top-banner" id="mainBanner" onclick="window.location.href='https://retayax.quark.ng'">
         <img src="all-in-one.png" alt="All-in-one Digital Service">
@@ -232,26 +227,20 @@
     </a>
 </div>
 
-<!-- Services Grid -->
 <div class="container-fluid mt-2">
     <div class="row g-2" id="grid"></div>
 </div>
 
-<!-- WhatsApp Button -->
 <a href="https://wa.me/2348164712102" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i></a>
 
-<!-- Footer -->
 <footer id="footerText">&copy; 2026 RetayaX - All Rights Reserved</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     let currentLang = 'en';
 
-    // REPLACE THESE WITH REAL AUDIO IDS WHEN I GENERATE THEM
-    const AUDIO_IDS = {
-        ha: "HAUSA_AUDIO_ID",
-        en: "ENGLISH_AUDIO_ID"
-    };
+    // RAW GITHUB MP3 AUDIO DATA STREAM LINK FOR HAUSA PROFILE RUNTIME
+    const HAUSA_AUDIO_URL = "https://raw.githubusercontent.com/Auwalmd804/AuwalMDtech/24b6c63b684309e1dbf37bbaa25376c2b1758adc/welcome.mp3";
 
     const translations = {
         en: {
@@ -307,7 +296,7 @@
     };
 
     function toggleLang() {
-        currentLang = currentLang === 'en'? 'ha' : 'en';
+        currentLang = currentLang === 'en' ? 'ha' : 'en';
         document.documentElement.lang = currentLang;
         updateContent();
     }
@@ -327,22 +316,35 @@
         loadServices(t.services);
     }
 
+    // INTERACTIVE VOICE ENGINE RESOLUTION CONTROLLER PIPELINE
     function enterDashboard() {
-        // Fade out welcome screen
         const overlay = document.getElementById('welcome-overlay');
         overlay.style.opacity = '0';
         setTimeout(() => { overlay.style.display = 'none'; }, 800);
 
-        // Play voice immediately on click - browsers allow this
-        const voice = document.getElementById('welcomeVoice');
-        const audioId = AUDIO_IDS[currentLang];
-
-        if (audioId && audioId!== "HAUSA_AUDIO_ID" && audioId!== "ENGLISH_AUDIO_ID") {
-            voice.src = `audio/${audioId}.mp3`;
-            voice.play().catch(e => console.log("Audio play failed: ", e));
+        if (currentLang === 'ha') {
+            // TRIGGER GITHUB SOURCED CUSTOM AUDIO PATH FOR HAUSA MODE RUNTIME
+            const voice = document.getElementById('welcomeVoice');
+            voice.src = HAUSA_AUDIO_URL;
+            voice.play().catch(e => console.log("Hausa audio playback initialization blocked: ", e));
+        } else {
+            // EXECUTE WEB SPEECH API ENGINE AUTO-SPEECH GENERATOR FOR ENGLISH MODE RUNTIME
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Stop any pending speech queue remnants
+                
+                const corporateSpeechString = "Welcome to RetayaX. To login or register your account, please tap the large banner image at the top of your screen. Thank you.";
+                const vocalUtteranceInstance = new SpeechSynthesisUtterance(corporateSpeechString);
+                
+                vocalUtteranceInstance.lang = 'en-US';
+                vocalUtteranceInstance.rate = 0.95;  // Corporate pacing speed configuration 
+                vocalUtteranceInstance.pitch = 1.0;  // Standard harmonic index baseline
+                
+                window.speechSynthesis.speak(vocalUtteranceInstance);
+            } else {
+                console.log("Local device hosting parameters do not support runtime WebSpeech synthesis engines.");
+            }
         }
 
-        // Shake banner
         const banner = document.getElementById('mainBanner');
         banner.classList.add('active-shake');
         setTimeout(() => { banner.classList.remove('active-shake'); }, 15000);
