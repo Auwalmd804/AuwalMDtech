@@ -8,32 +8,31 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@500;700;800&display=swap" rel="stylesheet">
     <style>
-        body { 
-            background: #0f2027; 
-            color: white; 
-            min-height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
+        body {
+            background: #0f2027;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
-        
-        /* Fixed Elegant Loading Animation */
+
         #sunking-loader {
             position: fixed; inset: 0; background: #0f2027; z-index: 20000;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             transition: opacity 0.5s ease;
         }
-        .loader-spinner {
+       .loader-spinner {
             width: 100px; height: 100px; border: 4px solid rgba(37, 211, 102, 0.1);
             border-top-color: #25d366; border-radius: 50%; animation: spin 1s infinite linear;
             position: absolute;
         }
-        .loader-logo { 
-            width: 65px; 
-            height: 65px; 
-            z-index: 2; 
-            border-radius: 12px; 
+       .loader-logo {
+            width: 65px;
+            height: 65px;
+            z-index: 2;
+            border-radius: 12px;
             object-fit: cover;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
@@ -44,139 +43,128 @@
             display: none; justify-content: center; align-items: center;
         }
 
-        .navbar { background: #162b36; border-bottom: 2px solid #25d366; }
-        
-        /* Fully Responsive Top Header Banner GIF */
-        .system-gif-wrapper { 
-            width: 100%; 
-            max-width: 100%; 
-            margin: 0 auto; 
-            border-bottom: 2px solid #25d366; 
+       .navbar { background: #162b36; border-bottom: 2px solid #25d366; }
+
+       .system-gif-wrapper {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            border-bottom: 2px solid #25d366;
             overflow: hidden;
             height: auto;
         }
-        .system-gif-wrapper img { 
-            width: 100%; 
-            height: auto; 
-            display: block; 
+       .system-gif-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
             object-fit: cover;
         }
-        
-        .step-container {
+
+       .step-container {
             width: 92%; max-width: 500px; margin: 20px auto;
             background: rgba(22, 43, 54, 0.4); backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px); padding: 25px;
+            padding: 25px;
             border-radius: 20px; border: 1px solid rgba(37, 211, 102, 0.25);
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
-        .step-header { display: flex; justify-content: space-between; margin-bottom: 25px; position: relative; }
-        .step-dot {
+       .step-header { display: flex; justify-content: space-between; margin-bottom: 25px; position: relative; }
+       .step-dot {
             width: 35px; height: 35px; border-radius: 50%; background: #1a2a34;
             display: flex; justify-content: center; align-items: center;
             font-weight: bold; color: #aaa; border: 2px solid #2c5364; z-index: 2;
         }
-        .step-dot.active { background: #25d366; color: black; border-color: #25d366; box-shadow: 0 0 10px #25d366; }
-        
-        /* Input & Form Controls Styles with Bright Text and Bright Placeholders */
-        .form-control, .form-select {
-            background: #11222c; border: 1px solid #2c5364; color: #ffffff !important;
+       .step-dot.active { background: #25d366; color: black; border-color: #25d366; box-shadow: 0 0 10px #25d366; }
+
+       .form-control,.form-select {
+            background: #11222c; border: 1px solid #2c5364; color: #ffffff!important;
             padding: 12px; border-radius: 10px; font-size: 15px; font-weight: 500;
         }
-        .form-control:focus, .form-select:focus {
-            background: #11222c; border-color: #25d366; color: #ffffff !important; box-shadow: none;
+       .form-control:focus,.form-select:focus {
+            background: #11222c; border-color: #25d366; color: #ffffff!important; box-shadow: none;
         }
-        /* Custom Styling to brighten placeholder text */
-        .form-control::placeholder {
-            color: rgba(255, 255, 255, 0.65) !important;
+       .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.65)!important;
             opacity: 1;
         }
-        .form-control:-ms-input-placeholder {
-            color: rgba(255, 255, 255, 0.65) !important;
-        }
-        .form-control::-ms-input-placeholder {
-            color: rgba(255, 255, 255, 0.65) !important;
-        }
-        
+
         label { font-size: 13px; color: #25d366; margin-bottom: 6px; font-weight: 600; }
-        
-        /* Large 2-Column Grid Setup for Grid View Visibility */
-        .product-grid { 
-            display: flex; 
-            flex-wrap: wrap; 
-            gap: 12px; 
-            max-height: 380px; 
-            overflow-y: auto; 
-            padding: 8px; 
-            background: #11222c; 
-            border: 1px solid #2c5364; 
-            border-radius: 12px; 
-            margin-bottom: 15px; 
+
+       .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            max-height: 380px;
+            overflow-y: auto;
+            padding: 8px;
+            background: #11222c;
+            border: 1px solid #2c5364;
+            border-radius: 12px;
+            margin-bottom: 15px;
         }
-        .prod-card { 
-            flex: 0 0 calc(50% - 6px); 
-            background: #162b36; 
-            border: 1px solid #2c5364; 
-            border-radius: 12px; 
-            padding: 12px; 
-            text-align: center; 
-            cursor: pointer; 
-            transition: 0.2s; 
+       .prod-card {
+            flex: 0 0 calc(50% - 6px);
+            background: #162b36;
+            border: 1px solid #2c5364;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
         }
-        .prod-card img { 
-            width: 100%; 
-            height: auto; 
-            max-height: 85px; 
-            object-fit: contain; 
-            margin-bottom: 8px; 
+       .prod-card img {
+            width: 100%;
+            height: auto;
+            max-height: 85px;
+            object-fit: contain;
+            margin-bottom: 8px;
         }
-        .prod-card p { 
-            font-size: 12px; 
-            color: white; 
-            margin: 0; 
+       .prod-card p {
+            font-size: 12px;
+            color: white;
+            margin: 0;
             font-weight: 600;
             line-height: 1.4;
-            word-wrap: break-word;
         }
-        .prod-card.selected { border-color: #25d366; background: rgba(37, 211, 102, 0.1); box-shadow: 0 0 10px rgba(37, 211, 102, 0.4); }
+       .prod-card.selected { border-color: #25d366; background: rgba(37, 211, 102, 0.1); box-shadow: 0 0 10px rgba(37, 211, 102, 0.4); }
 
-        .btn-next, .btn-submit, .btn-download {
+       .btn-next,.btn-submit,.btn-download {
             background: linear-gradient(45deg, #25d366, #128c7e); color: white;
             border: none; padding: 14px; border-radius: 50px; font-family: 'Poppins', sans-serif;
             font-weight: 700; width: 100%; margin-top: 20px; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
         }
-        .btn-back {
+       .btn-back {
             background: transparent; border: 1px solid #2c5364; color: #aaa;
             padding: 14px; border-radius: 50px; width: 100%; margin-top: 10px; font-weight: 600;
         }
 
-        .receipt-card {
+       .receipt-card {
             background: #11222c; border: 2px dashed #25d366; border-radius: 15px; padding: 20px;
             font-family: monospace; color: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
-        .receipt-header { text-align: center; border-bottom: 1px dashed #2c5364; padding-bottom: 12px; margin-bottom: 12px; }
-        .receipt-title { font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 16px; color: #25d366; margin: 0; }
-        .receipt-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; }
+       .receipt-header { text-align: center; border-bottom: 1px dashed #2c5364; padding-bottom: 12px; margin-bottom: 12px; }
+       .receipt-title { font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 16px; color: #25d366; margin: 0; }
+       .receipt-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; }
 
-        .support-box {
+       .support-box {
             width: 92%; max-width: 500px; margin: 10px auto 30px auto;
             background: #162b36; border-radius: 15px; border: 1px solid #2c5364; padding: 20px;
         }
-        .support-title { font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 700; color: white; margin-bottom: 15px; text-align: center; }
-        .admin-card {
+       .support-title { font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 700; color: white; margin-bottom: 15px; text-align: center; }
+       .admin-card {
             display: flex; align-items: center; justify-content: space-between;
             background: #11222c; padding: 12px 15px; border-radius: 10px;
             margin-bottom: 10px; text-decoration: none; border: 1px solid transparent; transition: 0.3s;
         }
-        .admin-card:hover { border-color: #25d366; }
-        .admin-info { display: flex; align-items: center; gap: 12px; }
-        .admin-icon { width: 35px; height: 35px; background: #25d366; color: black; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; }
-        .admin-name { font-size: 14px; font-weight: 600; color: white; margin: 0; }
-        .admin-role { font-size: 11px; color: #888; margin: 0; }
-        .wa-chat-btn { background: rgba(37, 211, 102, 0.1); color: #25d366; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+       .admin-card:hover { border-color: #25d366; }
+       .admin-info { display: flex; align-items: center; gap: 12px; }
+       .admin-icon { width: 35px; height: 35px; background: #25d366; color: black; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; }
+       .admin-name { font-size: 14px; font-weight: 600; color: white; margin: 0; }
+       .admin-role { font-size: 11px; color: #888; margin: 0; }
+       .wa-chat-btn { background: rgba(37, 211, 102, 0.1); color: #25d366; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
 
         footer { padding: 15px; text-align: center; color: rgba(255,255,255,0.5); font-size: 12px; margin-top: auto; border-top: 1px solid #162b36; }
     </style>
@@ -222,9 +210,9 @@
             <div class="mb-3">
                 <label>Payment Method</label>
                 <select id="payMethod" class="form-select" required>
-                    <option value="" style="color: #000;">-- Choose Method --</option>
-                    <option value="Cash" style="color: #000;">Cash Payment</option>
-                    <option value="EasyBuy" style="color: #000;">EasyBuy (Installment)</option>
+                    <option value="">-- Choose Method --</option>
+                    <option value="Cash">Cash Payment</option>
+                    <option value="EasyBuy">EasyBuy (Installment)</option>
                 </select>
             </div>
             <button type="button" class="btn-next" onclick="goToStep(2)">Next Step <i class="fas fa-arrow-right"></i></button>
@@ -338,10 +326,10 @@
         { id: "max_tv24_fan", name: "HomePlus Max + 24″ HD TV + Pedestal Fan", img: "sunking-max-tv24-fan.png" },
         { id: "max_tv43", name: "HomePlus Max + 43″ HD TV", img: "sunking-max-tv43.png" },
         { id: "max_tv32", name: "HomePlus Max + 32″ HD TV", img: "sunking-max-tv32.png" },
-        { id: "inverter3300", name: "PowerHub 3300 solar inverter", img: "sunking-inverter3300.png" },
-        { id: "boom", name: "Sunking boom", img: "sunking-boom.png" },
+        { id: "inverter3300", name: "PowerHub 3300 Solar Inverter", img: "sunking-inverter3300.png" },
+        { id: "boom", name: "Sunking Boom", img: "sunking-boom.png" },
         { id: "powerplay", name: "PowerPlay Pro", img: "sunking-powerplay.png" },
-        { id: "freezer", name: "Sunking freezer", img: "sunking-freezer.png" },
+        { id: "freezer", name: "Sunking Freezer", img: "sunking-freezer.png" },
         { id: "itel_a80", name: "Itel A80", img: "phone-itel-a80.png" },
         { id: "itel_a06", name: "Itel A06", img: "phone-itel-a06.png" },
         { id: "samsung_a05", name: "Samsung A05", img: "phone-samsung-a05.png" },
