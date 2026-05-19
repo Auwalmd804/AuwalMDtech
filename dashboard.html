@@ -7,7 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@500;700;800&display=swap" rel="stylesheet">
-
     <style>
         body {
             background: #0f2027;
@@ -19,356 +18,333 @@
             overflow-x: hidden;
         }
 
-        #welcome-overlay {
-            position: fixed;
-            inset: 0;
-            background: radial-gradient(circle, #162b36 0%, #0f2027 100%);
-            z-index: 10000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            transition: opacity 0.8s ease-out;
-            padding: 15px;
+        /* Loader */
+        #page-loader {
+            position: fixed; inset: 0; background: #0f2027; z-index: 20000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.5s ease;
         }
-     .welcome-box {
-            background: rgba(22, 43, 54, 0.4);
-            backdrop-filter: blur(20px);
-            padding: 40px 30px;
-            border-radius: 24px;
-            border: 1px solid rgba(37, 211, 102, 0.35);
-            width: 100%;
-            max-width: 420px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            position: relative;
-        }
-     .welcome-logo {
-            width: 90px;
-            height: auto;
-            margin-bottom: 25px;
-            animation: pulseLogo 2s infinite;
-        }
-        @keyframes pulseLogo { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
-
-     .welcome-title {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 800;
-            color: #25d366;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            font-size: 1.5rem;
-        }
-     .welcome-text {
-            font-size: 14px;
-            line-height: 1.7;
-            color: #eceff1;
-            margin-bottom: 35px;
-        }
-
-     .continue-btn {
-            background: linear-gradient(45deg, #25d366, #128c7e);
-            color: white;
-            border: none;
-            padding: 16px 40px;
-            border-radius: 50px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 700;
-            font-size: 15px;
-            width: 100%;
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
-            cursor: pointer;
-        }
-     .continue-btn:active { transform: scale(0.96); }
-
-     .lang-switch {
+       .loader-spinner {
+            width: 100px; height: 100px; border: 4px solid rgba(37, 211, 102, 0.1);
+            border-top-color: #25d366; border-radius: 50%; animation: spin 1s infinite linear;
             position: absolute;
-            top: 15px;
-            right: 15px;
+        }
+       .loader-logo {
+            width: 65px; height: 65px; z-index: 2; border-radius: 12px; object-fit: cover;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Navbar */
+       .navbar { background: #162b36; border-bottom: 2px solid #25d366; }
+
+       .lang-switch {
             background: rgba(37, 211, 102, 0.2);
             border: 1px solid #25d366;
             color: #25d366;
-            padding: 6px 12px;
+            padding: 4px 10px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
         }
 
-     .waving-logo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #25d366; background: white; }
-     .offcanvas { background: #0f2027; }
-
-     .marquee-wrapper {
-            background: #25d366;
+        /* Main Banner */
+       .main-banner {
+            width: 100%;
+            max-width: 500px;
+            margin: 15px auto;
+            border-radius: 15px;
             overflow: hidden;
-            white-space: nowrap;
-            padding: 8px 0;
+            cursor: pointer;
+            border: 2px solid #25d366;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
         }
-     .marquee-content {
-            display: inline-block;
+       .main-banner img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+       .banner-overlay {
+            background: rgba(22, 43, 54, 0.85);
+            padding: 15px;
+            text-align: center;
+            border-top: 2px solid #25d366;
+        }
+       .banner-overlay h2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 18px;
+            color: #25d366;
+            margin: 0 0 5px 0;
+        }
+       .banner-overlay p {
+            font-size: 13px;
+            margin: 0;
+            color: #fff;
+        }
+       .banner-overlay span {
+            color: #25d366;
+            font-weight: 700;
+        }
+
+        /* Marquee */
+       .marquee-bar {
+            background: #25d366;
             color: #000;
             font-weight: 700;
-            animation: scroll-left 15s linear infinite;
-        }
-        @keyframes scroll-left {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
+            padding: 6px 0;
+            font-size: 13px;
         }
 
-     .top-banner-wrapper { width: 92%; max-width: 500px; margin: 12px auto; position: relative; }
-     .top-banner {
-            background: #162b36; border-radius: 15px 15px 0 0;
-            border: 2px solid #25d366; border-bottom: none;
-            overflow: hidden; cursor: pointer; position: relative;
-        }
-     .top-banner img { width: 100%; height: auto; display: block; }
-
-     .active-shake { animation: shakeBanner 0.8s infinite ease-in-out; }
-        @keyframes shakeBanner {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-3px) rotate(-1deg); }
-            75% { transform: translateX(3px) rotate(1deg); }
-        }
-
-     .pointing-hand {
-            position: absolute;
-            right: 20px;
-            bottom: 15px;
-            font-size: 32px;
-            color: #25d366;
-            animation: pointHand 1.5s infinite;
-        }
-        @keyframes pointHand {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(15px, 0) scale(1.1); }
-        }
-
-     .login-cta {
+        /* Hot Deal */
+       .hot-deal {
+            width: 92%;
+            max-width: 500px;
+            margin: 20px auto 10px auto;
             background: linear-gradient(45deg, #25d366, #128c7e);
-            color: white; text-align: center; padding: 14px;
-            font-weight: bold; text-decoration: none; display: block;
-            border-radius: 0 0 15px 15px; font-size: 16px; border: 2px solid #25d366;
-            animation: pulse-glow 2s infinite;
-        }
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 0 0px rgba(37, 211, 102, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
-            100% { box-shadow: 0 0 0 0px rgba(37, 211, 102, 0); }
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
         }
 
-     .service-card {
-            background: #1a2a34; border-radius: 15px; padding: 8px; text-align: center;
-            border: 1px solid #2c5364; height: 105px; display: flex;
-            flex-direction: column; justify-content: center; align-items: center;
+        /* Services Grid */
+       .services-grid {
+            width: 92%;
+            max-width: 500px;
+            margin: 15px auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
         }
-     .service-card img { height: 42px; width: auto; margin-bottom: 6px; }
-     .service-card h6 { font-size: 0.65rem; color: #fff; margin: 0; }
-
-     .wa-btn {
-            position: fixed; bottom: 80px; right: 20px; background: #25d366;
-            color: white; width: 50px; height: 50px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            z-index: 1000; text-decoration: none; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+       .service-card {
+            flex: 0 0 calc(50% - 6px);
+            background: rgba(22, 43, 54, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(37, 211, 102, 0.25);
+            border-radius: 15px;
+            padding: 18px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+       .service-card:hover {
+            border-color: #25d366;
+            transform: translateY(-3px);
+        }
+       .service-icon {
+            font-size: 28px;
+            color: #25d366;
+            margin-bottom: 8px;
+        }
+       .service-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+            margin: 0;
         }
 
-        footer { padding: 12px; text-align: center; color: rgba(255,255,255,0.6); font-size: 12px; margin-top: auto; }
+        /* Info Box */
+       .info-box {
+            width: 92%;
+            max-width: 500px;
+            margin: 10px auto 30px auto;
+            background: #162b36;
+            border-radius: 15px;
+            border: 1px solid #2c5364;
+            padding: 15px;
+            font-size: 12px;
+            color: #aaa;
+            text-align: center;
+        }
+       .info-box strong { color: #25d366; }
+
+        /* Toast */
+        #toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #25d366;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 13px;
+            z-index: 30000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        footer {
+            padding: 15px;
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 12px;
+            margin-top: auto;
+            border-top: 1px solid #162b36;
+        }
     </style>
 </head>
 <body>
 
-<!-- Welcome Overlay -->
-<div id="welcome-overlay">
-    <button class="lang-switch" onclick="toggleLang()">HA/EN</button>
-    <div class="welcome-box">
-        <img src="logo.png" class="welcome-logo" alt="RetayaX Logo">
-        <h3 class="welcome-title" id="welcomeTitle">WELCOME TO RETAYAX</h3>
-        <div class="welcome-text" id="welcomeText">
-            RetayaX is beyond just a data and airtime hub. We are a premier digital ecosystem dedicated to empowering your lifestyle with seamless connectivity and professional business solutions.
-        </div>
-        <button class="continue-btn" id="continueBtn" onclick="enterDashboard()">CONTINUE TO DASHBOARD</button>
-    </div>
+<div id="page-loader">
+    <div class="loader-spinner"></div>
+    <img src="logo.png" class="loader-logo" alt="RetayaX">
 </div>
 
-<!-- Audio element -->
-<audio id="welcomeVoice"></audio>
-
-<!-- Navbar -->
-<nav class="navbar navbar-dark bg-dark p-3 shadow">
-    <div class="container-fluid d-flex justify-content-between align-items-center w-100">
-        <img src="logo.png" class="waving-logo" alt="Logo">
-        <span class="text-white fw-bold" id="navTitle">Welcome to RetayaX</span>
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<nav class="navbar navbar-dark p-3 shadow-sm">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <span class="text-white fw-bold" style="font-family: 'Poppins', sans-serif; font-size: 20px;">RetayaX</span>
+        <button class="lang-switch" id="langBtn" onclick="toggleLang()">HA/EN</button>
     </div>
 </nav>
 
-<!-- Menu -->
-<div class="offcanvas offcanvas-end" id="menu">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title text-white" id="menuTitle">RetayaX Menu</h5>
-        <button class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
-    </div>
-    <div class="offcanvas-body">
-        <a href="transactions.html" class="btn btn-outline-success w-100 mb-3 py-2" id="menuTrans">Transaction History</a>
-        <a href="https://wa.me/2348164712102" class="btn btn-success w-100 mb-3 py-2" id="menuSupport"><i class="fab fa-whatsapp"></i> Contact Support</a>
+<div class="main-banner" onclick="enterDashboard()">
+    <img src="banner.jpg" alt="RetayaX Banner" onerror="this.src='logo.png'">
+    <div class="banner-overlay">
+        <h2 id="welcomeText">Welcome to RetayaX</h2>
+        <p><span id="cta1">Tap here to</span> <span id="cta2">Login/Register</span></p>
     </div>
 </div>
 
-<!-- Marquee -->
-<div class="marquee-wrapper">
-    <div class="marquee-content" id="marqueeText">
-        CEO Auwal MD and Shayibu Ali Baba | RetayaX Active 24/7
+<marquee class="marquee-bar" id="marqueeText">RetayaX – Your Trusted Gateway for MTN & Airtel Data | Sunking Solar & EasyBuy Phones on Installments | Airtime & Data Calculator</marquee>
+
+<div class="hot-deal">
+    <i class="fas fa-fire"></i> <span id="hotDealText">Hot Deal Today</span>
+</div>
+
+<div class="services-grid">
+    <div class="service-card" onclick="location.href='sunking.html'">
+        <div class="service-icon"><i class="fas fa-solar-panel"></i></div>
+        <p class="service-name" id="easyBuyText">Sunking / EasyBuy</p>
+    </div>
+    <div class="service-card" onclick="location.href='calculator.html'">
+        <div class="service-icon"><i class="fas fa-calculator"></i></div>
+        <p class="service-name" id="calculatorText">Data & Airtime Calculator</p>
+    </div>
+    <div class="service-card" onclick="location.href='airtime-cash.html'">
+        <div class="service-icon"><i class="fas fa-exchange-alt"></i></div>
+        <p class="service-name" id="airtimeText">Airtime to Cash</p>
+    </div>
+    <div class="service-card" onclick="location.href='support.html'">
+        <div class="service-icon"><i class="fas fa-headset"></i></div>
+        <p class="service-name">Support</p>
     </div>
 </div>
 
-<!-- Banner -->
-<div class="top-banner-wrapper">
-    <div class="top-banner" id="mainBanner" onclick="window.location.href='https://retayax.quark.ng'">
-        <img src="all-in-one.png" alt="All-in-one Digital Service">
-        <span id="handIcon" class="pointing-hand">👉</span>
-    </div>
-    <a href="https://retayax.quark.ng" class="login-cta" id="loginBtn">
-        <i class="fas fa-sign-in-alt"></i> LOGIN / REGISTER TO ACCOUNT
-    </a>
+<div class="info-box">
+    <i class="fas fa-map-marker-alt"></i> <span id="kanoText">Kano, Nigeria</span> |
+    <i class="fas fa-clock"></i> <span id="timezoneText">WAT</span>
+    <br><br>
+    <strong>Disclaimer:</strong> <span id="disclaimerText">MTN, Airtel, Sun King & EasyBuy are trademarks of their respective owners.</span>
+    <span id="disclaimerNote">This app is not affiliated with or endorsed by them. All services are provided independently.</span>
 </div>
 
-<!-- Services Grid -->
-<div class="container-fluid mt-2">
-    <div class="row g-2" id="grid"></div>
-</div>
+<footer>
+    &copy; 2026 RetayaX - <span id="rightsText">All rights reserved.</span>
+</footer>
 
-<!-- WhatsApp Button -->
-<a href="https://wa.me/2348164712102" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i></a>
+<div id="toast"></div>
 
-<!-- Footer -->
-<footer id="footerText">&copy; 2026 RetayaX - All Rights Reserved</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     let currentLang = 'en';
 
-    // REPLACE THESE WITH REAL AUDIO IDS WHEN I GENERATE THEM
-    const AUDIO_IDS = {
-        ha: "HAUSA_AUDIO_ID",
-        en: "ENGLISH_AUDIO_ID"
+    // Audio URLs
+    const AUDIO_FILES = {
+        ha: "https://audio.jukehost.co.uk/C986U9Fp7H4eY8w6p7f2a7g8h1i2j3k4/hausa-welcome.mp3",
+        en: "https://audio.jukehost.co.uk/A382v1Xp9Q5b6w2k4f8e5d6c7b8a9z1y/english-welcome.mp3"
     };
 
     const translations = {
         en: {
-            welcomeTitle: "WELCOME TO RETAYAX",
-            welcomeText: "RetayaX is beyond just a data and airtime hub. We are a premier digital ecosystem dedicated to empowering your lifestyle with seamless connectivity and professional business solutions.",
-            continueBtn: "CONTINUE TO DASHBOARD",
-            navTitle: "Welcome to RetayaX",
-            menuTitle: "RetayaX Menu",
-            menuTrans: "Transaction History",
-            menuSupport: "Contact Support",
-            marqueeText: "CEO Auwal MD and Shayibu Ali Baba | RetayaX Active 24/7",
-            loginBtn: '<i class="fas fa-sign-in-alt"></i> LOGIN / REGISTER TO ACCOUNT',
-            footerText: "&copy; 2026 RetayaX - All Rights Reserved",
-            services: [
-                {name: "Sunking", img: "sunking.png"},
-                {name: "NIN Device", img: "nin-device.png"},
-                {name: "Airtel Reg", img: "airtel-reg.png"},
-                {name: "BVN Registration", img: "bvn-reg.png"},
-                {name: "WhatsApp Hub", img: "whatsapp-hub.png"},
-                {name: "Data Sim", img: "data-sim.png"},
-                {name: "Wifi/Router", img: "router-wifi.png"},
-                {name: "Product Shop", img: "shop-all.png"},
-                {name: "SIM Swap", img: "sim-swap.png"},
-                {name: "Graphic Design", img: "graphic-design.png"},
-                {name: "Service Match", img: "service-match.png"}
-            ]
+            welcome: "Welcome to RetayaX",
+            cta1: "Tap here to",
+            cta2: "Login/Register",
+            marquee: "RetayaX – Your Trusted Gateway for MTN & Airtel Data | Sunking Solar & EasyBuy Phones on Installments | Airtime & Data Calculator",
+            hotDeal: "Hot Deal Today",
+            kano: "Kano, Nigeria",
+            timezone: "WAT",
+            easyBuy: "Sunking / EasyBuy",
+            calculator: "Data & Airtime Calculator",
+            airtime: "Airtime to Cash",
+            disclaimer: "MTN, Airtel, Sun King & EasyBuy are trademarks of their respective owners.",
+            disclaimerNote: "This app is not affiliated with or endorsed by them. All services are provided independently.",
+            rights: "All rights reserved.",
+            toastLang: "Language switched to English",
+            toastBanner: "Please use the Login button or register first"
         },
         ha: {
-            welcomeTitle: "BARKA DA ZUWA RETAYAX",
-            welcomeText: "RetayaX ba kawai wurin siyan data da airtime ba ne. Mu ne tsarin dijital da ke sauƙaƙa rayuwarka da kasuwancinka da mafita na ƙwararru.",
-            continueBtn: "CI GABA ZUWA DASHBOARD",
-            navTitle: "Maraba zuwa RetayaX",
-            menuTitle: "Menu na RetayaX",
-            menuTrans: "Tarihin Ma'amaloli",
-            menuSupport: "Tuntubi Tallafi",
-            marqueeText: "Shugaba Auwal MD da Shayibu Ali Baba | RetayaX tana aiki 24/7",
-            loginBtn: '<i class="fas fa-sign-in-alt"></i> SHIGA KO RAJISTA ASUSU',
-            footerText: "&copy; 2026 RetayaX - Duk Haƙin Mallaka An Ajiye",
-            services: [
-                {name: "Sunking", img: "sunking.png"},
-                {name: "Na'urar NIN", img: "nin-device.png"},
-                {name: "Rijistar Airtel", img: "airtel-reg.png"},
-                {name: "Rijistar BVN", img: "bvn-reg.png"},
-                {name: "HUB na WhatsApp", img: "whatsapp-hub.png"},
-                {name: "SIM na Data", img: "data-sim.png"},
-                {name: "Wifi/Router", img: "router-wifi.png"},
-                {name: "Shagon Kaya", img: "shop-all.png"},
-                {name: "Sauya SIM", img: "sim-swap.png"},
-                {name: "Zane-zane", img: "graphic-design.png"},
-                {name: "Daidaita Sabis", img: "service-match.png"}
-            ]
+            welcome: "Barka da zuwa RetayaX",
+            cta1: "Danna nan don",
+            cta2: "Shiga ko Rijista",
+            marquee: "RetayaX – Amintaccen Gidan Sayen Data na MTN & Airtel | Sunking Solar & Wayoyin EasyBuy Kashi-kashi | Kalkuletan Airtime & Data",
+            hotDeal: "Babban Rangwame na Yau",
+            kano: "Kano, Najeriya",
+            timezone: "WAT",
+            easyBuy: "Sunking / EasyBuy",
+            calculator: "Kalkuletan Data & Airtime",
+            airtime: "Mayar da Airtime Kudi",
+            disclaimer: "MTN, Airtel, Sun King & EasyBuy alamun kasuwanci ne na masu su.",
+            disclaimerNote: "Wannan app din ba shi da alaka ko amincewa daga gare su. Duk sabis ɗin ana bayar da su ne da kansu.",
+            rights: "Duk haƙin mallaka an ajiye.",
+            toastLang: "An sauya harshe zuwa Hausa",
+            toastBanner: "Don Allah kayi amfani da maballin Login ko kayi rajista da farko"
         }
     };
+
+    function updateContent() {
+        const t = translations[currentLang];
+        document.getElementById('welcomeText').innerText = t.welcome;
+        document.getElementById('cta1').innerText = t.cta1;
+        document.getElementById('cta2').innerText = t.cta2;
+        document.getElementById('marqueeText').innerText = t.marquee;
+        document.getElementById('hotDealText').innerText = t.hotDeal;
+        document.getElementById('kanoText').innerText = t.kano;
+        document.getElementById('timezoneText').innerText = t.timezone;
+        document.getElementById('easyBuyText').innerText = t.easyBuy;
+        document.getElementById('calculatorText').innerText = t.calculator;
+        document.getElementById('airtimeText').innerText = t.airtime;
+        document.getElementById('disclaimerText').innerText = t.disclaimer;
+        document.getElementById('disclaimerNote').innerText = t.disclaimerNote;
+        document.getElementById('rightsText').innerText = t.rights;
+        document.getElementById('langBtn').innerText = currentLang === 'en'? 'HA/EN' : 'EN/HA';
+    }
 
     function toggleLang() {
         currentLang = currentLang === 'en'? 'ha' : 'en';
         document.documentElement.lang = currentLang;
         updateContent();
+        showToast(translations[currentLang].toastLang);
     }
 
-    function updateContent() {
-        const t = translations[currentLang];
-        document.getElementById('welcomeTitle').innerText = t.welcomeTitle;
-        document.getElementById('welcomeText').innerText = t.welcomeText;
-        document.getElementById('continueBtn').innerText = t.continueBtn;
-        document.getElementById('navTitle').innerText = t.navTitle;
-        document.getElementById('menuTitle').innerText = t.menuTitle;
-        document.getElementById('menuTrans').innerText = t.menuTrans;
-        document.getElementById('menuSupport').innerHTML = '<i class="fab fa-whatsapp"></i> ' + t.menuSupport;
-        document.getElementById('marqueeText').innerText = t.marqueeText;
-        document.getElementById('loginBtn').innerHTML = t.loginBtn;
-        document.getElementById('footerText').innerHTML = t.footerText;
-        loadServices(t.services);
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.innerText = msg;
+        t.style.opacity = 1;
+        setTimeout(() => { t.style.opacity = 0; }, 3000);
     }
 
     function enterDashboard() {
-        // Fade out welcome screen
-        const overlay = document.getElementById('welcome-overlay');
-        overlay.style.opacity = '0';
-        setTimeout(() => { overlay.style.display = 'none'; }, 800);
+        // Play voice based on current language
+        const voice = new Audio(AUDIO_FILES[currentLang]);
+        voice.play().catch(e => console.log("Audio play failed:", e));
 
-        // Play voice immediately on click - browsers allow this
-        const voice = document.getElementById('welcomeVoice');
-        const audioId = AUDIO_IDS[currentLang];
-
-        if (audioId && audioId!== "HAUSA_AUDIO_ID" && audioId!== "ENGLISH_AUDIO_ID") {
-            voice.src = `audio/${audioId}.mp3`;
-            voice.play().catch(e => console.log("Audio play failed: ", e));
-        }
-
-        // Shake banner
-        const banner = document.getElementById('mainBanner');
-        banner.classList.add('active-shake');
-        setTimeout(() => { banner.classList.remove('active-shake'); }, 15000);
+        showToast(translations[currentLang].toastBanner);
     }
 
-    function loadServices(services) {
-        const grid = document.getElementById('grid');
-        grid.innerHTML = '';
-        services.forEach(s => {
-            let fileLink = s.name.toLowerCase().replace(/ /g,'').replace('/','').replace('na\'urar','naurar');
-            grid.innerHTML += `
-                <div class="col-4">
-                    <div class="service-card" onclick="location.href='${fileLink}.html'">
-                        <img src="${s.img}" alt="${s.name}">
-                        <h6 class="text-truncate">${s.name}</h6>
-                    </div>
-                </div>`;
-        });
-    }
-
-    loadServices(translations.en.services);
-
-    setTimeout(() => {
-        const handIcon = document.getElementById('handIcon');
-        if (handIcon) handIcon.style.display = 'none';
-    }, 30000);
+    window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            const loader = document.getElementById('page-loader');
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.display = 'none', 500);
+        }, 3000);
+        updateContent();
+    });
 </script>
 </body>
 </html>
