@@ -98,17 +98,42 @@
         .waving-logo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #25d366; background: white; }
         .offcanvas { background: #0f2027; }
 
+        /* GYARARREN MARQUEE WRAPPER DOMIN SIFIKA DA RUBUTU */
         .marquee-wrapper {
             background: #25d366;
+            display: flex;
+            align-items: center;
+            padding: 6px 10px;
+            gap: 10px;
+            overflow: hidden;
+        }
+        .speaker-btn {
+            background: #000;
+            color: #25d366;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            flex-shrink: 0;
+        }
+        .speaker-btn:active { transform: scale(0.9); }
+        .marquee-container {
             overflow: hidden;
             white-space: nowrap;
-            padding: 8px 0;
+            width: 100%;
         }
         .marquee-content {
             display: inline-block;
             color: #000;
             font-weight: 700;
-            animation: scroll-left 15s linear infinite;
+            animation: scroll-left 22s linear infinite;
         }
         @keyframes scroll-left {
             0% { transform: translateX(100%); }
@@ -212,8 +237,11 @@
 </div>
 
 <div class="marquee-wrapper">
-    <div class="marquee-content" id="marqueeText">
-        CEO Auwal MD and Shayibu Ali Baba | RetayaX Active 24/7
+    <button class="speaker-btn" onclick="speakMarqueeText()" title="Listen"><i class="fas fa-volume-up"></i></button>
+    <div class="marquee-container">
+        <div class="marquee-content" id="marqueeText">
+            Welcome to RetayaX: Recover NIN with Face ID, Retrieve lost BVN, Buy Data & Airtime 24/7 | Ziyarci RetayaX Domin Cire NIN da Iya Fuska, Nemo BVN, Siyan Data da Airtime Cikin Sauki 24/7
+        </div>
     </div>
 </div>
 
@@ -239,11 +267,13 @@
 <script>
     let currentLang = 'en';
 
-    // AMFANI DA SEPARATE AUDIO CHANNELS - CORRECT GITHUB AUDIO DATA LINKS
     const AUDIO_PATHS = {
         ha: "https://raw.githubusercontent.com/Auwalmd804/AuwalMDtech/f22ed23f1de31a4dee094f963472f7c8ddbcc656/welcome.mp3",
         en: "https://raw.githubusercontent.com/Auwalmd804/AuwalMDtech/f22ed23f1de31a4dee094f963472f7c8ddbcc656/welcome-en.mp3"
     };
+
+    // PROFESSIONAL RECONSTRUCTED COMBINED MULTILINGUAL MARQUEE TEXT
+    const MARQUEE_GLOBAL_TEXT = "Welcome to RetayaX: Recover NIN with Face ID, Retrieve lost BVN, Buy Data & Airtime 24/7 | Ziyarci RetayaX Domin Cire NIN da Iya Fuska, Nemo BVN, Siyan Data da Airtime Cikin Sauki 24/7";
 
     const translations = {
         en: {
@@ -254,7 +284,7 @@
             menuTitle: "RetayaX Menu",
             menuTrans: "Transaction History",
             menuSupport: "Contact Support",
-            marqueeText: "CEO Auwal MD and Shayibu Ali Baba | RetayaX Active 24/7",
+            marqueeText: MARQUEE_GLOBAL_TEXT,
             loginBtn: '<i class="fas fa-sign-in-alt"></i> LOGIN / REGISTER TO ACCOUNT',
             footerText: "&copy; 2026 RetayaX - All Rights Reserved",
             services: [
@@ -279,7 +309,7 @@
             menuTitle: "Menu na RetayaX",
             menuTrans: "Tarihin Ma'amaloli",
             menuSupport: "Tuntubi Tallafi",
-            marqueeText: "Shugaba Auwal MD da Shayibu Ali Baba | RetayaX tana aiki 24/7",
+            marqueeText: MARQUEE_GLOBAL_TEXT,
             loginBtn: '<i class="fas fa-sign-in-alt"></i> SHIGA KO RAJISTA ASUSU',
             footerText: "&copy; 2026 RetayaX - Duk Haƙin Mallaka An Ajiye",
             services: [
@@ -319,21 +349,45 @@
         loadServices(t.services);
     }
 
-    // VOEOVER AUDIO LAUNCH ENGINE CONTROLLER
     function enterDashboard() {
         const overlay = document.getElementById('welcome-overlay');
         overlay.style.opacity = '0';
         setTimeout(() => { overlay.style.display = 'none'; }, 800);
 
-        // STREAM SELECTED DYNAMIC AUDIO MP3 CHANNELS CORRECTLY FROM GITHUB STORAGE
         const voice = document.getElementById('welcomeVoice');
         voice.src = AUDIO_PATHS[currentLang];
-        voice.load(); // Force the browser to read the newly loaded path
-        voice.play().catch(e => console.log("Audio streaming was interrupted by client setup: ", e));
+        voice.load();
+        voice.play().catch(e => console.log("Audio play blocked: ", e));
 
         const banner = document.getElementById('mainBanner');
         banner.classList.add('active-shake');
         setTimeout(() => { banner.classList.remove('active-shake'); }, 15000);
+    }
+
+    // INTERACTIVE LIVE NATIVE TEXT-TO-SPEECH CONTROLLER FUNCTION
+    function speakMarqueeText() {
+        if ('speechSynthesis' in window) {
+            // Cancel any ongoing speech to avoid overlaps
+            window.speechSynthesis.cancel();
+
+            let textToSpeak = "";
+            let speechUtterance = new SpeechSynthesisUtterance();
+
+            // Segment reading profiles based on active layout language view
+            if (currentLang === 'en') {
+                textToSpeak = "Welcome to RetayaX. Recover NIN with Face I D, Retrieve lost BVN, Buy Data and Airtime twenty-four seven.";
+                speechUtterance.lang = 'en-US';
+            } else {
+                textToSpeak = "Ziyarci RetayaX Domin Cire N I N da Iya Fuska, Nemo B V N, Siyan Data da Airtime Cikin Sauki kowane lokaci.";
+                speechUtterance.lang = 'ha-NG'; // Fallback handles gracefully across native device architectures
+            }
+
+            speechUtterance.text = textToSpeak;
+            speechUtterance.rate = 0.95; // Slightly slower layout cadence for extreme auditory clarity
+            window.speechSynthesis.speak(speechUtterance);
+        } else {
+            alert("Yi haƙuri, na'urarku ba ta goyi bayan muryar sifikar gidan yanar gizo ba.");
+        }
     }
 
     function loadServices(services) {
