@@ -184,7 +184,8 @@
             border: 1px solid #2c5364; height: 105px; display: flex;
             flex-direction: column; justify-content: center; align-items: center;
         }
-        .service-card img { height: 42px; width: auto; margin-bottom: 6px; }
+        .service-card img, .service-card i { height: 42px; width: auto; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; }
+        .service-card i { font-size: 36px; color: #25d366; height: auto; }
         .service-card h6 { font-size: 0.65rem; color: #fff; margin: 0; }
 
         .wa-btn {
@@ -285,17 +286,18 @@
             loginBtn: '<i class="fas fa-sign-in-alt"></i> LOGIN / REGISTER TO ACCOUNT',
             footerText: "&copy; 2026 RetayaX - All Rights Reserved",
             services: [
-                {name: "Sunking", img: "sunking.png"},
-                {name: "NIN Device", img: "nin-device.png"},
-                {name: "Airtel Reg", img: "airtel-reg.png"},
-                {name: "BVN Registration", img: "bvn-reg.png"},
-                {name: "WhatsApp Hub", img: "whatsapp-hub.png"},
-                {name: "Data Sim", img: "data-sim.png"},
-                {name: "Wifi/Router", img: "router-wifi.png"},
-                {name: "Product Shop", img: "shop-all.png"},
-                {name: "SIM Swap", img: "sim-swap.png"},
-                {name: "Graphic Design", img: "graphic-design.png"},
-                {name: "Service Match", img: "service-match.png"}
+                {name: "Sunking", img: "sunking.png", type: "img"},
+                {name: "NIN Device", img: "nin-device.png", type: "img"},
+                {name: "Airtel Reg", img: "airtel-reg.png", type: "img"},
+                {name: "BVN Registration", img: "bvn-reg.png", type: "img"},
+                {name: "WhatsApp Hub", img: "whatsapp-hub.png", type: "img"},
+                {name: "Data Sim", img: "data-sim.png", type: "img"},
+                {name: "Wifi/Router", img: "router-wifi.png", type: "img"},
+                {name: "Product Shop", img: "shop-all.png", type: "img"},
+                {name: "SIM Swap", img: "sim-swap.png", type: "img"},
+                {name: "Graphic Design", img: "graphic-design.png", type: "img"},
+                {name: "Service Match", img: "service-match.png", type: "img"},
+                {name: "RetayaX AI", img: "fas fa-robot", type: "icon", link: "retayax-ai.html"}
             ]
         },
         ha: {
@@ -310,17 +312,18 @@
             loginBtn: '<i class="fas fa-sign-in-alt"></i> SHIGA KO RAJISTA ASUSU',
             footerText: "&copy; 2026 RetayaX - Duk Haƙin Mallaka An Ajiye",
             services: [
-                {name: "Sunking", img: "sunking.png"},
-                {name: "Na'urar NIN", img: "nin-device.png"},
-                {name: "Rijistar Airtel", img: "airtel-reg.png"},
-                {name: "Rijistar BVN", img: "bvn-reg.png"},
-                {name: "HUB na WhatsApp", img: "whatsapp-hub.png"},
-                {name: "SIM na Data", img: "data-sim.png"},
-                {name: "Wifi/Router", img: "router-wifi.png"},
-                {name: "Shagon Kaya", img: "shop-all.png"},
-                {name: "Sauya SIM", img: "sim-swap.png"},
-                {name: "Zane-zane", img: "graphic-design.png"},
-                {name: "Daidaita Sabis", img: "service-match.png"}
+                {name: "Sunking", img: "sunking.png", type: "img"},
+                {name: "Na'urar NIN", img: "nin-device.png", type: "img"},
+                {name: "Rijistar Airtel", img: "airtel-reg.png", type: "img"},
+                {name: "Rijistar BVN", img: "bvn-reg.png", type: "img"},
+                {name: "HUB na WhatsApp", img: "whatsapp-hub.png", type: "img"},
+                {name: "SIM na Data", img: "data-sim.png", type: "img"},
+                {name: "Wifi/Router", img: "router-wifi.png", type: "img"},
+                {name: "Shagon Kaya", img: "shop-all.png", type: "img"},
+                {name: "Sauya SIM", img: "sim-swap.png", type: "img"},
+                {name: "Zane-zane", img: "graphic-design.png", type: "img"},
+                {name: "Daidaita Sabis", img: "service-match.png", type: "img"},
+                {name: "RetayaX AI", img: "fas fa-robot", type: "icon", link: "retayax-ai.html"}
             ]
         }
     };
@@ -388,11 +391,13 @@
         const grid = document.getElementById('grid');
         grid.innerHTML = '';
         services.forEach(s => {
-            let fileLink = s.name.toLowerCase().replace(/ /g,'').replace('/','').replace('na\'urar','naurar');
+            let fileLink = s.link ? s.link : s.name.toLowerCase().replace(/ /g,'').replace('/','').replace('na\'urar','naurar') + '.html';
+            let mediaHtml = s.type === 'icon' ? `<i class="${s.img}"></i>` : `<img src="${s.img}" alt="${s.name}">`;
+            
             grid.innerHTML += `
                 <div class="col-4">
-                    <div class="service-card" onclick="location.href='${fileLink}.html'">
-                        <img src="${s.img}" alt="${s.name}">
+                    <div class="service-card" onclick="location.href='${fileLink}'">
+                        ${mediaHtml}
                         <h6 class="text-truncate">${s.name}</h6>
                     </div>
                 </div>`;
