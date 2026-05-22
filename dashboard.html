@@ -98,7 +98,6 @@
         .waving-logo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #25d366; background: white; }
         .offcanvas { background: #0f2027; }
 
-        /* GYARARREN MARQUEE WRAPPER DOMIN SIFIKA DA RUBUTU */
         .marquee-wrapper {
             background: #25d366;
             display: flex;
@@ -124,20 +123,19 @@
             flex-shrink: 0;
         }
         .speaker-btn:active { transform: scale(0.9); }
+        
         .marquee-container {
             overflow: hidden;
             white-space: nowrap;
             width: 100%;
+            display: flex;
+            align-items: center;
         }
-        .marquee-content {
-            display: inline-block;
+        
+        marquee {
             color: #000;
             font-weight: 700;
-            animation: scroll-left 22s linear infinite;
-        }
-        @keyframes scroll-left {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
+            font-size: 15px;
         }
 
         .top-banner-wrapper { width: 92%; max-width: 500px; margin: 12px auto; position: relative; }
@@ -239,9 +237,9 @@
 <div class="marquee-wrapper">
     <button class="speaker-btn" onclick="speakMarqueeText()" title="Listen"><i class="fas fa-volume-up"></i></button>
     <div class="marquee-container">
-        <div class="marquee-content" id="marqueeText">
+        <marquee behavior="scroll" direction="left" scrollamount="6" id="marqueeText">
             Welcome to RetayaX: Recover NIN with Face ID, Retrieve lost BVN, Buy Data & Airtime 24/7 | Ziyarci RetayaX Domin Cire NIN da Iya Fuska, Nemo BVN, Siyan Data da Airtime Cikin Sauki 24/7
-        </div>
+        </marquee>
     </div>
 </div>
 
@@ -272,7 +270,6 @@
         en: "https://raw.githubusercontent.com/Auwalmd804/AuwalMDtech/f22ed23f1de31a4dee094f963472f7c8ddbcc656/welcome-en.mp3"
     };
 
-    // PROFESSIONAL RECONSTRUCTED COMBINED MULTILINGUAL MARQUEE TEXT
     const MARQUEE_GLOBAL_TEXT = "Welcome to RetayaX: Recover NIN with Face ID, Retrieve lost BVN, Buy Data & Airtime 24/7 | Ziyarci RetayaX Domin Cire NIN da Iya Fuska, Nemo BVN, Siyan Data da Airtime Cikin Sauki 24/7";
 
     const translations = {
@@ -364,26 +361,23 @@
         setTimeout(() => { banner.classList.remove('active-shake'); }, 15000);
     }
 
-    // INTERACTIVE LIVE NATIVE TEXT-TO-SPEECH CONTROLLER FUNCTION
     function speakMarqueeText() {
         if ('speechSynthesis' in window) {
-            // Cancel any ongoing speech to avoid overlaps
             window.speechSynthesis.cancel();
 
             let textToSpeak = "";
             let speechUtterance = new SpeechSynthesisUtterance();
 
-            // Segment reading profiles based on active layout language view
             if (currentLang === 'en') {
                 textToSpeak = "Welcome to RetayaX. Recover NIN with Face I D, Retrieve lost BVN, Buy Data and Airtime twenty-four seven.";
                 speechUtterance.lang = 'en-US';
             } else {
                 textToSpeak = "Ziyarci RetayaX Domin Cire N I N da Iya Fuska, Nemo B V N, Siyan Data da Airtime Cikin Sauki kowane lokaci.";
-                speechUtterance.lang = 'ha-NG'; // Fallback handles gracefully across native device architectures
+                speechUtterance.lang = 'ha-NG';
             }
 
             speechUtterance.text = textToSpeak;
-            speechUtterance.rate = 0.95; // Slightly slower layout cadence for extreme auditory clarity
+            speechUtterance.rate = 0.95;
             window.speechSynthesis.speak(speechUtterance);
         } else {
             alert("Yi haƙuri, na'urarku ba ta goyi bayan muryar sifikar gidan yanar gizo ba.");
