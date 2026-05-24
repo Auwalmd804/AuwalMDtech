@@ -175,12 +175,12 @@
 
         .chat-input-area {
             background: #162b36;
-            padding: 12px 15px;
+            padding: 15px;
             border-top: 1px solid rgba(255,255,255,0.05);
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
-            padding-bottom: calc(12px + env(safe-area-inset-bottom));
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
         }
 
         .chat-input {
@@ -202,13 +202,13 @@
             background: #25d366;
             color: black;
             border: none;
-            width: 44px;
-            height: 44px;
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 18px;
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);
             flex-shrink: 0;
@@ -251,9 +251,18 @@
     <button class="send-btn" id="sendBtn"><i class="fas fa-paper-plane"></i></button>
 </div>
 
+<script type="importmap">
+    {
+      "imports": {
+        "@google/generative-ai": "https://esm.run/@google/generative-ai"
+      }
+    }
+</script>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { GoogleGenerativeAI } from "@google/generative-ai";
 
     const firebaseConfig = {
         apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
@@ -269,7 +278,8 @@
     const db = getFirestore(app);
 
     const GEMINI_API_KEY = "AIzaSyCOniq4_5uyWgZ1Uh8TgfWoC0wThI0Z1S4";
-    const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
+    const aiGateway = new GoogleGenerativeAI(GEMINI_API_KEY);
+    const model = aiGateway.getGenerativeModel({ model: "gemini-pro" });
 
     const badWords = ["batsa", "iskanci", "matsiyaci", "bura", "gindi", "gutsu", "durumi", "b***", "fuck", "sexy", "porn", "pussy", "dick", "zagi", "shasha", "wawa"];
 
@@ -336,29 +346,17 @@
             }
 
             try {
-                const response = await fetch(GEMINI_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [{ text: `${SYSTEM_PROMPT}\n\nUser Question: ${userText}` }]
-                        }]
-                    })
-                });
-
-                const data = await response.json();
+                // Kiran SDK na Google na gaskiya maimakon fetch na talakawa
+                const result = await model.generateContent(`${SYSTEM_PROMPT}\n\nUser Question: ${userText}`);
+                const response = await result.response;
+                let aiReply = response.text();
                 
-                if (data.candidates && data.candidates[0].content.parts[0].text) {
-                    let aiReply = data.candidates[0].content.parts[0].text;
-                    aiReply = aiReply.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<i>$1</i>');
-                    appendMessage(aiReply, 'bot');
-                    await saveChatToFirebase("bot", aiReply);
-                } else {
-                    throw new Error("Invalid response format");
-                }
+                aiReply = aiReply.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<i>$1</i>');
+                appendMessage(aiReply, 'bot');
+                await saveChatToFirebase("bot", aiReply);
 
             } catch (error) {
-                console.error("Gemini Error: ", error);
+                console.error("Gemini SDK Error: ", error);
                 let errMsg = isHausa 
                     ? "Yi haƙuri, na sami matsalar haɗuwa da uwar gizo. Da fatan za ka sake gwada tura saƙon."
                     : "I am having trouble communicating with the core server. Please try again.";
@@ -368,7 +366,7 @@
     }
 
     function detectHausa(text) {
-        const hausaKeywords = ["kana", "kina", "yaya", "menene", "ina", "barka", "sannu", "wane", "wace", "ake", "kuma", "da", "na", "zo", "ce", "yana", "muna", "su", "zo", "tafi", "hi", "helo"];
+        const hausaKeywords = ["kana", "kina", "yaya", "menene", "ina", "barka", "sannu", "wane", "wace", "ake", "kuma", "da", "na", "zo", "ce", "yana", "muna", "su", "zo", "tafi", "hi", "helo", "kike", "kaka"];
         let words = text.toLowerCase().split(/\s+/);
         return words.some(w => hausaKeywords.includes(w));
     }
@@ -402,12 +400,12 @@
     function appendHistoryOptions(parentDiv, isHausa) {
         const btnYes = document.createElement('button');
         btnYes.classList.add('opt-btn');
-        btnYes.innerText = isHausa ? "Ee / Yes" : "Yes";
+        btnYes.innerText = isHausa ? "Ee" : "Yes";
         btnYes.onclick = () => showFullHistory(isHausa);
 
         const btnNo = document.createElement('button');
         btnNo.classList.add('opt-btn');
-        btnNo.innerText = isHausa ? "A'a / No" : "No";
+        btnNo.innerText = isHausa ? "A'a" : "No";
         btnNo.onclick = async () => {
             let closeMsg = isHausa ? "Madalla! Da wane abu dabam zan iya taimaka muku?" : "Alright! What else can I assist you with?";
             appendMessage(closeMsg, 'bot');
