@@ -9,25 +9,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
             background: #0f2027;
             color: white;
             font-family: 'Inter', sans-serif;
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             margin: 0;
+            padding: 0;
             overflow: hidden;
         }
 
         .ai-header {
             background: #162b36;
-            padding: 15px;
+            padding: 12px 15px;
             display: flex;
             align-items: center;
             border-bottom: 2px solid #25d366;
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            z-index: 10;
+            flex-shrink: 0;
         }
 
         .back-btn {
@@ -39,21 +43,21 @@
         }
 
         .ai-profile {
-            width: 42px;
-            height: 42px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(45deg, #25d366, #128c7e);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 20px;
             color: black;
             margin-right: 12px;
             box-shadow: 0 0 10px rgba(37, 211, 102, 0.5);
         }
 
         .ai-info h1 {
-            font-size: 16px;
+            font-size: 15px;
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
             margin: 0;
@@ -67,25 +71,31 @@
         }
 
         .capabilities-box {
-            background: rgba(22, 43, 54, 0.7);
-            border: 1px solid rgba(37, 211, 102, 0.2);
-            border-radius: 12px;
-            margin: 10px 15px 0 15px;
-            padding: 10px 12px;
-            font-size: 11px;
+            background: rgba(22, 43, 54, 0.8);
+            border: 1px solid rgba(37, 211, 102, 0.25);
+            border-radius: 14px;
+            margin: 12px 15px 5px 15px;
+            padding: 12px 15px;
+            font-size: 12px;
+            flex-shrink: 0;
         }
 
         .capabilities-box h6 {
-            font-size: 12px;
+            font-size: 13px;
             color: #25d366;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-family: 'Poppins', sans-serif;
+            font-weight: 700;
         }
 
         .capabilities-box ul {
             margin: 0;
             padding-left: 15px;
             color: #eceff1;
+        }
+        
+        .capabilities-box li {
+            margin-bottom: 4px;
         }
 
         .chat-container {
@@ -95,7 +105,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            max-height: calc(100vh - 240px);
+            background: rgba(15, 32, 39, 0.5);
         }
 
         .message {
@@ -126,14 +136,13 @@
             background: #0f2027;
             border: 1px solid #25d366;
             color: #25d366;
-            padding: 6px 15px;
+            padding: 6px 16px;
             border-radius: 20px;
             font-size: 12px;
             margin-top: 10px;
             margin-right: 8px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s;
         }
 
         .opt-btn:active {
@@ -166,12 +175,13 @@
 
         .chat-input-area {
             background: #162b36;
-            padding: 12px;
+            padding: 12px 15px;
             border-top: 1px solid rgba(255,255,255,0.05);
             display: flex;
             gap: 10px;
             align-items: center;
-            margin-top: auto;
+            flex-shrink: 0;
+            padding-bottom: calc(12px + env(safe-area-inset-bottom));
         }
 
         .chat-input {
@@ -179,7 +189,7 @@
             background: #0f2027;
             border: 1px solid #2c5364;
             border-radius: 25px;
-            padding: 12px 20px;
+            padding: 11px 20px;
             color: white;
             font-size: 14px;
             outline: none;
@@ -193,13 +203,13 @@
             background: #25d366;
             color: black;
             border: none;
-            width: 46px;
-            height: 46px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);
             flex-shrink: 0;
@@ -222,24 +232,23 @@
 </div>
 
 <div class="capabilities-box">
-    <h6>Abubuwan da zan iya yi muku / What I can do:</h6>
+    <h6>What I can do for you:</h6>
     <ul>
-        <li>🎨 <b>Zana Hotuna (Image Vending):</b> Rubuta "Zana mini..." ko "Generate image of...".</li>
-        <li>📚 <b>Assignment & Ilimi:</b> Taimako kan dukkan darussan makaranta da bincike nan take.</li>
-        <li>💔 <b>Soyayya & Shawarwari:</b> Tattaunawa da ba da shawarwari na natsuwa akan rayuwa.</li>
-        <li>💼 <b>Sabis na RetayaX:</b> Komai akan NIN, BVN, Data, Airtime, Sunking, da sauran su.</li>
+        <li>🎨 <b>Image Vending:</b> Type "Zana mini..." or "Generate image of...".</li>
+        <li>📚 <b>Assignment & Research:</b> Get help with any school subject instantly.</li>
+        <li>💔 <b>Relationship & Lifestyle:</b> Chat and get premium advice on life and love.</li>
+        <li>💼 <b>RetayaX Digital Services:</b> Instant help on NIN, BVN, Data, and Airtime.</li>
     </ul>
 </div>
 
 <div class="chat-container" id="chatContainer">
     <div class="message bot">
-        Barka da zuwa! Ni ce RetayaX Super AI, babban tsarin taimako na zamani a Najeriya da Afirka baki ɗaya. Ina jinku, kuna iya tambayana komai.<br><br>
         Welcome! I am RetayaX Super AI, the advanced assistant ecosystem in Nigeria and Africa. I am here to help you, you can ask me anything.
     </div>
 </div>
 
 <div class="chat-input-area">
-    <input type="text" class="chat-input" id="chatInput" placeholder="Rubuta tambaya... / Type a question..." onkeypress="handleKeyPress(event)">
+    <input type="text" class="chat-input" id="chatInput" placeholder="Type a question here..." onkeypress="handleKeyPress(event)">
     <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
 </div>
 
@@ -260,6 +269,18 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    window.saveChatToFirebase = async function(sender, text) {
+        try {
+            await addDoc(collection(db, "retayax_chats"), {
+                sender: sender,
+                text: text,
+                timestamp: serverTimestamp()
+            });
+        } catch (e) { console.error("Firebase save error: ", e); }
+    };
+</script>
+
+<script>
     const GEMINI_API_KEY = "AIzaSyCOniq4_5uyWgZ1Uh8TgfWoC0wThI0Z1S4";
     const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
 
@@ -271,7 +292,7 @@
     You can handle school assignments, write essays, provide deep relationship/love/romance advice, explain world history, and talk about famous people globally with accurate facts.
     Also act as a customer support for RetayaX digital services (NIN Face ID recovery via 'NIN Device', BVN registration/check, 24/7 fast Data/Airtime vending via dashboard login banner, Sunking solar systems, WhatsApp Hub, Routers, SIM Swap, Graphic Design, and Service Match).`;
 
-    window.sendMessage = async function() {
+    async function sendMessage() {
         const inputField = document.getElementById('chatInput');
         const userText = inputField.value.trim();
         if (!userText) return;
@@ -280,16 +301,11 @@
         inputField.value = '';
 
         const isHausa = detectHausa(userText);
-
         const indicator = appendLoadingIndicator();
 
-        try {
-            await addDoc(collection(db, "retayax_chats"), {
-                sender: "user",
-                text: userText,
-                timestamp: serverTimestamp()
-            });
-        } catch (e) { console.error("Firebase error: ", e); }
+        if (window.saveChatToFirebase) {
+            window.saveChatToFirebase("user", userText);
+        }
 
         setTimeout(async () => {
             removeLoadingIndicator(indicator);
@@ -300,7 +316,7 @@
                     ? "Yi haƙuri, ni a matsayina na RetayaX AI ba zan iya ba ka wannan amsar ba, saboda ba a ba ni ikon amsa irin wannan tambayar ba."
                     : "I am sorry, as RetayaX AI I cannot provide you with this answer, because I am not authorized to respond to this type of request.";
                 appendMessage(safetyMsg, 'bot');
-                saveBotReply(safetyMsg);
+                if (window.saveChatToFirebase) window.saveChatToFirebase("bot", safetyMsg);
                 return;
             }
 
@@ -309,18 +325,18 @@
                 let imgUrl = `https://pollinations.ai/p/${imgPrompt}?width=500&height=500&seed=42&nofeed=true`;
                 let imgHtml = `<p>${isHausa ? 'Ga hoton da kuka nema:' : 'Here is your generated image:'}</p><img src="${imgUrl}" alt="Generated Image" class="img-fluid rounded mt-2" style="max-width:100%; height:auto;">`;
                 appendMessage(imgHtml, 'bot');
-                saveBotReply("[Generated Image Sent]");
+                if (window.saveChatToFirebase) window.saveChatToFirebase("bot", "[Generated Image Sent]");
                 return;
             }
 
             if (userText.toLowerCase().includes("owner") || userText.toLowerCase().includes("creator") || userText.toLowerCase().includes("wa ya kire") || userText.toLowerCase().includes("waye ya gina") || userText.toLowerCase().includes("auwal md") || userText.toLowerCase().includes("muhammad yau")) {
                 let devIntro = isHausa
-                    ? "Wannan babban tsarin na RetayaX Super AI, ƙirƙirar babban jami'i kuma gwarzon mai hangen nesa ne, <b>Muhammad Yau Ibrahim</b> (wanda aka fi sani da <b>Auwal MD</b>). Kuna son jin cikakken tarihin gwagwarmayar rayuwarsa daga farko?"
+                    ? "Wannan babban tsarin na RetayaX Super AI, ƙirƙirar babban jami'i kai tsaye kuma gwarzon mai hangen nesa ne, <b>Muhammad Yau Ibrahim</b> (wanda aka fi sani da <b>Auwal MD</b>). Kuna son jin cikakken tarihin gwagwarmayar rayuwarsa daga farko?"
                     : "This entire RetayaX Super AI system was created by the visionary tech entrepreneur, <b>Muhammad Yau Ibrahim</b> (popularly known as <b>CEO Auwal MD</b>). Would you like to hear the full inspirational history of his life struggle?";
                 
                 let botMsgId = appendMessage(devIntro, 'bot');
                 appendHistoryOptions(botMsgId, isHausa);
-                saveBotReply(devIntro);
+                if (window.saveChatToFirebase) window.saveChatToFirebase("bot", devIntro);
                 return;
             }
 
@@ -341,7 +357,7 @@
                 aiReply = aiReply.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<i>$1</i>');
 
                 appendMessage(aiReply, 'bot');
-                saveBotReply(aiReply);
+                if (window.saveChatToFirebase) window.saveChatToFirebase("bot", aiReply);
 
             } catch (error) {
                 let errMsg = isHausa 
@@ -350,13 +366,13 @@
                 appendMessage(errMsg, 'bot');
             }
         }, 2000);
-    };
+    }
 
-    window.handleKeyPress = function(event) {
+    function handleKeyPress(event) {
         if (event.key === 'Enter') {
             sendMessage();
         }
-    };
+    }
 
     function detectHausa(text) {
         const hausaKeywords = ["kana", "kina", "yaya", "menene", "ina", "barka", "sannu", "wane", "wace", "ake", "kuma", "da", "na", "zo", "ce", "yana", "muna", "su", "zo", "tafi"];
@@ -402,7 +418,7 @@
         btnNo.onclick = () => {
             let closeMsg = isHausa ? "Madalla! Da wane abu dabam zan iya taimaka muku?" : "Alright! What else can I assist you with?";
             appendMessage(closeMsg, 'bot');
-            saveBotReply(closeMsg);
+            if (window.saveChatToFirebase) window.saveChatToFirebase("bot", closeMsg);
         };
 
         parentDiv.appendChild(document.createElement('br'));
@@ -424,17 +440,7 @@
             Today, at just 19 years old in 2026, he stands as the brilliant founder and CEO of RetayaX, empowering digital connectivity across Nigeria and Africa!`;
         }
         appendMessage(historyText, 'bot');
-        saveBotReply(historyText);
-    }
-
-    async function saveBotReply(replyText) {
-        try {
-            await addDoc(collection(db, "retayax_chats"), {
-                sender: "bot",
-                text: replyText,
-                timestamp: serverTimestamp()
-            });
-        } catch (e) { console.error("Firebase error saving bot reply: ", e); }
+        if (window.saveChatToFirebase) window.saveChatToFirebase("bot", historyText);
     }
 </script>
 </body>
