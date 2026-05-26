@@ -77,7 +77,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // Firebase dauke da try-catch domin kar ta shafi Gemini
     let db = null;
     try {
         const firebaseConfig = {
@@ -91,12 +90,12 @@
         };
         const app = initializeApp(firebaseConfig);
         db = getFirestore(app);
-    } catch(e) {
-        console.error("Firebase Init Error isolated:", e);
-    }
+    } catch(e) { console.error("Firebase disabled safely:", e); }
 
     const GEMINI_API_KEY = "AIzaSyDaX4vyAdeghRpYREkWi1bPYGQUWVVWT7A";
-    const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    
+    // DABARAR PROXY: An karkata kiran ta hanyar Cors-Anywhere ko Allorigins don tsallake block na Google CORS 
+    const GEMINI_API_URL = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + GEMINI_API_KEY)}`;
 
     const badWords = ["batsa", "iskanci", "matsiyaci", "bura", "gindi", "gutsu", "durumi", "b***", "fuck", "sexy", "porn", "pussy", "dick", "zagi", "shasha", "wawa"];
 
@@ -114,7 +113,7 @@
                 text: text,
                 timestamp: serverTimestamp()
             });
-        } catch (e) { console.error("Firebase save caught & isolated: ", e); }
+        } catch (e) { console.error("Firebase logged silently: ", e); }
     }
 
     async function sendMessage() {
@@ -128,7 +127,6 @@
         const isHausa = detectHausa(userText);
         const indicator = appendLoadingIndicator();
 
-        // Kira Firebase a asace (Ba zai taba tsayar da Gemini ba koda akwai matsala)
         saveChatToFirebase("user", userText);
 
         setTimeout(async () => {
@@ -165,6 +163,7 @@
             }
 
             try {
+                // Kiran API ta amfani da sabuwar dabarar Proxy
                 const response = await fetch(GEMINI_API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -183,12 +182,11 @@
                     appendMessage(aiReply, 'bot');
                     saveChatToFirebase("bot", aiReply);
                 } else {
-                    console.log("Gemini Raw Error Log:", data);
-                    throw new Error("API Failure");
+                    throw new Error("Proxy Data error");
                 }
 
             } catch (error) {
-                console.error("Gemini Error Block:", error);
+                console.error("Gemini Proxy Error:", error);
                 let errMsg = isHausa 
                     ? "Yi haƙuri, na sami matsalar haɗuwa da uwar gizo. Da fatan za ka sake gwada tura saƙon."
                     : "I am having trouble communicating with the core server. Please try again.";
@@ -198,7 +196,7 @@
     }
 
     function detectHausa(text) {
-        const hausaKeywords = ["kana", "kina", "yaya", "menene", "ina", "barka", "sannu", "wane", "wace", "ake", "kuma", "da", "na", "zo", "ce", "yana", "muna", "su", "tafi", "kike", "kaka", "lafiya", "injiniya"];
+        const hausaKeywords = ["kana", "kina", "yaya", "menene", "ina", "barka", "sannu", "wane", "wace", "ake", "kuma", "da", "na", "zo", "ce", "yana", "muna", "su", "tafi", "kike", "kaka", "lafiya"];
         let words = text.toLowerCase().split(/\s+/);
         return words.some(w => hausaKeywords.includes(w));
     }
@@ -241,7 +239,6 @@
         btnNo.onclick = () => {
             let closeMsg = isHausa ? "Madalla! Da wane abu dabam zan iya taimaka muku?" : "Alright! What else can I assist you with?";
             appendMessage(closeMsg, 'bot');
-            saveChatToFirebase("bot", closeMsg);
         };
 
         parentDiv.appendChild(document.createElement('br'));
@@ -250,14 +247,10 @@
     }
 
     function showFullHistory(isHausa) {
-        let historyText = "";
-        if (isHausa) {
-            historyText = `<b>Tarihin Gwagwarmayar CEO Auwal MD (Muhammad Yau Ibrahim):</b><br><br>An haifi gwarzo Muhammad Yau Ibrahim ranar 18/02/2007 a garin Potiskum...`;
-        } else {
-            historyText = `<b>The Life Struggle & History of CEO Auwal MD (Muhammad Yau Ibrahim):</b><br><br>Muhammad Yau Ibrahim was born on February 18, 2007...`;
-        }
+        let historyText = isHausa 
+            ? `<b>Tarihin Gwagwarmayar CEO Auwal MD:</b><br><br>An haifi gwarzo Muhammad Yau Ibrahim ranar 18/02/2007 a garin Potiskum...`
+            : `<b>The Life Struggle & History of CEO Auwal MD:</b><br><br>Muhammad Yau Ibrahim was born on February 18, 2007...`;
         appendMessage(historyText, 'bot');
-        saveChatToFirebase("bot", historyText);
     }
 
     document.getElementById('sendBtn').addEventListener('click', sendMessage);
