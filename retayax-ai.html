@@ -6,7 +6,7 @@
     <title>RetayaX Super AI</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;600;700&family=Poppins:wght=600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -17,26 +17,21 @@
         .ai-profile { width: 40px; height: 40px; background: linear-gradient(45deg, #25d366, #128c7e); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: black; margin-right: 12px; box-shadow: 0 0 10px rgba(37, 211, 102, 0.5); }
         .ai-info h1 { font-size: 15px; font-family: 'Poppins', sans-serif; font-weight: 700; margin: 0; color: #25d366; }
         .ai-info p { font-size: 11px; margin: 0; color: #b0bec5; }
-        
         .capabilities-box { background: rgba(22, 43, 54, 0.8); border: 1px solid rgba(37, 211, 102, 0.25); border-radius: 14px; margin: 12px 15px 5px 15px; padding: 12px 15px; font-size: 12px; }
         .capabilities-box h6 { font-size: 13px; color: #25d366; margin-bottom: 8px; font-family: 'Poppins', sans-serif; font-weight: 700; }
         .capabilities-box ul { margin: 0; padding-left: 15px; color: #eceff1; }
         .capabilities-box li { margin-bottom: 4px; }
-        
         .chat-container { padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: rgba(15, 32, 39, 0.5); }
         .message { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.5; word-wrap: break-word; }
         .message.bot { background: #162b36; color: white; align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid rgba(37, 211, 102, 0.15); }
         .message.user { background: linear-gradient(45deg, #25d366, #128c7e); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
-        
         .opt-btn { background: #0f2027; border: 1px solid #25d366; color: #25d366; padding: 6px 16px; border-radius: 20px; font-size: 12px; margin-top: 10px; margin-right: 8px; cursor: pointer; font-weight: 600; }
         .opt-btn:active { background: #25d366; color: black; }
-        
         .typing-indicator { display: flex; gap: 4px; padding: 5px 10px; align-items: center; }
         .typing-dot { width: 7px; height: 7px; background: #25d366; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out both; }
         .typing-dot:nth-child(1) { animation-delay: -0.32s; }
         .typing-dot:nth-child(2) { animation-delay: -0.16s; }
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
-        
         .chat-input-area { background: #162b36; padding: 15px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; gap: 12px; align-items: center; box-shadow: 0 -4px 10px rgba(0,0,0,0.2); }
         .chat-input { flex: 1; background: #0f2027; border: 1px solid #2c5364; border-radius: 25px; padding: 12px 20px; color: white; font-size: 14px; outline: none; }
         .chat-input:focus { border-color: #25d366; }
@@ -100,13 +95,9 @@
 
     const badWords = ["batsa", "iskanci", "matsiyaci", "bura", "gindi", "gutsu", "durumi", "fuck", "sexy", "porn", "pussy", "dick", "zagi", "shasha", "wawa"];
 
-    const SYSTEM_PROMPT = `You are RetayaX Super AI, a highly professional, multi-talented, and sharp AI developed for Nigeria and Africa. 
-    Your owner and creator is the great tech entrepreneur CEO Auwal MD (Muhammad Yau Ibrahim), born on 18/02/2007 in Potiskum, Yobe State, Nigeria. 
-    MONOLINGUAL RULE: If the user asks in Hausa, answer ONLY in professional, smooth Hausa. If the user asks in English, answer ONLY in expert English. NEVER mix languages or code-switch in a single response.
-    CAPABILITIES:
-    - School & Assignments: You can solve maths, physics, chemistry, write high-quality school essays, and conduct research.
-    - Love & Advice: You give emotionally intelligent, mature, and deep relationship or motivation guidance.
-    - Customer Support: You expert-support RetayaX digital services like NIN Face ID recovery ('NIN Device'), BVN recovery, 24/7 fast data/airtime, Sunking solar, WhatsApp Hub, SIM Swap, Graphic Design, and Service Match.`;
+    const SYSTEM_PROMPT = `You are RetayaX Super AI, a highly professional assistant developed for Nigeria and Africa. 
+    Your owner and creator is the tech entrepreneur CEO Auwal MD (Muhammad Yau Ibrahim), born on 18/02/2007 in Potiskum, Yobe State, Nigeria. 
+    RULE: If the user asks in Hausa, answer ONLY in professional Hausa. If in English, answer ONLY in English. Never mix languages.`;
 
     async function saveChatToFirebase(sender, text) {
         if (!db) return;
@@ -137,35 +128,29 @@
 
             let hasBadWord = badWords.some(word => userText.toLowerCase().includes(word));
             if (hasBadWord) {
-                let safetyMsg = isHausa ? "Yi haƙuri, ni a matsayina na RetayaX AI ba zan iya ba ka wannan amsar ba saboda ka'idojin tsaro." : "I am sorry, as RetayaX AI I cannot fulfill this request due to safety restrictions.";
+                let safetyMsg = isHausa ? "Yi haƙuri, ba zan iya amsa wannan ba saboda tsaro." : "I am sorry, I cannot fulfill this request due to safety restrictions.";
                 appendMessage(safetyMsg, 'bot');
                 return;
             }
 
-            // HIKIMA TA 1: AI GENERATED IMAGE (ZANA HOTUNA)
             if (userText.toLowerCase().includes("zana mini") || userText.toLowerCase().includes("generate image") || userText.toLowerCase().includes("hoton")) {
                 let imgPrompt = encodeURIComponent(userText.replace(/zana mini|generate image|hoton/gi, '').trim());
                 let imgUrl = `https://pollinations.ai/p/${imgPrompt}?width=600&height=600&seed=${Math.floor(Math.random() * 1000)}&nofeed=true`;
                 let imgHtml = `<p>🎨 <b>${isHausa ? 'Ga hoton da kuka nema tsaf:' : 'Here is your generated image:'}</b></p><img src="${imgUrl}" alt="RetayaX Generated Image" class="img-fluid rounded mt-2" style="max-width:100%; height:auto; border: 2px solid #25d366;">`;
                 appendMessage(imgHtml, 'bot');
-                saveChatToFirebase("bot", "[Image Generated Successfully]");
                 return;
             }
 
-            // HIKIMA TA 2: CIKAKKEN TARIHIN CEO AUWAL MD
             if (userText.toLowerCase().includes("owner") || userText.toLowerCase().includes("creator") || userText.toLowerCase().includes("wa ya kire") || userText.toLowerCase().includes("waye ya gina") || userText.toLowerCase().includes("auwal md")) {
                 let devIntro = isHausa
-                    ? "Wannan babban tsarin na RetayaX Super AI, ƙirƙirar babban jami'i kai tsaye kuma gwarzon mai hangen nesa ne, <b>Muhammad Yau Ibrahim</b> (wanda aka fi sani da <b>CEO Auwal MD</b>). Kuna son jin cikakken tarihin gwagwarmayar rayuwarsa?"
-                    : "This entire RetayaX Super AI system was created by the visionary tech entrepreneur, <b>Muhammad Yau Ibrahim</b> (popularly known as <b>CEO Auwal MD</b>). Would you like to hear the full inspirational history of his life struggle?";
-                
-                let botMsgDiv = appendMessage(devIntro, 'bot');
-                appendHistoryOptions(botMsgDiv, isHausa);
-                saveChatToFirebase("bot", devIntro);
+                    ? "Wannan babban tsarin na RetayaX Super AI, ƙirƙirar babban jami'i kai tsaye ne, <b>Muhammad Yau Ibrahim (CEO Auwal MD)</b>."
+                    : "This entire RetayaX Super AI system was created by the visionary tech entrepreneur, <b>CEO Auwal MD (Muhammad Yau Ibrahim)</b>.";
+                appendMessage(devIntro, 'bot');
                 return;
             }
 
-            // HIKIMA TA 3: KIRAN ENGINE NA DUNIYA (NO API KEY REQUIRED)
             try {
+                // AN GYARA GYARAN ENGINE ANAN: An canza zuwa 'openai' don magance 404 error na daren nan!
                 const res = await fetch(`https://text.pollinations.ai/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -174,25 +159,23 @@
                             { role: 'system', content: SYSTEM_PROMPT },
                             { role: 'user', content: userText }
                         ],
-                        model: 'llama', // Llama-3-70b engine mai matukar kaifi
+                        model: 'openai', 
                         private: true
                     })
                 });
 
                 const aiReply = await res.text();
                 if (aiReply) {
-                    // Tace font formats
                     let cleanReply = aiReply.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<i>$1</i>');
                     appendMessage(cleanReply, 'bot');
                     saveChatToFirebase("bot", cleanReply);
                 } else {
-                    throw new Error("Engine timeout");
+                    throw new Error("Engine error");
                 }
 
             } catch (error) {
-                console.error("RetayaX Fallback Error: ", error);
                 let errMsg = isHausa 
-                    ? "Yi haƙuri, na sami ɗan tsaiko gurin haɗuwa da uwar gizo. Da fatan za ka sake gwada tura saƙon."
+                    ? "Yi haƙuri, na sami ɗan tsaiko. Don Allah sake jaraba turawa."
                     : "I am having trouble communicating with the core engine. Please try again.";
                 appendMessage(errMsg, 'bot');
             }
@@ -200,7 +183,7 @@
     }
 
     function detectHausa(text) {
-        const hausaKeywords = ["kana", "kina", "yaya", "menene", "ina", "barka", "sannu", "wane", "wace", "ake", "kuma", "da", "na", "zo", "ce", "yana", "muna", "su", "tafi", "kike", "kaka", "lafiya", "waye", "yayi", "ance"];
+        const hausaKeywords = ["kana", "kina", "yaya", "menene", "ina", "barka", "sannu", "wane", "wace", "ake", "kuma", "da", "na", "zo", "ce", "yana", "muna", "su", "tafi", "kike"];
         let words = text.toLowerCase().split(/\s+/);
         return words.some(w => hausaKeywords.includes(w));
     }
@@ -229,32 +212,6 @@
         if (indicator && indicator.parentNode) {
             indicator.parentNode.removeChild(indicator);
         }
-    }
-
-    function appendHistoryOptions(parentDiv, isHausa) {
-        const btnYes = document.createElement('button');
-        btnYes.classList.add('opt-btn');
-        btnYes.innerText = isHausa ? "Ee" : "Yes";
-        btnYes.onclick = () => showFullHistory(isHausa);
-
-        const btnNo = document.createElement('button');
-        btnNo.classList.add('opt-btn');
-        btnNo.innerText = isHausa ? "A'a" : "No";
-        btnNo.onclick = () => {
-            let closeMsg = isHausa ? "Madalla! Da wane abu dabam zan iya taimaka muku?" : "Alright! What else can I assist you with?";
-            appendMessage(closeMsg, 'bot');
-        };
-
-        parentDiv.appendChild(document.createElement('br'));
-        parentDiv.appendChild(btnYes);
-        parentDiv.appendChild(btnNo);
-    }
-
-    function showFullHistory(isHausa) {
-        let historyText = isHausa 
-            ? `<b>Tarihin Gwagwarmayar CEO Auwal MD (Muhammad Yau Ibrahim):</b><br><br>An haifi gwarzo Muhammad Yau Ibrahim ranar 18/02/2007 a garin Potiskum, Yobe State. Ya halarci Yindiski Primary School, Arikime JSS, da Government Day Secondary School a Potiskum.<br><br>Tun yana ƙarami mai fafutuka ne, ya yi sana'o'i kamar siyar da ruwa, raƙe, kayan treda, toci, batur, brush da macleans, minti da biskit. Daga baya ya shiga harkar sadarwa (SIM registration, BVN retrieval, NIN recovery). Yanzu yana da shekaru 19 a wannan shekara ta 2026, kuma shi ne babban darektan RetayaX!`
-            : `<b>The Life Struggle & History of CEO Auwal MD (Muhammad Yau Ibrahim):</b><br><br>Muhammad Yau Ibrahim was born on February 18, 2007, in Potiskum, Yobe State. He attended Yindiski Primary School, Arikime JSS, and Government Day Secondary School in Potiskum.<br><br>From a young age, he engaged in businesses like selling water, sugarcane, retail trading, flashlights, batteries, toothbrushes, Macleans, mints, and biscuits, before entering the Communication business (SIM registration, BVN retrieval, NIN recovery). Today, at 19 years old in 2026, he is the brilliant founder of RetayaX!`;
-        appendMessage(historyText, 'bot');
     }
 
     document.getElementById('sendBtn').addEventListener('click', sendMessage);
