@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RetayaX AI Assistant</title>
+    <!-- FontAwesome domin hotunan maɓallai (Icons) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -14,6 +15,7 @@
             --bot-bubble: #415a77;
             --user-bubble: #00b074;
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
@@ -24,6 +26,8 @@
             flex-direction: column;
             height: 100vh;
         }
+
+        /* Tsarin Shugaban Shafin */
         .chat-header {
             background-color: var(--chat-bg);
             padding: 15px;
@@ -36,9 +40,12 @@
             justify-content: center;
             gap: 10px;
         }
+
         .chat-header i {
             color: var(--primary-color);
         }
+
+        /* Wurin Hira */
         .chat-container {
             flex: 1;
             padding: 20px;
@@ -47,17 +54,21 @@
             flex-direction: column;
             gap: 20px;
         }
+
         .message-wrapper {
             display: flex;
             flex-direction: column;
             max-width: 80%;
         }
+
         .message-wrapper.user {
             align-self: flex-end;
         }
+
         .message-wrapper.bot {
             align-self: flex-start;
         }
+
         .message-bubble {
             padding: 12px 16px;
             border-radius: 15px;
@@ -65,14 +76,18 @@
             line-height: 1.5;
             word-wrap: break-word;
         }
+
         .user .message-bubble {
             background-color: var(--user-bubble);
             border-bottom-right-radius: 2px;
         }
+
         .bot .message-bubble {
             background-color: var(--bot-bubble);
             border-bottom-left-radius: 2px;
         }
+
+        /* Tsarin Maɓallan Aiki (Toolbar) */
         .action-toolbar {
             display: flex;
             gap: 12px;
@@ -81,25 +96,32 @@
             font-size: 0.85rem;
             color: #ccc;
         }
+
         .action-icon {
             cursor: pointer;
             transition: color 0.2s;
         }
+
         .action-icon:hover {
             color: var(--primary-color);
         }
+
         .action-icon.liked {
             color: #4caf50;
         }
+
         .action-icon.disliked {
             color: #f44336;
         }
+
+        /* Maɓallan Shawwari (Follow-up Buttons) */
         .suggestions-container {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
             margin-top: 10px;
         }
+
         .suggestion-btn {
             background-color: transparent;
             border: 1px solid var(--primary-color);
@@ -110,19 +132,25 @@
             font-size: 0.9rem;
             transition: all 0.3s ease;
         }
+
         .suggestion-btn:hover {
             background-color: var(--primary-color);
             color: white;
         }
+
+        /* Tsarin Rubutu na ɗaki-ɗaki (Typing Cursor) */
         .typing::after {
             content: '▊';
             animation: blink 0.6s infinite;
             color: var(--primary-color);
             margin-left: 2px;
         }
+
         @keyframes blink {
             50% { opacity: 0; }
         }
+
+        /* Wurin Tura Saƙo */
         .input-container {
             padding: 15px;
             background-color: var(--chat-bg);
@@ -130,6 +158,7 @@
             gap: 10px;
             border-top: 1px solid #2b3a4a;
         }
+
         .input-container input {
             flex: 1;
             padding: 12px;
@@ -140,9 +169,11 @@
             outline: none;
             font-size: 1rem;
         }
+
         .input-container input:focus {
             border-color: var(--primary-color);
         }
+
         .send-btn {
             background-color: var(--primary-color);
             border: none;
@@ -157,6 +188,7 @@
             font-size: 1.1rem;
             transition: transform 0.2s;
         }
+
         .send-btn:hover {
             transform: scale(1.05);
         }
@@ -169,6 +201,7 @@
     </div>
 
     <div class="chat-container" id="chatContainer">
+        <!-- Sakon Barka da Zuwa na Fari -->
         <div class="message-wrapper bot">
             <div class="message-bubble">Barka da zuwa RetayaX AI! 👋 Ina jinka, wane taimako kake buƙata yanzu ko wace shawara kake nema?</div>
         </div>
@@ -184,6 +217,7 @@
         const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
 
+        // 1. Taskar Gyara Kuskuren Rubutu (Fuzzy/Typo Correction Dictionary)
         const typoDictionary = {
             "subahanallahi": "subhanallah",
             "kudi": "kuɗi",
@@ -202,6 +236,7 @@
             return correctedWords.join(" ");
         }
 
+        // 2. Taskar Bayanai da Emojis na Yanayi (Database & Sentiment)
         const aiDatabase = {
             "murna": {
                 text: "Wannan babban labari ne mai daɗi kwarai da gaske! 🎉 Muna taya ka farin ciki da wannan babban nasara. Koda yaushe RetayaX tana tare da kai don samar maka da farin ciki 😁",
@@ -225,15 +260,19 @@
             }
         };
 
+        // 3. Tsarin Tura Saƙo
         function handleSend() {
             const rawText = userInput.value.trim();
             if (!rawText) return;
 
+            // Nuna saƙon Customer
             appendMessage(rawText, 'user');
             userInput.value = '';
 
+            // Gyara kuskuren rubutu cikin sauri
             const correctedText = cleanAndCorrectText(rawText);
 
+            // Gano amsar da ta dace
             let matchedKey = "default";
             for (let key in aiDatabase) {
                 if (correctedText.includes(key)) {
@@ -244,11 +283,13 @@
 
             const responseData = aiDatabase[matchedKey];
             
+            // Tura amsar zuwa tsarin Streaming (Typing Effect)
             setTimeout(() => {
                 streamBotResponse(responseData.text, responseData.follows);
             }, 500);
         }
 
+        // 4. Tsarin Nuna Rubutu Ɗaki-ɗaki (Professional Streaming Effect)
         function streamBotResponse(fullText, follows) {
             const wrapper = document.createElement('div');
             wrapper.className = 'message-wrapper bot';
@@ -264,6 +305,7 @@
             let index = 0;
             bubble.innerText = '';
 
+            // Gudu na musamman (Professional Typing Speed)
             let interval = setInterval(() => {
                 if (index < words.length) {
                     bubble.innerText += (index === 0 ? '' : ' ') + words[index];
@@ -271,13 +313,17 @@
                     chatContainer.scrollTop = chatContainer.scrollHeight;
                 } else {
                     clearInterval(interval);
-                    bubble.classList.remove('typing');
+                    bubble.classList.remove('typing'); // Cire alamar ƙyiftawa
+                    
+                    // Bayan kammala rubutun, nuna Maɓallan Aiki da Tambayoyin Jan Hankali
                     addToolbarsAndSuggestions(wrapper, fullText, follows);
                 }
-            }, 120);
+            }, 120); // Gudun fitar kalma bayan kalma
         }
 
+        // 5. Ƙara Maɓallan Like, Dislike, Copy, Share da Shawwari
         function addToolbarsAndSuggestions(wrapper, textToCopy, follows) {
+            // Kirkirar Toolbar
             const toolbar = document.createElement('div');
             toolbar.className = 'action-toolbar';
             toolbar.innerHTML = `
@@ -288,6 +334,7 @@
             `;
             wrapper.appendChild(toolbar);
 
+            // Kirkirar Maɓallan Tambayoyin Jan Hankali (Dynamic Suggestion Buttons)
             const suggestionsContainer = document.createElement('div');
             suggestionsContainer.className = 'suggestions-container';
             
@@ -306,6 +353,7 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
+        // Ayyukan Maɓallan (Toolbar Functions)
         function handleLike(element) {
             element.classList.toggle('fa-regular');
             element.classList.toggle('fa-solid');
@@ -346,6 +394,7 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
+        // Latsa Enter don tura saƙo
         userInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') handleSend();
         });
