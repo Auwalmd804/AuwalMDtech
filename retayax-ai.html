@@ -1,404 +1,416 @@
 <!DOCTYPE html>
-<html lang="ha">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RetayaX AI Assistant</title>
-    <!-- FontAwesome domin hotunan maɓallai (Icons) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RetayaX Super AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+
     <style>
-        :root {
-            --primary-color: #00b074;
-            --bg-color: #0d1b2a;
-            --chat-bg: #1b263b;
-            --text-color: #ffffff;
-            --bot-bubble: #415a77;
-            --user-bubble: #00b074;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; background: #0f2027; color: white; font-family: 'Inter', sans-serif; overflow: hidden; }
+        body { display: grid; grid-template-rows: auto 1fr auto; position: relative; }
+        
+        /* Header & Sidebar Styles */
+        .ai-header { background: #162b36; padding: 12px 15px; display: flex; align-items: center; border-bottom: 2px solid #25d366; box-shadow: 0 4px 15px rgba(0,0,0,0.4); z-index: 10; }
+        .menu-btn { color: #25d366; font-size: 22px; cursor: pointer; margin-right: 15px; background: none; border: none; }
+        .ai-profile { width: 40px; height: 40px; background: linear-gradient(45deg, #25d366, #128c7e); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: black; margin-right: 12px; }
+        .ai-info h1 { font-size: 15px; font-family: 'Poppins', sans-serif; font-weight: 700; margin: 0; color: #25d366; }
+        .ai-info p { font-size: 11px; margin: 0; color: #b0bec5; }
+        
+        /* Sidebar */
+        .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #162b36; box-shadow: 5px 0 15px rgba(0,0,0,0.5); z-index: 99; transition: 0.3s ease; padding: 20px; overflow-y: auto; }
+        .sidebar.active { left: 0; }
+        .sidebar h5 { color: #25d366; font-family: 'Poppins', sans-serif; margin-bottom: 20px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+        .history-item { background: #0f2027; padding: 10px 15px; border-radius: 8px; margin-bottom: 10px; cursor: pointer; font-size: 13px; border-left: 3px solid #25d366; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: 0.2s; }
+        .history-item:hover { background: #1c3644; }
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 98; display: none; }
+        .sidebar-overlay.active { display: block; }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
+        /* Capabilities & Welcome Box */
+        .capabilities-box { background: rgba(22, 43, 54, 0.8); border: 1px solid rgba(37, 211, 102, 0.25); border-radius: 14px; margin: 12px 15px 5px 15px; padding: 12px 15px; font-size: 12px; transition: all 0.4s ease; opacity: 1; max-height: 300px; overflow: hidden; }
+        .capabilities-box.hidden { opacity: 0; max-height: 0; margin: 0; padding: 0; border: none; }
+        .capabilities-box h6 { font-size: 13px; color: #25d366; margin-bottom: 8px; font-family: 'Poppins', sans-serif; font-weight: 700; }
+        .capabilities-box ul { margin: 0; padding-left: 15px; color: #eceff1; }
+        .capabilities-box li { margin-bottom: 4px; }
 
-        /* Tsarin Shugaban Shafin */
-        .chat-header {
-            background-color: var(--chat-bg);
-            padding: 15px;
-            text-align: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-bottom: 2px solid var(--primary-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
+        /* Chat Containers */
+        .chat-container { padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; background: rgba(15, 32, 39, 0.5); }
+        .message { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.5; word-wrap: break-word; position: relative; }
+        .message.bot { background: #162b36; color: white; align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid rgba(37, 211, 102, 0.15); }
+        .message.user { background: linear-gradient(45deg, #25d366, #128c7e); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+        
+        /* Welcome Overlay Animated Box */
+        .welcome-overlay-box { background: rgba(37, 211, 102, 0.1); border: 2px dashed #25d366; color: #25d366; text-align: center; padding: 15px; border-radius: 12px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 15px; animation: pulse 2s infinite, fadeOutUp 0.5s forwards 10s; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        @keyframes fadeOutUp { from { opacity: 1; height: auto; } to { opacity: 0; height: 0; padding: 0; margin: 0; border: none; display: none; } }
 
-        .chat-header i {
-            color: var(--primary-color);
-        }
+        /* Emotional Tone Styles */
+        .tone-sad { color: #81d4fa !important; font-weight: 500; border-left: 3px solid #0288d1; padding-left: 5px; }
+        .tone-happy { color: #fff59d !important; font-weight: 600; text-shadow: 0 0 5px rgba(255,245,157,0.3); }
+        .tone-surprise { color: #ffab91 !important; font-weight: 700; animation: shake 0.5s ease-in-out infinite alternate; display: inline-block; }
+        @keyframes shake { 0% { transform: translateX(0); } 100% { transform: translateX(3px); } }
 
-        /* Wurin Hira */
-        .chat-container {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+        /* Action Buttons (Like, Dislike, Copy, Share) */
+        .msg-actions { display: flex; gap: 12px; margin-top: 8px; font-size: 12px; color: #b0bec5; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 6px; }
+        .action-btn { cursor: pointer; transition: 0.2s; background: none; border: none; color: #b0bec5; }
+        .action-btn:hover { color: #25d366; }
 
-        .message-wrapper {
-            display: flex;
-            flex-direction: column;
-            max-width: 80%;
-        }
+        /* Follow up Dynamic Buttons */
+        .followup-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .followup-btn { background: #0f2027; border: 1px solid #25d366; color: #25d366; padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .followup-btn:hover { background: #25d366; color: black; }
 
-        .message-wrapper.user {
-            align-self: flex-end;
-        }
+        /* Researching Spinner */
+        .research-box { display: flex; align-items: center; gap: 10px; color: #25d366; font-size: 13px; font-weight: 600; }
+        .research-spinner { width: 18px; height: 18px; border: 2px solid transparent; border-top-color: #25d366; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        .message-wrapper.bot {
-            align-self: flex-start;
-        }
-
-        .message-bubble {
-            padding: 12px 16px;
-            border-radius: 15px;
-            font-size: 1rem;
-            line-height: 1.5;
-            word-wrap: break-word;
-        }
-
-        .user .message-bubble {
-            background-color: var(--user-bubble);
-            border-bottom-right-radius: 2px;
-        }
-
-        .bot .message-bubble {
-            background-color: var(--bot-bubble);
-            border-bottom-left-radius: 2px;
-        }
-
-        /* Tsarin Maɓallan Aiki (Toolbar) */
-        .action-toolbar {
-            display: flex;
-            gap: 12px;
-            margin-top: 5px;
-            padding-left: 5px;
-            font-size: 0.85rem;
-            color: #ccc;
-        }
-
-        .action-icon {
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .action-icon:hover {
-            color: var(--primary-color);
-        }
-
-        .action-icon.liked {
-            color: #4caf50;
-        }
-
-        .action-icon.disliked {
-            color: #f44336;
-        }
-
-        /* Maɓallan Shawwari (Follow-up Buttons) */
-        .suggestions-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .suggestion-btn {
-            background-color: transparent;
-            border: 1px solid var(--primary-color);
-            color: var(--primary-color);
-            padding: 8px 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .suggestion-btn:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        /* Tsarin Rubutu na ɗaki-ɗaki (Typing Cursor) */
-        .typing::after {
-            content: '▊';
-            animation: blink 0.6s infinite;
-            color: var(--primary-color);
-            margin-left: 2px;
-        }
-
-        @keyframes blink {
-            50% { opacity: 0; }
-        }
-
-        /* Wurin Tura Saƙo */
-        .input-container {
-            padding: 15px;
-            background-color: var(--chat-bg);
-            display: flex;
-            gap: 10px;
-            border-top: 1px solid #2b3a4a;
-        }
-
-        .input-container input {
-            flex: 1;
-            padding: 12px;
-            border-radius: 25px;
-            border: 1px solid #415a77;
-            background-color: var(--bg-color);
-            color: white;
-            outline: none;
-            font-size: 1rem;
-        }
-
-        .input-container input:focus {
-            border-color: var(--primary-color);
-        }
-
-        .send-btn {
-            background-color: var(--primary-color);
-            border: none;
-            color: white;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            transition: transform 0.2s;
-        }
-
-        .send-btn:hover {
-            transform: scale(1.05);
-        }
+        /* Flexible Input Area */
+        .chat-input-area { background: #162b36; padding: 12px 15px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; gap: 10px; align-items: flex-end; box-shadow: 0 -4px 10px rgba(0,0,0,0.2); }
+        .chat-input-wrapper { flex: 1; background: #0f2027; border: 1px solid #2c5364; border-radius: 20px; padding: 8px 15px; max-height: 120px; overflow-y: auto; display: flex; align-items: center; }
+        .chat-input { flex: 1; background: none; border: none; color: white; font-size: 14px; outline: none; resize: none; max-height: 100px; height: 24px; font-family: inherit; }
+        .send-btn { background: #25d366; color: black; border: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2); flex-shrink: 0; margin-bottom: 2px; }
     </style>
 </head>
 <body>
 
-    <div class="chat-header">
-        <i class="fa-solid fa-robot"></i> RetayaX Professional AI
+<!-- Sidebar Menu -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="sidebar" id="sidebar">
+    <h5><span><i class="fas fa-history"></i> Chat History</span> <button class="btn btn-sm text-white" id="closeSidebar"><i class="fas fa-times"></i></button></h5>
+    <div id="historyList">
+        <p class="text-muted text-center style='font-size:12px;'">Babu tsohuwar hira tukunna.</p>
     </div>
+</div>
 
-    <div class="chat-container" id="chatContainer">
-        <!-- Sakon Barka da Zuwa na Fari -->
-        <div class="message-wrapper bot">
-            <div class="message-bubble">Barka da zuwa RetayaX AI! 👋 Ina jinka, wane taimako kake buƙata yanzu ko wace shawara kake nema?</div>
-        </div>
+<!-- Main Top Header -->
+<div class="ai-header">
+    <button class="menu-btn" id="openSidebar"><i class="fas fa-bars"></i></button>
+    <div class="ai-profile"><i class="fas fa-robot"></i></div>
+    <div class="ai-info">
+        <h1>RetayaX Super AI</h1>
+        <p>Professional Africa Assistant | Active</p>
     </div>
+</div>
 
-    <div class="input-container">
-        <input type="text" id="userInput" placeholder="Rubuta tambayarka anan..." autocomplete="off">
-        <button class="send-btn" id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+<!-- Info Box (Zai bace idan an fara rubutu) -->
+<div class="capabilities-box" id="capabilitiesBox">
+    <h6>Abubuwan da zan iya yi muku / What I can do:</h6>
+    <ul>
+        <li>🎨 <b>Zana Hotuna (Image Vending):</b> Rubuta "Zana mini..." ko "Generate image of...".</li>
+        <li>📚 <b>Assignment & Ilimi:</b> Taimako kan dukkan darussan makaranta da bincike nan take.</li>
+        <li>💔 <b>Soyayya & Shawarwari:</b> Tattaunawa da ba da shawarwari na natsuwa akan rayuwa.</li>
+        <li>💼 <b>Sabis na RetayaX:</b> Komai akan NIN, BVN, Data, Airtime, Sunking, da sauran su.</li>
+    </ul>
+</div>
+
+<!-- Chat Body -->
+<div class="chat-container" id="chatContainer">
+    <!-- Welcome message mai sakan 10 -->
+    <div class="welcome-overlay-box" id="welcomeBox">
+        ✨ Welcome to RetayaX Super AI ✨
     </div>
+</div>
 
-    <script>
-        const chatContainer = document.getElementById('chatContainer');
-        const userInput = document.getElementById('userInput');
-        const sendBtn = document.getElementById('sendBtn');
+<!-- Flexible Chat Input Form -->
+<div class="chat-input-area">
+    <div class="chat-input-wrapper">
+        <textarea class="chat-input" id="chatInput" rows="1" placeholder="Rubuta tambaya... / Type a question..."></textarea>
+    </div>
+    <button class="send-btn" id="sendBtn"><i class="fas fa-paper-plane"></i></button>
+</div>
 
-        // 1. Taskar Gyara Kuskuren Rubutu (Fuzzy/Typo Correction Dictionary)
-        const typoDictionary = {
-            "subahanallahi": "subhanallah",
-            "kudi": "kuɗi",
-            "data": "data",
-            "retyax": "retayax",
-            "retayax": "RetayaX",
-            "profeahonal": "professional",
-            "mistak": "mistake",
-            "amsarshi": "amsarsa",
-            "tanyaba": "tambaya"
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // Firebase Setup don kallon hirarraki ta Admin Panel
+    let db = null;
+    try {
+        const firebaseConfig = {
+            apiKey: "AIzaSyA6Ce7cEDzcxOoEyh5Swl3wFx7ju-Up00k",
+            authDomain: "auwalmdtech.firebaseapp.com",
+            projectId: "auwalmdtech",
+            storageBucket: "auwalmdtech.firebasestorage.app",
+            messagingSenderId: "202329584080",
+            appId: "1:202329584080:web:e989d7df53d3c3024609d5",
+            measurementId: "G-8SZ1MQRMC9"
         };
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+    } catch(e) { console.error("Firebase Integration Active."); }
 
-        function cleanAndCorrectText(text) {
-            let words = text.toLowerCase().split(" ");
-            let correctedWords = words.map(word => typoDictionary[word] || word);
-            return correctedWords.join(" ");
-        }
+    // Rumbun Kula da Tsarin System Prompt na Gane Kuskure, Launukan Tausayi/Murna da Tambayoyin Jan Hankali
+    const SYSTEM_PROMPT = `You are RetayaX Super AI, created by CEO Auwal MD (Muhammad Yau Ibrahim) of Potiskum, Yobe State, Nigeria.
+    INSTRUCTIONS FOR EMOTIONS AND ENGAGEMENT:
+    1. INTENT TOLERANCE: Always understand what the user means even if they make typing mistakes, abbreviations, or poor Hausa/English typos. Never tell them "Ban gane ba" or "You made a mistake". Just give the correct response.
+    2. EMOTIONAL HIGHLIGHTS: You must wrap emotional parts of your replies using specific HTML tags:
+       - For Sad/Tragic/Pity topics, wrap that sentence in: <span class="tone-sad">... saƙon tausayi ... 🥺💔</span>
+       - For Happy/Exciting/Funny topics, wrap that sentence in: <span class="tone-happy">... saƙon murna/dariya ... 😂🎉</span>
+       - For Shocking/Surprising topics, wrap that sentence in: <span class="tone-surprise">... saƙon mamaki ... 😱🤯</span>
+    3. LANGUAGE INTEGRITY: Respond strictly in Hausa if asked in Hausa, or English if asked in English. Do not mix.
+    4. DYNAMIC FOLLOW-UPS: At the very end of your response, you MUST generate 2 or 3 dynamic related questions that the user might want to ask next. You MUST format them exactly at the end of your response as a valid JSON block enclosed inside [FOLLOWUPS]...[/FOLLOWUPS].
+    Example layout of the end of your response:
+    [FOLLOWUPS]
+    ["Kuna son ƙarin bayani?", "Yaya farashinsa yake?", "Ban gane ba sosai"]
+    [/FOLLOWUPS]`;
 
-        // 2. Taskar Bayanai da Emojis na Yanayi (Database & Sentiment)
-        const aiDatabase = {
-            "murna": {
-                text: "Wannan babban labari ne mai daɗi kwarai da gaske! 🎉 Muna taya ka farin ciki da wannan babban nasara. Koda yaushe RetayaX tana tare da kai don samar maka da farin ciki 😁",
-                follows: ["Yaya zan ƙara faɗaɗa wannan nasarar?", "Wane sabon tsari kuke da shi na murna?"]
-            },
-            "kudi": {
-                text: "Maganar kuɗi tana da muhimmanci sosai 💰 A dandalin RetayaX, muna samar maka da sauƙi wurin siyan Data, Airtime, da biyan kuɗin wutar lantarki cikin sauri da aminci ba tare da ɓata lokaci ba! ⚡",
-                follows: ["Yaya zan saka kuɗi a walet tawa?", "Nuna min farashin Data mafi sauƙi"]
-            },
-            "matsala": {
-                text: "Haba dai! Kada ka damu, mun tsara wannan tsarin ne musamman domin magance kowace irin matsala cikin sauri 🥺 Gaskiya muna ba ka haƙuri game da abin da ya faru. Bari mu duba ma'aikatanmu za su magance maka yanzu 🙏",
-                follows: ["Tuntuɓi Ma'aikata kai tsaye", "Yaya zan dawo da tsohon kuɗina?"]
-            },
-            "mamaki": {
-                text: "Iye?! Wannan abin mamaki ne da ban al'ajabi kwarai da gaske! 😱 Ban taɓa tsammanin hakan zai kasance haka cikin sauri ba 🤯 Bari mu bincika ƙarin bayani a kansa.",
-                follows: ["Me ya sa hakan ta faru?", "Ba ni ƙarin shawarwari akan wannan"]
-            },
-            "default": {
-                text: "Na fahimci tambayarka sarai kuma mun tsara wannan tsarin ne domin ba ka mafi kyawun shawara da taimako a kowane lokaci 🧠 Domin samun cikakken tsari, RetayaX tana buɗe kofa a gare ka sa'o'i 24.",
-                follows: ["Nuna min ayyukan RetayaX", "Ina son ƙarin bayani akan tsarin AI"]
-            }
-        };
+    let activeChatSession = "Session_" + Date.now();
+    let localHistory = JSON.parse(localStorage.getItem("retayax_history")) || [];
 
-        // 3. Tsarin Tura Saƙo
-        function handleSend() {
-            const rawText = userInput.value.trim();
-            if (!rawText) return;
+    // Auto-expand input textbox bug fix
+    const chatInput = document.getElementById('chatInput');
+    chatInput.addEventListener('input', function() {
+        this.style.height = '24px';
+        this.style.height = (this.scrollHeight) + 'px';
+        
+        // Bace-bacen akwatin sama idan mutum ya fara rubutu
+        document.getElementById('capabilitiesBox').classList.add('hidden');
+    });
 
-            // Nuna saƙon Customer
-            appendMessage(rawText, 'user');
-            userInput.value = '';
+    // Sidebar triggers
+    document.getElementById('openSidebar').addEventListener('click', () => {
+        document.getElementById('sidebar').classList.add('active');
+        document.getElementById('sidebarOverlay').classList.add('active');
+        loadHistoryList();
+    });
+    const closeSidebarFunc = () => {
+        document.getElementById('sidebar').classList.remove('active');
+        document.getElementById('sidebarOverlay').classList.remove('active');
+    };
+    document.getElementById('closeSidebar').addEventListener('click', closeSidebarFunc);
+    document.getElementById('sidebarOverlay').addEventListener('click', closeSidebarFunc);
 
-            // Gyara kuskuren rubutu cikin sauri
-            const correctedText = cleanAndCorrectText(rawText);
-
-            // Gano amsar da ta dace
-            let matchedKey = "default";
-            for (let key in aiDatabase) {
-                if (correctedText.includes(key)) {
-                    matchedKey = key;
-                    break;
-                }
-            }
-
-            const responseData = aiDatabase[matchedKey];
-            
-            // Tura amsar zuwa tsarin Streaming (Typing Effect)
-            setTimeout(() => {
-                streamBotResponse(responseData.text, responseData.follows);
-            }, 500);
-        }
-
-        // 4. Tsarin Nuna Rubutu Ɗaki-ɗaki (Professional Streaming Effect)
-        function streamBotResponse(fullText, follows) {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'message-wrapper bot';
-
-            const bubble = document.createElement('div');
-            bubble.className = 'message-bubble typing';
-            wrapper.appendChild(bubble);
-
-            chatContainer.appendChild(wrapper);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-
-            let words = fullText.split(' ');
-            let index = 0;
-            bubble.innerText = '';
-
-            // Gudu na musamman (Professional Typing Speed)
-            let interval = setInterval(() => {
-                if (index < words.length) {
-                    bubble.innerText += (index === 0 ? '' : ' ') + words[index];
-                    index++;
-                    chatContainer.scrollTop = chatContainer.scrollHeight;
-                } else {
-                    clearInterval(interval);
-                    bubble.classList.remove('typing'); // Cire alamar ƙyiftawa
-                    
-                    // Bayan kammala rubutun, nuna Maɓallan Aiki da Tambayoyin Jan Hankali
-                    addToolbarsAndSuggestions(wrapper, fullText, follows);
-                }
-            }, 120); // Gudun fitar kalma bayan kalma
-        }
-
-        // 5. Ƙara Maɓallan Like, Dislike, Copy, Share da Shawwari
-        function addToolbarsAndSuggestions(wrapper, textToCopy, follows) {
-            // Kirkirar Toolbar
-            const toolbar = document.createElement('div');
-            toolbar.className = 'action-toolbar';
-            toolbar.innerHTML = `
-                <i class="fa-regular fa-thumbs-up action-icon" title="Like" onclick="handleLike(this)"></i>
-                <i class="fa-regular fa-thumbs-down action-icon" title="Dislike" onclick="handleDislike(this)"></i>
-                <i class="fa-regular fa-copy action-icon" title="Copy" onclick="handleCopy('${textToCopy.replace(/'/g, "\\'")}')"></i>
-                <i class="fa-solid fa-share-nodes action-icon" title="Share" onclick="handleShare('${textToCopy.replace(/'/g, "\\'")}')"></i>
-            `;
-            wrapper.appendChild(toolbar);
-
-            // Kirkirar Maɓallan Tambayoyin Jan Hankali (Dynamic Suggestion Buttons)
-            const suggestionsContainer = document.createElement('div');
-            suggestionsContainer.className = 'suggestions-container';
-            
-            follows.forEach(question => {
-                const btn = document.createElement('button');
-                btn.className = 'suggestion-btn';
-                btn.innerText = question;
-                btn.onclick = () => {
-                    userInput.value = question;
-                    handleSend();
-                };
-                suggestionsContainer.appendChild(btn);
+    // Save Chat Live data directly to Firebase Firestore for Admin Panel Tracking
+    async function logToAdminPanel(sender, text) {
+        if (!db) return;
+        try {
+            await addDoc(collection(db, "retayax_chats"), {
+                sessionId: activeChatSession,
+                sender: sender,
+                text: text,
+                timestamp: serverTimestamp()
             });
+        } catch (e) { }
+    }
 
-            wrapper.appendChild(suggestionsContainer);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+    // Save history locally
+    function saveToLocalHistory(userPrompt) {
+        if(!localHistory.includes(userPrompt)) {
+            localHistory.unshift(userPrompt);
+            if(localHistory.length > 15) localHistory.pop();
+            localStorage.setItem("retayax_history", JSON.stringify(localHistory));
         }
+    }
 
-        // Ayyukan Maɓallan (Toolbar Functions)
-        function handleLike(element) {
-            element.classList.toggle('fa-regular');
-            element.classList.toggle('fa-solid');
-            element.classList.toggle('liked');
+    function loadHistoryList() {
+        const listContainer = document.getElementById('historyList');
+        if(localHistory.length === 0) {
+            listContainer.innerHTML = `<p class="text-muted text-center" style="font-size:12px;">Babu tsohuwar hira tukunna.</p>`;
+            return;
         }
-
-        function handleDislike(element) {
-            element.classList.toggle('fa-regular');
-            element.classList.toggle('fa-solid');
-            element.classList.toggle('disliked');
-        }
-
-        function handleCopy(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert('An kwafto rubutun cikin nasara! 📋');
-            });
-        }
-
-        function handleShare(text) {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'RetayaX AI Response',
-                    text: text
-                }).catch(console.error);
-            } else {
-                alert('An yi share na saƙon: ' + text);
-            }
-        }
-
-        function appendMessage(text, sender) {
-            const wrapper = document.createElement('div');
-            wrapper.className = `message-wrapper ${sender}`;
-            const bubble = document.createElement('div');
-            bubble.className = 'message-bubble';
-            bubble.innerText = text;
-            wrapper.appendChild(bubble);
-            chatContainer.appendChild(wrapper);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        // Latsa Enter don tura saƙo
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleSend();
+        listContainer.innerHTML = "";
+        localHistory.forEach(item => {
+            const div = document.createElement('div');
+            div.classList.add('history-item');
+            div.innerText = item;
+            div.onclick = () => {
+                chatInput.value = item;
+                closeSidebarFunc();
+                sendMessage();
+            };
+            listContainer.appendChild(div);
         });
-        sendBtn.addEventListener('click', handleSend);
-    </script>
+    }
+
+    // Dynamic Typing Stream Text effect
+    function typeWriterEffect(element, fullHtml, callback) {
+        let i = 0;
+        element.innerHTML = "";
+        
+        // This parses HTML tags correctly during typing animation
+        let trackingHtml = [];
+        let cleanText = fullHtml.replace(/(<[^>]+>)/g, (match) => {
+            trackingHtml.push(match);
+            return "\u0001"; 
+        });
+
+        function type() {
+            if (i < cleanText.length) {
+                let char = cleanText.charAt(i);
+                if (char === "\u0001") {
+                    element.innerHTML += trackingHtml.shift();
+                } else {
+                    element.innerHTML += char;
+                }
+                i++;
+                document.getElementById('chatContainer').scrollTop = document.getElementById('chatContainer').scrollHeight;
+                setTimeout(type, 15); // Gudun fitowar rubutun
+            } else {
+                element.innerHTML = fullHtml; // safety snap
+                if(callback) callback();
+            }
+        }
+        type();
+    }
+
+    async function sendMessage(overrideText = null) {
+        const userText = overrideText ? overrideText.trim() : chatInput.value.trim();
+        if (!userText) return;
+
+        if(!overrideText) chatInput.value = '';
+        chatInput.style.height = '24px';
+        document.getElementById('capabilitiesBox').classList.add('hidden');
+
+        appendMessage(userText, 'user');
+        saveToLocalHistory(userText);
+        logToAdminPanel("user", userText);
+
+        // Research Animation Indicator Setup
+        const indicator = appendResearchIndicator();
+
+        try {
+            const res = await fetch(`https://text.pollinations.ai/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    messages: [
+                        { role: 'system', content: SYSTEM_PROMPT },
+                        { role: 'user', content: userText }
+                    ],
+                    model: 'openai', 
+                    private: true
+                })
+            });
+
+            const rawResponse = await res.text();
+            removeResearchIndicator(indicator);
+
+            if (rawResponse) {
+                // Raba ainihin amsar da block na follow-up questions
+                let cleanReply = rawResponse;
+                let followUpQuestions = [];
+
+                const match = rawResponse.match(/\[FOLLOWUPS\]([\s\S]*?)\[\/FOLLOWUPS\]/);
+                if (match) {
+                    cleanReply = rawResponse.replace(/\[FOLLOWUPS\]([\s\S]*?)\[\/FOLLOWUPS\]/, '').trim();
+                    try {
+                        followUpQuestions = JSON.parse(match[1].trim());
+                    } catch(e) { console.error("Follow-up error parsing"); }
+                }
+
+                // Gyara markdown tags zuwa HTML tags tsaf
+                cleanReply = cleanReply.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<i>$1</i>');
+
+                const botMsgElement = appendMessage("", 'bot');
+                
+                typeWriterEffect(botMsgElement, cleanReply, () => {
+                    // Sanya alamar Like, Copy, Share da maballan karin bayani bayan rubutu ya kare
+                    appendUtilityControls(botMsgElement, cleanReply);
+                    if(followUpQuestions.length > 0) {
+                        appendFollowUpButtons(botMsgElement, followUpQuestions);
+                    }
+                    logToAdminPanel("bot", cleanReply);
+                });
+
+            } else { throw new Error("Null response"); }
+
+        } catch (error) {
+            removeResearchIndicator(indicator);
+            appendMessage("Yi haƙuri, na sami ɗan lissafi na matsala. Don Allah sake aiko mini.", 'bot');
+        }
+    }
+
+    function appendMessage(text, sender) {
+        const chatContainer = document.getElementById('chatContainer');
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('message', sender);
+        msgDiv.innerHTML = text.replace(/\n/g, '<br>');
+        chatContainer.appendChild(msgDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        return msgDiv;
+    }
+
+    function appendResearchIndicator() {
+        const chatContainer = document.getElementById('chatContainer');
+        const indicatorDiv = document.createElement('div');
+        indicatorDiv.classList.add('message', 'bot');
+        indicatorDiv.innerHTML = `<div class="research-box"><div class="research-spinner"></div><span>RetayaX AI yana bincike a uwar gizo...</span></div>`;
+        chatContainer.appendChild(indicatorDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        return indicatorDiv;
+    }
+
+    function removeResearchIndicator(indicator) {
+        if (indicator && indicator.parentNode) indicator.parentNode.removeChild(indicator);
+    }
+
+    // Tsarin Like, Dislike, Copy, da Share Buttons
+    function appendUtilityControls(targetElement, textToCopy) {
+        const actionsDiv = document.createElement('div');
+        actionsDiv.classList.add('msg-actions');
+        actionsDiv.innerHTML = `
+            <button class="action-btn thumbs-up"><i class="fas fa-thumbs-up"></i></button>
+            <button class="action-btn thumbs-down"><i class="fas fa-thumbs-down"></i></button>
+            <button class="action-btn copy-txt"><i class="fas fa-copy"></i> Kwafi</button>
+            <button class="action-btn share-txt"><i class="fas fa-share-alt"></i> Share</button>
+        `;
+        
+        // Copy action logic (cire tags kafin kwafi)
+        actionsDiv.querySelector('.copy-txt').addEventListener('click', () => {
+            let pureText = textToCopy.replace(/<[^>]*>/g, '');
+            navigator.clipboard.writeText(pureText);
+            alert("An kwafi wannan amsar zalla tsaf!");
+        });
+
+        // Share action logic via Web Share API
+        actionsDiv.querySelector('.share-txt').addEventListener('click', () => {
+            let pureText = textToCopy.replace(/<[^>]*>/g, '');
+            if (navigator.share) {
+                navigator.share({ title: 'RetayaX AI Reply', text: pureText });
+            } else {
+                alert("Browser dinka bata goyi bayan share kai tsaye ba. Zaka iya kwafa.");
+            }
+        });
+
+        // Like/Dislike color effects
+        actionsDiv.querySelector('.thumbs-up').addEventListener('click', function() { this.style.color = '#25d366'; });
+        actionsDiv.querySelector('.thumbs-down').addEventListener('click', function() { this.style.color = '#ff6b6b'; });
+
+        targetElement.appendChild(actionsDiv);
+    }
+
+    // Saka Maballan Dynamic Follow-up Buttons
+    function appendFollowUpButtons(targetElement, questionArray) {
+        const container = document.createElement('div');
+        container.classList.add('followup-container');
+        questionArray.forEach(q => {
+            const btn = document.createElement('button');
+            btn.classList.add('followup-btn');
+            btn.innerText = q;
+            btn.onclick = () => { sendMessage(q); };
+            container.appendChild(btn);
+        });
+        targetElement.parentNode.appendChild(container);
+        document.getElementById('chatContainer').scrollTop = document.getElementById('chatContainer').scrollHeight;
+    }
+
+    document.getElementById('sendBtn').addEventListener('click', () => sendMessage());
+    chatInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+
+    // Cire welcome message ta atomatik bayan sakan 10
+    setTimeout(() => {
+        const welcome = document.getElementById('welcomeBox');
+        if(welcome) welcome.style.display = 'none';
+    }, 10000);
+</script>
 </body>
 </html>
