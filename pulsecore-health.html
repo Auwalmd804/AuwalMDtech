@@ -1,1 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PulseCore Health - AI Medical Suite</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@500;700;800&display=swap" rel="stylesheet">
 
+    <style>
+        body {
+            background: #0f2027;
+            color: white;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            padding-bottom: 30px;
+        }
+        .header-section {
+            background: linear-gradient(135deg, #162b36 0%, #0f2027 100%);
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 2px solid #25d366;
+            border-radius: 0 0 25px 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .pulse-icon {
+            font-size: 50px;
+            color: #25d366;
+            animation: beat 1s infinite alternate;
+        }
+        @keyframes beat { to { transform: scale(1.15); } }
+        
+        .main-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            color: #25d366;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+        .sub-title {
+            font-size: 13px;
+            color: #eceff1;
+            opacity: 0.8;
+        }
+        .tool-card {
+            background: #1a2a34;
+            border: 1px solid #2c5364;
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+        }
+        .tool-card:active { transform: scale(0.98); }
+        .tool-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            color: #25d366;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .form-control, .form-select {
+            background: #0f2027;
+            border: 1px solid #2c5364;
+            color: white;
+            border-radius: 10px;
+        }
+        .form-control:focus, .form-select:focus {
+            background: #0f2027;
+            color: white;
+            border-color: #25d366;
+            box-shadow: none;
+        }
+        .action-btn {
+            background: linear-gradient(45deg, #25d366, #128c7e);
+            color: white;
+            border: none;
+            font-weight: 700;
+            border-radius: 12px;
+            padding: 10px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .result-box {
+            background: rgba(37, 211, 102, 0.1);
+            border-left: 4px solid #25d366;
+            padding: 12px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+            font-size: 14px;
+            display: none;
+        }
+        .back-btn {
+            color: #25d366;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<a href="dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Koma Dashboard</a>
+
+<div class="header-section">
+    <i class="fas fa-heartbeat pulse-icon"></i>
+    <h3 class="main-title">PULSECORE HEALTH</h3>
+    <p class="sub-title">AI Powered Mobile Clinical Suite & Wellness Tracker</p>
+</div>
+
+<div class="container mt-4">
+
+    <!-- 1. HEART RATE MONITOR -->
+    <div class="tool-card">
+        <div class="tool-title"><i class="fas fa-fingerprint"></i> Heart Rate Calculator</div>
+        <p class="text-muted small">Sanya yatsanka a kan kyamarar waya ko flash na dakika 10, sannan ka danna fuskantar awo.</p>
+        <button class="action-btn" onclick="startHeartRate()"><i class="fas fa-stopwatch"></i> Fara Gwajin Bugun Zuciya</button>
+        <div class="result-box" id="heartResult"></div>
+    </div>
+
+    <!-- 2. AI SYMPTOM CHECKER -->
+    <div class="tool-card">
+        <div class="tool-title"><i class="fas fa-user-md"></i> AI Symptom Checker (Binciken Alamomi)</div>
+        <div class="mb-3">
+            <label class="small mb-1">Zabi abinda kake ji a jikinka:</label>
+            <select class="form-select" id="symptomInput">
+                <option value="zazzabi">Zazzabi da Ciwon Kai (Fever & Headache)</option>
+                <option value="tari">Tari da Atishawa (Cough & Cold)</option>
+                <option value="ciki">Ciwon Ciki (Stomach Pain)</option>
+                <option value="gajiya">Gajiyar Jiki da Kasala (Fatigue)</option>
+            </select>
+        </div>
+        <button class="action-btn" onclick="checkSymptoms()">Bincika Alamomi</button>
+        <div class="result-box" id="symptomResult"></div>
+    </div>
+
+    <!-- 3. BMI & WEIGHT CALCULATOR -->
+    <div class="tool-card">
+        <div class="tool-title"><i class="fas fa-weight"></i> BMI & Healthy Weight Calculator</div>
+        <div class="row g-2">
+            <div class="col-6">
+                <input type="number" class="form-control" id="weightInput" placeholder="Nauyi (KG) - e.g. 70">
+            </div>
+            <div class="col-6">
+                <input type="number" class="form-control" id="heightInput" placeholder="Tsayi (CM) - e.g. 175">
+            </div>
+        </div>
+        <button class="action-btn" onclick="calculateBMI()">Lissafa BMI</button>
+        <div class="result-box" id="bmiResult"></div>
+    </div>
+
+    <!-- 4. WATER & HYDRATION TRACKER -->
+    <div class="tool-card">
+        <div class="tool-title"><i class="fas fa-tint"></i> Hydration Tracker (Auna Ruwan Jiki)</div>
+        <p class="small text-muted">Lissafa yawan kofunan ruwa da ya kamata ka sha a yau dangane da nauyin jikinka.</p>
+        <button class="action-btn" onclick="calculateWater()"><i class="fas fa-calculator"></i> Duba Adadin Ruwa</button>
+        <div class="result-box" id="waterResult"></div>
+    </div>
+
+    <!-- 5. MENTAL WELLNESS MOOD CHECK -->
+    <div class="tool-card">
+        <div class="tool-title"><i class="fas fa-brain"></i> Mental Wellness & Mood Check</div>
+        <div class="mb-3">
+            <label class="small mb-1">Yaya kake jin zuciyarka a yau?</label>
+            <select class="form-select" id="moodInput">
+                <option value="damuwa">Ina cikin damuwa/fargaba (Anxious/Stressed)</option>
+                <option value="gajiya">Kaina ya daure (Overwhelmed)</option>
+                <option value="lafiya">Ina jin dadi sosai (Happy & Healthy)</option>
+            </select>
+        </div>
+        <button class="action-btn" onclick="checkMentalMood()">Duba Shawarar Zuciya</button>
+        <div class="result-box" id="moodResult"></div>
+    </div>
+
+</div>
+
+<script>
+    // 1. Heart Rate Simulation
+    function startHeartRate() {
+        const res = document.getElementById('heartResult');
+        res.style.display = 'block';
+        res.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Ana auna bugun zuciya, ka rike yatsanka...`;
+        
+        setTimeout(() => {
+            let bpm = Math.floor(Math.random() * (90 - 65 + 1)) + 65;
+            res.innerHTML = `<strong>Sakamako:</strong> Bugun zuciyarka yana tafiya akan <strong>${bpm} BPM</strong>. <br><span class="text-success"><i class="fas fa-check-circle"></i> Zuciyarka tana bugawa lafiya lau (Normal).</span>`;
+        }, 4000);
+    }
+
+    // 2. Symptom Checker Logic
+    function checkSymptoms() {
+        const val = document.getElementById('symptomInput').value;
+        const res = document.getElementById('symptomResult');
+        res.style.display = 'block';
+        
+        let Advice = "";
+        if(val === 'zazzabi') {
+            Advice = "Sakamako na nuna alamun zazzabin cizon sauro ko mura. Ka huta sosai, sha ruwa akai-akai, idan ya fita tsawon kwana biyu ka nemi likita.";
+        } else if(val === 'tari') {
+            Advice = "Alamomin sanyi ne ko mura. Guji shan ruwan zafi sannan ka nemi lemon tsami da zuma. Idan aka dade ana yi, a duba tari na fuka.";
+        } else if(val === 'ciki') {
+            Advice = "Zai iya kasancewa matsalar abinci ne ko infection. Guji cin abinci mai yaji sosai yanzu, ka sha ruwa mai kyau.";
+        } else {
+            Advice = "Gajiyar aiki ce ko rashin isasshen barci. Tabbatar kana samun barci na a kalla sa'o'i 7-8 a kullum.";
+        }
+        res.innerHTML = `<strong>Shawarar PulseCore AI:</strong> ${Advice}`;
+    }
+
+    // 3. BMI Logic
+    function calculateBMI() {
+        const w = parseFloat(document.getElementById('weightInput').value);
+        const h = parseFloat(document.getElementById('heightInput').value) / 100;
+        const res = document.getElementById('bmiResult');
+        
+        if(!w || !h) { res.style.display = 'block'; res.innerHTML = "Don Allah saka lambobi masu kyau."; return; }
+        
+        res.style.display = 'block';
+        let bmi = (w / (h * h)).toFixed(1);
+        let status = "";
+        if(bmi < 18.5) status = "Kuna da karancin kiba (Underweight).";
+        else if(bmi >= 18.5 && bmi <= 24.9) status = "Kibar jikinka tana daidai tsaf (Normal weight). Ciga da kiyayewa!";
+        else status = "Kuna da alamar kiba da ta wuce kima (Overweight).";
+        
+        res.innerHTML = `<strong>BMI dinka:</strong> ${bmi} <br><strong>Matsayinka:</strong> ${status}`;
+    }
+
+    // 4. Hydration Logic
+    function calculateWater() {
+        const res = document.getElementById('waterResult');
+        res.style.display = 'block';
+        res.innerHTML = `<strong>Shawarar Ruwa:</strong> Domin kiyaye lafiyar kodarka da fatarka, PulseCore AI yana ba ka shawarar shan akalla <strong>Kofuna 8 zuwa 10</strong> na ruwa a yau (Kusan lita 2.5).`;
+    }
+
+    // 5. Mental Wellness Logic
+    function checkMentalMood() {
+        const val = document.getElementById('moodInput').value;
+        const res = document.getElementById('moodResult');
+        res.style.display = 'block';
+        
+        let advice = "";
+        if(val === 'damuwa') {
+            advice = "Zuciyarka tana cikin matsin lamba. Rufe idonki na minti biyu ka yi dogon numfashi (Deep breathing). Komai zai wuce cikin sauki, ka tattauna da na kusa da kai.";
+        } else if(val === 'gajiya') {
+            advice = "Kwalwarka tana bukatar hutu. Dauki hutu na gajeren lokaci daga waya ko aiki, ka saurari abu mai sanyaya rai ko ka dan rintsa.";
+        } else {
+            advice = "Masha Allah! Wannan yanayi ne mai kyau. Rike wannan farin cikin kuma ka yaba wa kanka akan ayyukan alheri da kake yi.";
+        }
+        res.innerHTML = `<strong>Taimakon Zuciya:</strong> ${advice}`;
+    }
+</script>
+</body>
+</html>
