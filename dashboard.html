@@ -241,6 +241,8 @@
     </div>
     <div class="offcanvas-body">
         <a href="transactions.html" class="btn btn-outline-success w-100 mb-3 py-2" id="menuTrans">Transaction History</a>
+        <!-- WhatsApp Hub yanzu yana cikin Menu cikin mutunci -->
+        <a href="whatsapp-hub.html" class="btn btn-outline-primary w-100 mb-3 py-2" id="menuWHAHub"><i class="fab fa-whatsapp"></i> WhatsApp Hub</a>
         <a href="https://wa.me/2348164712102" class="btn btn-success w-100 mb-3 py-2" id="menuSupport"><i class="fab fa-whatsapp"></i> Contact Support</a>
     </div>
 </div>
@@ -292,6 +294,7 @@
             menuTitle: "RetayaX Menu",
             menuTrans: "Transaction History",
             menuSupport: "Contact Support",
+            menuWHAHub: "<i class='fab fa-whatsapp'></i> WhatsApp Hub",
             marqueeText: MARQUEE_GLOBAL_TEXT,
             loginBtn: '<i class="fas fa-sign-in-alt"></i> LOGIN / REGISTER TO ACCOUNT',
             footerText: "&copy; 2026 RetayaX - All Rights Reserved",
@@ -300,7 +303,7 @@
                 {name: "NIN Device", img: "nin-device.png", type: "img"},
                 {name: "Airtel Reg", img: "airtel-reg.png", type: "img"},
                 {name: "BVN Registration", img: "bvn-reg.png", type: "img"},
-                {name: "WhatsApp Hub", img: "whatsapp-hub.png", type: "img"},
+                {name: "PulseCore Health", img: "fas fa-heartbeat", type: "icon", link: "pulsecore-health.html"},
                 {name: "Data Sim", img: "data-sim.png", type: "img"},
                 {name: "Wifi/Router", img: "router-wifi.png", type: "img"},
                 {name: "Product Shop", img: "shop-all.png", type: "img"},
@@ -318,6 +321,7 @@
             menuTitle: "Menu na RetayaX",
             menuTrans: "Tarihin Ma'amaloli",
             menuSupport: "Tuntubi Tallafi",
+            menuWHAHub: "<i class='fab fa-whatsapp'></i> HUB na WhatsApp",
             marqueeText: MARQUEE_GLOBAL_TEXT,
             loginBtn: '<i class="fas fa-sign-in-alt"></i> SHIGA KO RAJISTA ASUSU',
             footerText: "&copy; 2026 RetayaX - Duk Haƙin Mallaka An Ajiye",
@@ -326,7 +330,7 @@
                 {name: "Na'urar NIN", img: "nin-device.png", type: "img"},
                 {name: "Rijistar Airtel", img: "airtel-reg.png", type: "img"},
                 {name: "Rijistar BVN", img: "bvn-reg.png", type: "img"},
-                {name: "HUB na WhatsApp", img: "whatsapp-hub.png", type: "img"},
+                {name: "PulseCore Health", img: "fas fa-heartbeat", type: "icon", link: "pulsecore-health.html"},
                 {name: "SIM na Data", img: "data-sim.png", type: "img"},
                 {name: "Wifi/Router", img: "router-wifi.png", type: "img"},
                 {name: "Shagon Kaya", img: "shop-all.png", type: "img"},
@@ -352,6 +356,7 @@
         document.getElementById('navTitle').innerText = t.navTitle;
         document.getElementById('menuTitle').innerText = t.menuTitle;
         document.getElementById('menuTrans').innerText = t.menuTrans;
+        document.getElementById('menuWHAHub').innerHTML = t.menuWHAHub;
         document.getElementById('menuSupport').innerHTML = '<i class="fab fa-whatsapp"></i> ' + t.menuSupport;
         document.getElementById('marqueeText').innerText = t.marqueeText;
         document.getElementById('loginBtn').innerHTML = t.loginBtn;
